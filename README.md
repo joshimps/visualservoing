@@ -5,10 +5,10 @@ The students can choose any pattern, and design any desired position on the imag
 When moving a fiducial/marker/object, the robot arm moves to point towards the fiducial/marker/object.
 
 ## Architecture and Equipment:
-C++
-MATLAB
-ROS
-ROS Toolbox for MATLAB
+- C++
+- MATLAB
+- ROS
+- ROS Toolbox for MATLAB
 
 ## Sensors and Control for Mechatronic Systems Specifics
 
