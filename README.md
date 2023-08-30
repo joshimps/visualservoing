@@ -5,6 +5,7 @@ The students can choose any pattern, and design any desired position on the imag
 When moving a fiducial/marker/object, the robot arm moves to point towards the fiducial/marker/object.
 
 ## Architecture and Equipment:
+- UR3 Robot
 - C++
 - MATLAB
 - ROS
