@@ -1,4 +1,4 @@
-# Visual servoing of a handheld RGB-D camera
+# Visual Servoing of a Handheld RGB-D Camera
 
 The aim of this project is to use visual servoing techniques to control a Robot-held (Dobot or UR3) camera. 
 The students can choose any pattern, and design any desired position on the image. 
