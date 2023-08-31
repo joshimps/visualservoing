@@ -6,6 +6,7 @@ When moving a fiducial/marker/object, the robot arm moves to point towards the f
 
 ## Architecture and Equipment:
 - UR3 Robot
+- RGB-D Camera System
 - C++
 - MATLAB
 - ROS
