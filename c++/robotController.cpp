@@ -28,12 +28,12 @@ std::vector<tf2Scalar> RobotController::calculateEndEffectorVelocity(){
     
     std::vector<tf2Scalar> endEffectorVelocity;
 
-    endEffectorVelocity.at(0) = positionError.x();
-    endEffectorVelocity.at(1) = positionError.y();
-    endEffectorVelocity.at(2) = positionError.z();
-    endEffectorVelocity.at(3) = rotationalError.x();
-    endEffectorVelocity.at(4) = rotationalError.y();
-    endEffectorVelocity.at(5) = rotationalError.z();
+    endEffectorVelocity.at(0) = gain_ * positionError.x();
+    endEffectorVelocity.at(1) = gain_ * positionError.y();
+    endEffectorVelocity.at(2) = gain_ * positionError.z();
+    endEffectorVelocity.at(3) = gain_ * rotationalError.x();
+    endEffectorVelocity.at(4) = gain_ * rotationalError.y();
+    endEffectorVelocity.at(5) = gain_ * rotationalError.z();
 
     return endEffectorVelocity;
 }
