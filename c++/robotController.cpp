@@ -20,8 +20,9 @@ RobotController::RobotController(ros::NodeHandle nh, Robot* robot){
 void RobotController::calculateJointVelocities(){
     //First calculate the error between end effector position and the desired position
 
-    tf2::Transform tBaseToEndEffector = robot_.
-    tf2::Transform tError = fiducialPoseLocal_ * 
+    robot_->calculateJointTransforms();
+    tf2::Transform tBaseToEndEffector = robot_->getEndEffectorTransform();
+    tf2::Transform tError = fiducialPoseLocal_ * tBaseToEndEffector.inverse();
 }
 
 ///////////////////////////////////////////////////////////
