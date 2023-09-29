@@ -19,7 +19,7 @@ class RobotController{
     // Constructors and Destructors
     /////////////////////////////////////////////////////////////////////////////////////////
 
-    RobotController(ros::NodeHandle nh, Robot* robot);
+    RobotController(ros::NodeHandle nh, Robot* robot, double gain, double errorThreshold);
     ~RobotController();
 
     ///////////////////////////////////////////////////////////
