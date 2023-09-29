@@ -22,7 +22,7 @@ void RobotController::calculateJointVelocities(){
 
     robot_->calculateJointTransforms();
     tf2::Transform tBaseToEndEffector = robot_->getEndEffectorTransform();
-    tf2::Transform tError = fiducialPoseLocal_ * tBaseToEndEffector.inverse();
+    tf2::Transform tError = fiducialPoseLocal_ * (tBaseToEndEffector.inverse());
 }
 
 ///////////////////////////////////////////////////////////
@@ -30,5 +30,13 @@ void RobotController::calculateJointVelocities(){
 //////////////////////////////////////////////////////////
 
 void RobotController::fiducialPositionCallBack(geometry_msgs::PoseWithCovariancePtr &msg){
-    fiducialPoseLocal_ = *msg;
+    geometry_msgs::PoseWithCovariance fiducialPoseWithCovarianceLocal_ = *msg;
+    tf2::Vector3 fiducialTranslation(fiducialPoseWithCovarianceLocal_.pose.position.x,fiducialPoseWithCovarianceLocal_.pose.position.y,fiducialPoseWithCovarianceLocal_.pose.position.z);
+    tf2::Quaternion fiducialRotation(fiducialPoseWithCovarianceLocal_.pose.orientation.x,
+                                     fiducialPoseWithCovarianceLocal_.pose.orientation.y,
+                                     fiducialPoseWithCovarianceLocal_.pose.orientation.z,
+                                     fiducialPoseWithCovarianceLocal_.pose.orientation.w);
+    
+    fiducialPoseLocal_.setOrigin(fiducialTranslation);
+    fiducialPoseLocal_.setRotation(fiducialRotation);
 }

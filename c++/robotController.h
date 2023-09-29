@@ -3,6 +3,10 @@
 #include "geometry_msgs/PoseWithCovariance.h"
 #include "tf2/LinearMath/Transform.h"
 #include <vector>
+#include "tf2/LinearMath/Vector3.h"
+#include "tf2/LinearMath/Matrix3x3.h"
+#include "tf2/LinearMath/Scalar.h"
+#include "tf2/LinearMath/Quaternion.h"
 
 class RobotController{
     public:
@@ -48,7 +52,7 @@ class RobotController{
     // Variables
     /////////////////////////////////////////////////////////////////////
 
-    geometry_msgs::PoseWithCovariance fiducialPoseLocal_;
+    tf2::Transform fiducialPoseLocal_;
 
     ///////////////////////////////////////////////////////////////////////
     // Robot To Control Velocity
