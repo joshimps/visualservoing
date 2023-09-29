@@ -17,12 +17,25 @@ RobotController::RobotController(ros::NodeHandle nh, Robot* robot){
 // Calculation
 //////////////////////////////////////////////////////////
 
-void RobotController::calculateJointVelocities(){
+std::vector<tf2Scalar> RobotController::calculateEndEffectorVelocity(){
     //First calculate the error between end effector position and the desired position
 
     robot_->calculateJointTransforms();
     tf2::Transform tBaseToEndEffector = robot_->getEndEffectorTransform();
     tf2::Transform tError = fiducialPoseLocal_ * (tBaseToEndEffector.inverse());
+    tf2::Vector3 positionError = tError.getOrigin();
+    tf2::Quaternion rotationalError = tError.getRotation();
+    
+    std::vector<tf2Scalar> endEffectorVelocity;
+
+    endEffectorVelocity.at(0) = positionError.x();
+    endEffectorVelocity.at(1) = positionError.y();
+    endEffectorVelocity.at(2) = positionError.z();
+    endEffectorVelocity.at(3) = rotationalError.x();
+    endEffectorVelocity.at(4) = rotationalError.y();
+    endEffectorVelocity.at(5) = rotationalError.z();
+
+    return endEffectorVelocity;
 }
 
 ///////////////////////////////////////////////////////////

@@ -26,7 +26,7 @@ class RobotController{
     // Calculation
     //////////////////////////////////////////////////////////
 
-    void calculateJointVelocities();
+    std::vector<tf2Scalar> calculateEndEffectorVelocity();
     
     ///////////////////////////////////////////////////////////
     // Callbacks and Services
