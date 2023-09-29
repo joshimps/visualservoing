@@ -10,6 +10,10 @@ Robot::Robot(ros::NodeHandle nh, std::vector<double> d, std::vector<double> a, s
     d_ = d;
     a_ = a;
     alpha_ = alpha;
+
+    robot_model_loader::RobotModelLoader robot_model_loader("ur3_robot");
+    kinematic_model_ = robot_model_loader.getModel();
+    ROS_INFO("Model frame: %s", kinematic_model_->getModelFrame().c_str());
 }
 
 ///////////////////////////////////////////////////////////

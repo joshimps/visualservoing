@@ -4,6 +4,7 @@
 #include "tf2/LinearMath/Vector3.h"
 #include "tf2/LinearMath/Matrix3x3.h"
 #include "tf2/LinearMath/Scalar.h"
+#include "moveit/robot_model_loader/robot_model_loader.h"
 #include <atomic>
 #include <mutex>
 #include <vector>
@@ -48,6 +49,12 @@ class Robot{
     // Data Security and Pointers
     /////////////////////////////////////////////////////////////////////
     std::mutex jointStateMutex_;
+
+    ///////////////////////////////////////////////////////////////////////
+    // Robot Model
+    /////////////////////////////////////////////////////////////////////
+    
+    robot_model::RobotModelPtr kinematic_model_;
 
     ///////////////////////////////////////////////////////////////////////
     // Joints
