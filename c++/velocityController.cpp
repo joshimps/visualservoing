@@ -7,4 +7,13 @@
 
 VelocityController::VelocityControllers(ros::NodeHandle nh){
     nh_ = nh;
+    //fiducialPositionSub_ = nh_.subscribe("fiducialPositionTopic", 1000, &VelocityController::fiducialPositionCallBack, this);
+}
+
+///////////////////////////////////////////////////////////
+// Callbacks and Services
+//////////////////////////////////////////////////////////
+
+void fiducialPositionCallBack(const geometry_msgs::PoseWithCovariancePtr &msg){
+    fiducialPose_ = msg;
 }

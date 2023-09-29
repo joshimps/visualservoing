@@ -1,4 +1,5 @@
 #include "ros/ros.h"
+#include "geometry_msgs/PoseWithCovariance.h"
 
 class VelocityController{
     public:
@@ -14,11 +15,24 @@ class VelocityController{
     VelocityController(ros::NodeHandle nh);
     ~VelocityController();
 
+    ///////////////////////////////////////////////////////////
+    // Callbacks and Services
+    //////////////////////////////////////////////////////////
+
+    void fiducialPositionCallBack(const geometry_msgs::PoseWithCovariancePtr &msg);
 
     ///////////////////////////////////////////////////////////////////////
     // Node, Publishers and Subscribers
     /////////////////////////////////////////////////////////////////////
-    
+
     ros::NodeHandle nh_;
-    
+    ros::Subscriber fiducialPositionSub_;
+    ros::Publisher jointVelocityPub_;
+
+    ///////////////////////////////////////////////////////////////////////
+    // Variables
+    /////////////////////////////////////////////////////////////////////
+
+    geometry_msgs::PoseWithCovariance fiducialPose_;
+
 }
