@@ -1,5 +1,5 @@
 {
-    "cmake.sourceDirectory": "/wsl.localhost/Ubuntu-20.04/home/joshimps/git/visualservoing/c++",
+    "cmake.sourceDirectory": "/home/joshimps/git/visualservoing/c++",
     "files.associations": {
         "cctype": "cpp",
         "clocale": "cpp",
@@ -61,6 +61,12 @@
         "thread": "cpp",
         "cfenv": "cpp",
         "cinttypes": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "bitset": "cpp",
+        "hash_map": "cpp",
+        "hash_set": "cpp",
+        "shared_mutex": "cpp",
+        "typeindex": "cpp",
+        "variant": "cpp"
     }
 }

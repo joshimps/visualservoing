@@ -1,7 +1,10 @@
+#include "robot.h"
 #include "ros/ros.h"
 #include "geometry_msgs/PoseWithCovariance.h"
+#include "tf2/LinearMath/Transform.h"
+#include <vector>
 
-class VelocityController{
+class RobotController{
     public:
 
     protected:
@@ -12,8 +15,8 @@ class VelocityController{
     // Constructors and Destructors
     /////////////////////////////////////////////////////////////////////////////////////////
 
-    VelocityController(ros::NodeHandle nh);
-    ~VelocityController();
+    RobotController(ros::NodeHandle nh, Robot* robot);
+    ~RobotController();
 
     ///////////////////////////////////////////////////////////
     // Calculation
@@ -25,7 +28,7 @@ class VelocityController{
     // Callbacks and Services
     //////////////////////////////////////////////////////////
 
-    void fiducialPositionCallBack(const geometry_msgs::PoseWithCovariancePtr &msg);
+    void fiducialPositionCallBack(geometry_msgs::PoseWithCovariancePtr &msg);
 
     ///////////////////////////////////////////////////////////////////////
     // Node, Publishers and Subscribers
@@ -45,6 +48,11 @@ class VelocityController{
     // Variables
     /////////////////////////////////////////////////////////////////////
 
-    geometry_msgs::PoseWithCovariance fiducialPose_;
+    geometry_msgs::PoseWithCovariance fiducialPoseLocal_;
+
+    ///////////////////////////////////////////////////////////////////////
+    // Robot To Control Velocity
+    /////////////////////////////////////////////////////////////////////
+    Robot* robot_;
 
 };
