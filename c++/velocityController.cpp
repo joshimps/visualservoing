@@ -5,15 +5,25 @@
 // Constructors and Destructors
 /////////////////////////////////////////////////////////////////////////////////////////
 
-VelocityController::VelocityControllers(ros::NodeHandle nh){
+VelocityController::VelocityController(ros::NodeHandle nh){
     nh_ = nh;
     //fiducialPositionSub_ = nh_.subscribe("fiducialPositionTopic", 1000, &VelocityController::fiducialPositionCallBack, this);
+    jointVelocityPub_ = nh_.publish("", 3, false);
+}
+
+
+///////////////////////////////////////////////////////////
+// Calculation
+//////////////////////////////////////////////////////////
+
+void VelocityController::calculateJointVelocities(){
+    
 }
 
 ///////////////////////////////////////////////////////////
 // Callbacks and Services
 //////////////////////////////////////////////////////////
 
-void fiducialPositionCallBack(const geometry_msgs::PoseWithCovariancePtr &msg){
+void VelocityController::fiducialPositionCallBack(const geometry_msgs::PoseWithCovariancePtr &msg){
     fiducialPose_ = msg;
 }
