@@ -276,5 +276,4 @@ void Robot::calculateJacobian(){
         jacobian_(5,i) = unitVector(2,0);
     }
 
-
 }
