@@ -15,7 +15,7 @@ class Robot{
     // Getters
     /////////////////////////////////////////////////////////////////////////////////////////
     sensor_msgs::JointState getJointState();
-    tf2::Transform getEndEffectorTransform();
+    Eigen::MatrixXd getEndEffectorTransform();
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     // Calculations
@@ -54,7 +54,7 @@ class Robot{
     ///////////////////////////////////////////////////////////////////////
     // Base and Joints
     /////////////////////////////////////////////////////////////////////
-    tf2::Transform baseTransform_;
+    Eigen::MatrixXd baseTransform_;
     sensor_msgs::JointState jointStates_;
     std::vector<Eigen::MatrixXf> jointTransforms_;
     Eigen::MatrixXf jacobian_;
