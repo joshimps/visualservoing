@@ -59,6 +59,17 @@ Eigen::MatrixXd Robot::getEndEffectorTransform(){
     return jointTransforms_.at(jointStates_.position.size());
 }
 
+Eigen::MatrixXd Robot::getJointTransform(int i){
+    std::unique_lock<std::mutex> lck(jointStateMutex_);
+    return jointTransforms_.at(i);
+}
+
+Eigen::MatrixXd Robot::getJacobian(){
+    std::unique_lock<std::mutex> lck(jointStateMutex_);
+    return jacobian_;
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////
 // Calculations
 /////////////////////////////////////////////////////////////////////////////////////////

@@ -23,6 +23,7 @@ void RobotController::moveRobot(){
     //First calculate the error between end effector position and the desired position
 
     Eigen::MatrixXd endEffectorVelocity(6,1);
+    Eigen::MatrixXd jointVelocities;
 
     robot_->calculateJointTransforms();
     
@@ -32,6 +33,10 @@ void RobotController::moveRobot(){
     endEffectorVelocity(3,0) = gain_ * fiducialRotationLocal_.x();
     endEffectorVelocity(4,0) = gain_ * fiducialRotationLocal_.y();
     endEffectorVelocity(5,0) = gain_ * fiducialRotationLocal_.z();
+
+    robot_->calculateJacobian();
+
+    jointVelocities = robot_->getJacobian().completeOrthogonalDecomposition().pseudoInverse() * endEffectorVelocity;
 
 }
 
