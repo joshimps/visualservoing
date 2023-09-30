@@ -27,7 +27,7 @@ class RobotController{
     // Calculation
     //////////////////////////////////////////////////////////
 
-    std::vector<tf2Scalar> calculateEndEffectorVelocity();
+    void RobotController::moveRobot();
     
     ///////////////////////////////////////////////////////////
     // Callbacks and Services
@@ -53,7 +53,8 @@ class RobotController{
     // Variables
     /////////////////////////////////////////////////////////////////////
 
-    Eigen::MatrixXd fiducialPoseLocal_;
+    Eigen::MatrixXd fiducialTranslationLocal_;
+    Eigen::Quaterniond fiducialRotationLocal_;
 
     ///////////////////////////////////////////////////////////////////////
     // Robot To Control Velocity
