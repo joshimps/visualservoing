@@ -7,6 +7,7 @@
 #include "tf2/LinearMath/Matrix3x3.h"
 #include "tf2/LinearMath/Scalar.h"
 #include "tf2/LinearMath/Quaternion.h"
+#include "Eigen/Dense"
 
 class RobotController{
     public:
@@ -52,7 +53,7 @@ class RobotController{
     // Variables
     /////////////////////////////////////////////////////////////////////
 
-    tf2::Transform fiducialPoseLocal_;
+    Eigen::MatrixXd fiducialPoseLocal_;
 
     ///////////////////////////////////////////////////////////////////////
     // Robot To Control Velocity

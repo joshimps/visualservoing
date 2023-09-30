@@ -23,10 +23,9 @@ std::vector<tf2Scalar> RobotController::calculateEndEffectorVelocity(){
     //First calculate the error between end effector position and the desired position
 
     robot_->calculateJointTransforms();
-    tf2::Transform tBaseToEndEffector = robot_->getEndEffectorTransform();
-    tf2::Transform tError = fiducialPoseLocal_ * (tBaseToEndEffector.inverse());
-    tf2::Vector3 positionError = tError.getOrigin();
-    tf2::Quaternion rotationalError = tError.getRotation();
+    Eigen::MatrixXd tError = fiducialPoseLocal_
+    tf2::Vector3 positionError = 
+    tf2::Quaternion rotationalError = 
     
     std::vector<tf2Scalar> endEffectorVelocity;
 
@@ -46,8 +45,21 @@ std::vector<tf2Scalar> RobotController::calculateEndEffectorVelocity(){
 
 void RobotController::fiducialPositionCallBack(geometry_msgs::PoseWithCovariancePtr &msg){
     geometry_msgs::PoseWithCovariance fiducialPoseWithCovarianceLocal_ = *msg;
-    tf2::Vector3 fiducialTranslation(fiducialPoseWithCovarianceLocal_.pose.position.x,fiducialPoseWithCovarianceLocal_.pose.position.y,fiducialPoseWithCovarianceLocal_.pose.position.z);
-    tf2::Quaternion fiducialRotation(fiducialPoseWithCovarianceLocal_.pose.orientation.x,
+    Eigen::MatrixXd fiducialTranslation(3,1);
+    Eigen::Quaterniond fiducialRotation;
+
+    //Row 1
+    fiducialTranslation(0,0) = fiducialPoseWithCovarianceLocal_.pose.position.x;
+    //Row 2
+    fiducialTranslation(1,0) = fiducialPoseWithCovarianceLocal_.pose.position.y;
+    //Row 3
+    fiducialTranslation(2,0) = fiducialPoseWithCovarianceLocal_.pose.position.z;
+
+    fiducialRotation
+    
+
+
+    (fiducialPoseWithCovarianceLocal_.pose.orientation.x,
                                      fiducialPoseWithCovarianceLocal_.pose.orientation.y,
                                      fiducialPoseWithCovarianceLocal_.pose.orientation.z,
                                      fiducialPoseWithCovarianceLocal_.pose.orientation.w);
