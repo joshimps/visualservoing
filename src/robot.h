@@ -7,6 +7,7 @@
 #include <atomic>
 #include <mutex>
 #include <vector>
+#include "Eigen/Dense"
 
 class Robot{
     public:
@@ -20,7 +21,8 @@ class Robot{
     // Calculations
     /////////////////////////////////////////////////////////////////////////////////////////
 
-    tf2::Transform calculateJointTransforms();
+    void calculateJointTransforms();
+    void calculateJacobian();
 
     protected:
 
@@ -50,17 +52,12 @@ class Robot{
     std::mutex jointStateMutex_;
 
     ///////////////////////////////////////////////////////////////////////
-    // Robot Model
+    // Base and Joints
     /////////////////////////////////////////////////////////////////////
-    
-    robot_model::RobotModelPtr kinematic_model_;
-
-    ///////////////////////////////////////////////////////////////////////
-    // Joints
-    /////////////////////////////////////////////////////////////////////
-    
+    tf2::Transform baseTransform_;
     sensor_msgs::JointState jointStates_;
-    std::vector<tf2::Transform> jointTransforms_;
+    std::vector<Eigen::MatrixXf> jointTransforms_;
+    Eigen::MatrixXf jacobian_;
 
     ///////////////////////////////////////////////////////////////////////
     // Robot DH Params

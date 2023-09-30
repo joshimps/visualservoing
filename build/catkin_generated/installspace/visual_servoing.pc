@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: visual_servoing
+Description: Description of visual_servoing
+Version: 1.2.4
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
