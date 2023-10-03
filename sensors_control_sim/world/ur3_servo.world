@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<sdf>
+  <world name="default">
+    <!-- ground plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- source light -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <include>
+      <uri>model:aruco-marker-id=1</uri>
+    </include>
+
+  </world>
+</sdf>
