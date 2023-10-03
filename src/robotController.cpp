@@ -16,15 +16,15 @@ RobotController::RobotController(ros::NodeHandle nh, Robot* robot, double gain, 
 
 
 ///////////////////////////////////////////////////////////
-// Calculation
+// Actions
 //////////////////////////////////////////////////////////
 
 void RobotController::moveRobot(){
+    std::unique_lock<std::mutex> lck(fiducialPoseMutex_);
     Eigen::MatrixXd endEffectorVelocity(6,1);
     Eigen::MatrixXd jointVelocities;
 
     while(endEffectorVelocity.norm() > errorThreshold_){
-        robot_->calculateJointTransforms();
     
         endEffectorVelocity(0,0) = gain_ * fiducialTranslationLocal_(0,0);
         endEffectorVelocity(1,0) = gain_ * fiducialTranslationLocal_(1,0);
@@ -33,9 +33,13 @@ void RobotController::moveRobot(){
         endEffectorVelocity(4,0) = gain_ * fiducialRotationLocal_.y();
         endEffectorVelocity(5,0) = gain_ * fiducialRotationLocal_.z();
 
+        //Calculate the jacobian of the current pose 
+        robot_->calculateJointTransforms();
         robot_->calculateJacobian();
 
         jointVelocities = robot_->getJacobian().completeOrthogonalDecomposition().pseudoInverse() * endEffectorVelocity;
+        
+        //Publish the joint velocities to the robot here
     }
     
 }
@@ -45,6 +49,9 @@ void RobotController::moveRobot(){
 //////////////////////////////////////////////////////////
 
 void RobotController::fiducialPositionCallBack(geometry_msgs::PoseWithCovariancePtr &msg){
+
+    std::unique_lock<std::mutex> lck(fiducialPoseMutex_);
+
     geometry_msgs::PoseWithCovariance fiducialPoseWithCovarianceLocal_ = *msg;
 
     fiducialTranslationLocal_(0,0) = fiducialPoseWithCovarianceLocal_.pose.position.x;
