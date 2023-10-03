@@ -24,8 +24,13 @@ void RobotController::moveRobot(){
     Eigen::MatrixXd endEffectorVelocity(6,1);
     Eigen::MatrixXd jointVelocities;
 
+    //Keep going until the norm of the error is greater than the threshold
+    //Using Position Based servoing as explained here
+    //https://canvas.uts.edu.au/courses/27375/pages/2-position-based-visual-servoing-pbvs?module_item_id=1290599
+
     while(endEffectorVelocity.norm() > errorThreshold_){
-    
+        
+        //Calculate our end effector velocity from the positional and rotational error
         endEffectorVelocity(0,0) = gain_ * fiducialTranslationLocal_(0,0);
         endEffectorVelocity(1,0) = gain_ * fiducialTranslationLocal_(1,0);
         endEffectorVelocity(2,0) = gain_ * fiducialTranslationLocal_(2,0);
@@ -37,9 +42,11 @@ void RobotController::moveRobot(){
         robot_->calculateJointTransforms();
         robot_->calculateJacobian();
 
+        //The joint velocity is the jacobian multiplied by the error 
         jointVelocities = robot_->getJacobian().completeOrthogonalDecomposition().pseudoInverse() * endEffectorVelocity;
         
         //Publish the joint velocities to the robot here
+        
     }
     
 }

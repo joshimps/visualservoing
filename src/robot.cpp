@@ -190,6 +190,7 @@ void Robot::calculateJointTransforms(){
     }   
 }
 
+// Please please please this needs unit testing to ensure its right
 void Robot::calculateJacobian(){
     Eigen::MatrixXd unitVector(3,1);
     Eigen::MatrixXd rotationMatrixIto0(3,3);
@@ -199,8 +200,8 @@ void Robot::calculateJacobian(){
 
     //Lets fill in each column of the jacobian
     //Each column can be represented by the formula
-    //For a robot with N DOF where I is the column number
-    //rotationMatrixIToBase x unitVector x (translationMatrixN - translationMatrix(I-1)) }->First three rows
+    //For a robot with N DOF where I is the jacobian column index
+    //rotationMatrixITo0 x unitVector x (translationMatrixN - translationMatrix(I-1)) }->First three rows
     //unitVector }->Last three rows
     
     //The unit vector is 0;0;1 as with DH params we always rotate about z axis
