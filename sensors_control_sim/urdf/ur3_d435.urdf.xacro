@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<robot name="ur3_d435"
+    xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <!--File includes-->
+    <xacro:include filename="$(find sensors_control_sim)/urdf/ur3_macro.xacro"/>
+
+    <link name="world"/>
+    <joint name="world_joint" type="fixed">
+        <parent link="world"/>
+        <child link="base_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <xacro:include filename="$(find sensors_control_sim)/urdf/_d435.urdf.xacro"/>
+
+    <link name="camera_link"/>
+    <joint name="ee_joint" type="fixed">
+        <parent link="{prefix}ee_link"/>
+        <origin xyz="0.0 0.2 0" rpy="0 0 0"/>
+    </joint>
+
+</robot>
+
+
+
+
+
