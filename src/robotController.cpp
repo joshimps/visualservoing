@@ -20,24 +20,24 @@ RobotController::RobotController(ros::NodeHandle nh, Robot* robot, double gain, 
 //////////////////////////////////////////////////////////
 
 void RobotController::moveRobot(){
-    //First calculate the error between end effector position and the desired position
-
     Eigen::MatrixXd endEffectorVelocity(6,1);
     Eigen::MatrixXd jointVelocities;
 
-    robot_->calculateJointTransforms();
+    while(endEffectorVelocity.norm() > errorThreshold_){
+        robot_->calculateJointTransforms();
     
-    endEffectorVelocity(0,0) = gain_ * fiducialTranslationLocal_(0,0);
-    endEffectorVelocity(1,0) = gain_ * fiducialTranslationLocal_(1,0);
-    endEffectorVelocity(2,0) = gain_ * fiducialTranslationLocal_(2,0);
-    endEffectorVelocity(3,0) = gain_ * fiducialRotationLocal_.x();
-    endEffectorVelocity(4,0) = gain_ * fiducialRotationLocal_.y();
-    endEffectorVelocity(5,0) = gain_ * fiducialRotationLocal_.z();
+        endEffectorVelocity(0,0) = gain_ * fiducialTranslationLocal_(0,0);
+        endEffectorVelocity(1,0) = gain_ * fiducialTranslationLocal_(1,0);
+        endEffectorVelocity(2,0) = gain_ * fiducialTranslationLocal_(2,0);
+        endEffectorVelocity(3,0) = gain_ * fiducialRotationLocal_.x();
+        endEffectorVelocity(4,0) = gain_ * fiducialRotationLocal_.y();
+        endEffectorVelocity(5,0) = gain_ * fiducialRotationLocal_.z();
 
-    robot_->calculateJacobian();
+        robot_->calculateJacobian();
 
-    jointVelocities = robot_->getJacobian().completeOrthogonalDecomposition().pseudoInverse() * endEffectorVelocity;
-
+        jointVelocities = robot_->getJacobian().completeOrthogonalDecomposition().pseudoInverse() * endEffectorVelocity;
+    }
+    
 }
 
 ///////////////////////////////////////////////////////////

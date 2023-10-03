@@ -53,6 +53,7 @@ class RobotController{
     // Variables
     /////////////////////////////////////////////////////////////////////
 
+    
     Eigen::MatrixXd fiducialTranslationLocal_;
     Eigen::Quaterniond fiducialRotationLocal_;
 

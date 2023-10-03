@@ -760,28 +760,6 @@
 			"path" : "cmake/FindEigen3.cmake"
 		},
 		{
-			"isExternal" : true,
-			"path" : "/usr/lib/cmake/eigen3/Eigen3ConfigVersion.cmake"
-		},
-		{
-			"isExternal" : true,
-			"path" : "/usr/lib/cmake/eigen3/Eigen3ConfigVersion.cmake"
-		},
-		{
-			"isExternal" : true,
-			"path" : "/lib/cmake/eigen3/Eigen3ConfigVersion.cmake"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "/usr/share/cmake-3.16/Modules/FindPackageHandleStandardArgs.cmake"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "/usr/share/cmake-3.16/Modules/FindPackageMessage.cmake"
-		},
-		{
 			"path" : "package.xml"
 		},
 		{
