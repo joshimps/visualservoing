@@ -1,1 +1,0 @@
-/usr/bin/c++  -g  -rdynamic CMakeFiles/robotTests.dir/robotTests.cpp.o  -o robotTests  -Wl,-rpath,/home/joshimps/git/visualservoing/build/test -Wl,-Bstatic -lgtest -Wl,-Bdynamic libstudent_lib.so 
