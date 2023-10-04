@@ -57,6 +57,13 @@ void RobotController::moveRobot(){
         
         //Publish the joint velocities to the robot here
         std_msgs::Float64MultiArray msg;
+        msg.data.reserve(robot_->getNumberOfJoints());
+
+        for(int i = 0; i < robot_->getNumberOfJoints(); i++){
+            msg.data.at(i) = jointVelocities(i,0);
+        }
+        
+        jointVelocityPub_.publish(msg);
     }
 }
 

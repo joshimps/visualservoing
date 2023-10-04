@@ -37,6 +37,7 @@ TEST(RobotController,testEndEffectorVelocity){
     * Eigen::AngleAxisd(yaw, Eigen::Vector3d::UnitZ());
     
    robotController.setFiducialPostition(fiducialTranslationLocal,fiducialRotationLocal);
+   robotController.moveRobot();
     
 }
 

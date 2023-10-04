@@ -12,6 +12,7 @@ Robot::Robot(ros::NodeHandle nh, std::vector<double> d, std::vector<double> a, s
     a_ = a;
     alpha_ = alpha;
     jacobian_.resize(6,d.size());
+    numberOfJoints_ = d_.size();
 
     //Row 1
     baseTransform_(0,0) = 1;
@@ -77,6 +78,10 @@ Eigen::MatrixXd Robot::getJointTransformToBase(int i){
 Eigen::MatrixXd Robot::getJacobian(){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
     return jacobian_;
+}
+
+int Robot::getNumberOfJoints(){
+    return numberOfJoints_;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
