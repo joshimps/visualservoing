@@ -32,8 +32,7 @@
   -->
 
   <!--Robot description and related parameter files -->
-  <!-- <arg name="robot_description_file" default="$(dirname)/load_ur3.launch.xml" doc="Launch file which populates the 'robot_description' parameter."/> -->
-  
+  <arg name="robot_description_file" default="$(dirname)/load_ur3.launch.xml" doc="Launch file which populates the 'robot_description' parameter."/> -->
   <arg name="joint_limit_params" default="$(find ur_description)/config/ur3/joint_limits.yaml"/>
   <arg name="kinematics_params" default="$(find ur_description)/config/ur3/default_kinematics.yaml"/>
   <arg name="physical_params" default="$(find ur_description)/config/ur3/physical_parameters.yaml"/>
@@ -52,13 +51,13 @@
   <arg name="paused" default="false" doc="Starts Gazebo in paused mode" />
   <arg name="gui" default="true" doc="Starts Gazebo gui" />
 
-  <!-- Load urdf on the parameter server
+  <!-- Load urdf on the parameter server -->
   <include file="$(arg robot_description_file)">
     <arg name="joint_limit_params" value="$(arg joint_limit_params)"/>
     <arg name="kinematics_params" value="$(arg kinematics_params)"/>
     <arg name="physical_params" value="$(arg physical_params)"/>
     <arg name="visual_params" value="$(arg visual_params)"/>
-  </include> -->
+  </include>
 
   <!-- Robot state publisher -->
   <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
@@ -67,7 +66,7 @@
   </node>
 
   <!-- Start the 'driver' (ie: Gazebo in this case) -->
-  <include file="$(find ur_gazebo)/launch/inc/ur_control.launch.xml">
+  <include file="$(find sensors_control_sim)/launch/inc/ur_control.launch.xml">
     <arg name="controller_config_file" value="$(arg controller_config_file)"/>
     <arg name="controllers" value="$(arg controllers)"/>
     <arg name="gui" value="$(arg gui)"/>
