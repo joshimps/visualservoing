@@ -215,7 +215,7 @@ void Robot::calculateJacobian(){
     //Lets fill in each column of the jacobian
     //Each column can be represented by the formula
     //For a robot with N DOF where I is the jacobian column index
-    //rotationMatrixITo0 x unitVector x (translationMatrixN - translationMatrix(I-1)) }->First three rows
+    //rotationMatrixITo0 x unitVector x (translationMatrixN - translationMatrix(I)) }->First three rows
     //unitVector }->Last three rows
     
     //The unit vector is 0;0;1 as with DH params we always rotate about z axis
