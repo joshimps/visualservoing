@@ -12,6 +12,7 @@ Robot::Robot(ros::NodeHandle nh, std::vector<double> d, std::vector<double> a, s
     a_ = a;
     alpha_ = alpha;
     jacobian_.resize(6,d.size());
+    numberOfJoints_ = d_.size();
 
     //Row 1
     baseTransform_(0,0) = 1;
@@ -77,6 +78,10 @@ Eigen::MatrixXd Robot::getJointTransformToBase(int i){
 Eigen::MatrixXd Robot::getJacobian(){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
     return jacobian_;
+}
+
+int Robot::getNumberOfJoints(){
+    return numberOfJoints_;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -255,7 +260,7 @@ void Robot::calculateJacobian(){
     translationMatrixNtoB(1,0) = jointTransformsToBase_.at(jointTransformsToBase_.size()-1)(1,3);
     translationMatrixNtoB(2,0) = jointTransformsToBase_.at(jointTransformsToBase_.size()-1)(2,3);
     
-    for(int i = 0; i < jointTransforms_.size()-1; i++){
+    for(int i = 0; i < jointTransforms_.size(); i++){
         //Get the rotation matrix from i to 0 and the translation matrix from i to 0
         
         if(i == 0){
@@ -304,7 +309,8 @@ void Robot::calculateJacobian(){
         ROS_INFO_STREAM(translationMatrixItoB);
         jacobianLinearVelocityComponent = (rotationMatrixItoB * unitVector).cross((translationMatrixNtoB - translationMatrixItoB));
         jacobianRotationalVelocityComponent = rotationMatrixItoB * unitVector;
-        
+
+
         //Row 1
         jacobian_(0,i) = jacobianLinearVelocityComponent(0,0);
         //Row 2

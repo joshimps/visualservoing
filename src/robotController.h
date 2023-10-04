@@ -1,6 +1,7 @@
 #include "robot.h"
 #include "ros/ros.h"
 #include "geometry_msgs/PoseWithCovariance.h"
+#include "geometry_msgs/PoseStamped.h"
 #include "tf2/LinearMath/Transform.h"
 #include "tf2/LinearMath/Vector3.h"
 #include "tf2/LinearMath/Matrix3x3.h"
@@ -8,6 +9,7 @@
 #include "tf2/LinearMath/Quaternion.h"
 #include "eigen3/Eigen/Dense"
 #include "std_msgs/Float64MultiArray.h"
+#include "geometry_msgs/PoseStamped.h"
 #include <atomic>
 #include <mutex>
 #include <vector>
@@ -41,7 +43,7 @@ class RobotController{
     // Callbacks and Services
     //////////////////////////////////////////////////////////
 
-    void fiducialPositionCallBack(geometry_msgs::PoseWithCovariancePtr &msg);
+    void fiducialPositionCallBack(const geometry_msgs::PoseStampedPtr &msg);
 
     ///////////////////////////////////////////////////////////////////////
     // Node, Publishers and Subscribers

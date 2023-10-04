@@ -25,6 +25,7 @@ class Robot{
     Eigen::MatrixXd getJointTransform(int i);
     Eigen::MatrixXd getJointTransformToBase(int i);
     Eigen::MatrixXd getJacobian();
+    int getNumberOfJoints();
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     // Setters
@@ -69,6 +70,7 @@ class Robot{
     std::vector<Eigen::Matrix4d> jointTransforms_;
     std::vector<Eigen::Matrix4d> jointTransformsToBase_;
     Eigen::MatrixXd jacobian_;
+    int numberOfJoints_;
 
     ///////////////////////////////////////////////////////////////////////
     // Robot DH Params
