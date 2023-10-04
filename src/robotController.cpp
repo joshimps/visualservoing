@@ -18,7 +18,7 @@ RobotController::RobotController(ros::NodeHandle nh, Robot* robot, double gain, 
 // Setters
 /////////////////////////////////////////////////////////////////////////////////////////
 
-void RobotController::setFiducialPostition(geometry_msgs::PoseWithCovariancePtr msg){
+void RobotController::setFiducialPostition(geometry_msgs::PoseWithCovariancePtr &msg){
     fiducialPositionCallBack(msg);
 }
 
@@ -56,10 +56,7 @@ void RobotController::moveRobot(){
         
         //Publish the joint velocities to the robot here
         std_msgs::Float64MultiArray msg;
-
-
     }
-    
 }
 
 ///////////////////////////////////////////////////////////

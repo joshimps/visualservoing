@@ -31,7 +31,7 @@ class RobotController{
     // Setters
     /////////////////////////////////////////////////////////////////////////////////////////
 
-    void setFiducialPostition(geometry_msgs::PoseWithCovariancePtr msg);
+    void setFiducialPostition(geometry_msgs::PoseWithCovariancePtr &msg);
 
     protected:
 
