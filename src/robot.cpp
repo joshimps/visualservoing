@@ -207,15 +207,16 @@ void Robot::calculateJointTransformsToBase(){
 // Please please please this needs unit testing to ensure its right
 void Robot::calculateJacobian(){
     Eigen::Vector3d unitVector;
-    Eigen::MatrixXd rotationMatrixIto0(3,3);
-    Eigen::Vector3d translationMatrixIto0;
-    Eigen::Vector3d translationMatrixNto0;
+    Eigen::MatrixXd rotationMatrixItoB(3,3);
+    Eigen::Vector3d translationMatrixItoB;
+    Eigen::Vector3d translationMatrixNtoB;
     Eigen::MatrixXd jacobianLinearVelocityComponent;
 
     //Lets fill in each column of the jacobian
     //Each column can be represented by the formula
-    //For a robot with N DOF where I is the jacobian column index
-    //rotationMatrixITo0 x unitVector x (translationMatrixN - translationMatrix(I)) }->First three rows
+    //For a robot with N DOF where I is the jacobian column index and B is the base transform
+    //If I was 0 then the transform would be from BtoB or 0to0
+    //rotationMatrixIToB x unitVector x (translationMatrixNtoB - translationMatrix(ItoB) }->First three rows
     //unitVector }->Last three rows
     
     //The unit vector is 0;0;1 as with DH params we always rotate about z axis
@@ -227,57 +228,57 @@ void Robot::calculateJacobian(){
     calculateJointTransformsToBase();
 
     //The translationMatrixNto0 will be the translation part of the transformation matrix N to 0
-    translationMatrixNto0(0,0) = jointTransformsToBase_.at(jointTransformsToBase_.size())(0,3);
-    translationMatrixNto0(1,0) = jointTransformsToBase_.at(jointTransformsToBase_.size())(1,3);
-    translationMatrixNto0(2,0) = jointTransformsToBase_.at(jointTransformsToBase_.size())(2,3);
+    translationMatrixNtoB(0,0) = jointTransformsToBase_.at(jointTransformsToBase_.size())(0,3);
+    translationMatrixNtoB(1,0) = jointTransformsToBase_.at(jointTransformsToBase_.size())(1,3);
+    translationMatrixNtoB(2,0) = jointTransformsToBase_.at(jointTransformsToBase_.size())(2,3);
 
     for(int i = -1; i < jointTransforms_.size()-1; i++){
         //Get the rotation matrix from i to 0 and the translation matrix from i to 0
         
         if(i == -1){
             //Build the matrices rotationMatrixIto0 and translationMatrixIto0
-            translationMatrixIto0(0,0) = baseTransform_(0,3);
-            translationMatrixIto0(1,0) = baseTransform_(1,3);
-            translationMatrixIto0(2,0) = baseTransform_(2,3);
+            translationMatrixItoB(0,0) = baseTransform_(0,3);
+            translationMatrixItoB(1,0) = baseTransform_(1,3);
+            translationMatrixItoB(2,0) = baseTransform_(2,3);
 
             //Row 1
-            rotationMatrixIto0(0,0) = baseTransform_(0,0);
-            rotationMatrixIto0(0,1) = baseTransform_(0,1);
-            rotationMatrixIto0(0,2) = baseTransform_(0,2);
+            rotationMatrixItoB(0,0) = baseTransform_(0,0);
+            rotationMatrixItoB(0,1) = baseTransform_(0,1);
+            rotationMatrixItoB(0,2) = baseTransform_(0,2);
 
             //Row 2
-            rotationMatrixIto0(1,0) = baseTransform_(1,0);
-            rotationMatrixIto0(1,1) = baseTransform_(1,2);
-            rotationMatrixIto0(1,2) = baseTransform_(1,2);
+            rotationMatrixItoB(1,0) = baseTransform_(1,0);
+            rotationMatrixItoB(1,1) = baseTransform_(1,2);
+            rotationMatrixItoB(1,2) = baseTransform_(1,2);
 
             //Row 3
-            rotationMatrixIto0(2,0) = baseTransform_(2,0);
-            rotationMatrixIto0(2,1) = baseTransform_(2,1);
-            rotationMatrixIto0(2,2) = baseTransform_(2,2);
+            rotationMatrixItoB(2,0) = baseTransform_(2,0);
+            rotationMatrixItoB(2,1) = baseTransform_(2,1);
+            rotationMatrixItoB(2,2) = baseTransform_(2,2);
         }
         else{
             //Build the matrices rotationMatrixIto0 and translationMatrixIto0
-            translationMatrixIto0(0,0) = jointTransformsToBase_.at(i)(0,3);
-            translationMatrixIto0(1,0) = jointTransformsToBase_.at(i)(1,3);
-            translationMatrixIto0(2,0) = jointTransformsToBase_.at(i)(2,3);
+            translationMatrixItoB(0,0) = jointTransformsToBase_.at(i)(0,3);
+            translationMatrixItoB(1,0) = jointTransformsToBase_.at(i)(1,3);
+            translationMatrixItoB(2,0) = jointTransformsToBase_.at(i)(2,3);
 
             //Row 1
-            rotationMatrixIto0(0,0) = jointTransformsToBase_.at(i)(0,0);
-            rotationMatrixIto0(0,1) = jointTransformsToBase_.at(i)(0,1);
-            rotationMatrixIto0(0,2) = jointTransformsToBase_.at(i)(0,2);
+            rotationMatrixItoB(0,0) = jointTransformsToBase_.at(i)(0,0);
+            rotationMatrixItoB(0,1) = jointTransformsToBase_.at(i)(0,1);
+            rotationMatrixItoB(0,2) = jointTransformsToBase_.at(i)(0,2);
             
             //Row 2
-            rotationMatrixIto0(1,0) = jointTransformsToBase_.at(i)(1,0);
-            rotationMatrixIto0(1,1) = jointTransformsToBase_.at(i)(1,2);
-            rotationMatrixIto0(1,2) = jointTransformsToBase_.at(i)(1,2);
+            rotationMatrixItoB(1,0) = jointTransformsToBase_.at(i)(1,0);
+            rotationMatrixItoB(1,1) = jointTransformsToBase_.at(i)(1,2);
+            rotationMatrixItoB(1,2) = jointTransformsToBase_.at(i)(1,2);
             //Row 3
-            rotationMatrixIto0(2,0) = jointTransformsToBase_.at(i)(2,0);
-            rotationMatrixIto0(2,1) = jointTransformsToBase_.at(i)(2,1);
-            rotationMatrixIto0(2,2) = jointTransformsToBase_.at(i)(2,2);
+            rotationMatrixItoB(2,0) = jointTransformsToBase_.at(i)(2,0);
+            rotationMatrixItoB(2,1) = jointTransformsToBase_.at(i)(2,1);
+            rotationMatrixItoB(2,2) = jointTransformsToBase_.at(i)(2,2);
         }
 
         //Create the coiumn in the jacobian matrix
-        jacobianLinearVelocityComponent = rotationMatrixIto0 * unitVector.cross((translationMatrixNto0 - translationMatrixIto0));
+        jacobianLinearVelocityComponent = rotationMatrixItoB * unitVector.cross((translationMatrixNtoB - translationMatrixItoB));
         //Row 1
         jacobian_(0,i) = jacobianLinearVelocityComponent(0,0);
         //Row 2
