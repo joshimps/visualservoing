@@ -231,13 +231,15 @@ void Robot::calculateJacobian(){
     translationMatrixNto0(1,0) = jointTransformsToBase_.at(jointTransformsToBase_.size())(1,3);
     translationMatrixNto0(2,0) = jointTransformsToBase_.at(jointTransformsToBase_.size())(2,3);
 
-    for(int i = -1; i < jointTransforms_.size();i++){
+    for(int i = -1; i < jointTransforms_.size()-1; i++){
         //Get the rotation matrix from i to 0 and the translation matrix from i to 0
-        translationMatrixIto0(0,0) = jointTransformsToBase_.at(i)(0,3);
-        translationMatrixIto0(1,0) = jointTransformsToBase_.at(i)(1,3);
-        translationMatrixIto0(2,0) = jointTransformsToBase_.at(i)(2,3);
-
+        
         if(i == -1){
+            //Build the matrices rotationMatrixIto0 and translationMatrixIto0
+            translationMatrixIto0(0,0) = baseTransform_(0,3);
+            translationMatrixIto0(1,0) = baseTransform_(1,3);
+            translationMatrixIto0(2,0) = baseTransform_(2,3);
+
             //Row 1
             rotationMatrixIto0(0,0) = baseTransform_(0,0);
             rotationMatrixIto0(0,1) = baseTransform_(0,1);
@@ -254,10 +256,16 @@ void Robot::calculateJacobian(){
             rotationMatrixIto0(2,2) = baseTransform_(2,2);
         }
         else{
-           //Row 1
+            //Build the matrices rotationMatrixIto0 and translationMatrixIto0
+            translationMatrixIto0(0,0) = jointTransformsToBase_.at(i)(0,3);
+            translationMatrixIto0(1,0) = jointTransformsToBase_.at(i)(1,3);
+            translationMatrixIto0(2,0) = jointTransformsToBase_.at(i)(2,3);
+
+            //Row 1
             rotationMatrixIto0(0,0) = jointTransformsToBase_.at(i)(0,0);
             rotationMatrixIto0(0,1) = jointTransformsToBase_.at(i)(0,1);
             rotationMatrixIto0(0,2) = jointTransformsToBase_.at(i)(0,2);
+            
             //Row 2
             rotationMatrixIto0(1,0) = jointTransformsToBase_.at(i)(1,0);
             rotationMatrixIto0(1,1) = jointTransformsToBase_.at(i)(1,2);
