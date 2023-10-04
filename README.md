@@ -8,24 +8,21 @@ When moving a fiducial/marker/object, the robot arm moves to point towards the f
 - UR3 Robot
 - RGB-D Camera System
 - C++
-- MATLAB
-- ROS
-- ROS Toolbox for MATLAB
-
-## Sensors and Control for Mechatronic Systems Specifics
-
-## Industrial Robotics Specifics
+- ROS Noetic
+- Python 3
 
 ## Dependent Packages
-- Universal Robot Package - https://github.com/ros-industrial/universal_robot.git
-- RealSense Gazebo Pluugin - https://github.com/pal-robotics/realsense_gazebo_plugin.git
-- Intel realsense-ros - https://github.com/IntelRealSense/realsense-ros.git
+[UR3 Simulator with Camera and Gripper](https://github.com/sheepskins/sandc_simulation)
 
-## Launch D435 RGBD w/ ArUco Marker Gazebo
+## USAGE
+### Launch UR3 w/ Mounted D435 RGBD & ArUco Marker Gazebo
 ```
-roslaunch sensors_control_sim d435_arUco.launch
+roslaunch ur3_gazebo ur_gripper_85_cubes.launch ur_robot:=ur3 grasp_plugin:=1
 ```
-## Launch UR3 w/ Mounted D435 RGBD & ArUco Marker Gazebo
+### Launch Aruco Ros Node
 ```
-roslaunch sensors_control_sim ur3_d435.launch
+```
+
+### Launch Visual Servoing Node
+```
 ```
