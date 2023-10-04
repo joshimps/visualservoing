@@ -20,7 +20,7 @@ RobotController::RobotController(ros::NodeHandle nh, Robot* robot, double gain, 
 //////////////////////////////////////////////////////////
 
 void RobotController::moveRobot(){
-    std::unique_lock<std::mutex> lck(fiducialPoseMutex_);
+    
     Eigen::MatrixXd endEffectorVelocity(6,1);
     Eigen::MatrixXd jointVelocities;
 
@@ -30,6 +30,7 @@ void RobotController::moveRobot(){
 
     while(endEffectorVelocity.norm() > errorThreshold_){
         
+        std::unique_lock<std::mutex> lck(fiducialPoseMutex_);
         //Calculate our end effector velocity from the positional and rotational error
         endEffectorVelocity(0,0) = gain_ * fiducialTranslationLocal_(0,0);
         endEffectorVelocity(1,0) = gain_ * fiducialTranslationLocal_(1,0);
@@ -40,6 +41,7 @@ void RobotController::moveRobot(){
 
         //Calculate the jacobian of the current pose 
         robot_->calculateJointTransforms();
+        robot_->calculateJointTransformsToBase();
         robot_->calculateJacobian();
 
         //The joint velocity is the jacobian multiplied by the error 

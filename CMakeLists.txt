@@ -51,8 +51,8 @@ add_library(${PROJECT_NAME}_robot src/robot.cpp )
 target_link_libraries(${PROJECT_NAME}_robot  ${catkin_LIBRARIES})
 
 ## Declare a C++ library
-add_library(${PROJECT_NAME}_robotController src/robotController.cpp)
-target_link_libraries(${PROJECT_NAME}_robotController ${catkin_LIBRARIES})
+add_library(${PROJECT_NAME}_robotController src/robotController.cpp) 
+target_link_libraries(${PROJECT_NAME}_robotController ${catkin_LIBRARIES} ${PROJECT_NAME}_robot )
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context

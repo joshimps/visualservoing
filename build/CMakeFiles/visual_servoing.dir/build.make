@@ -127,8 +127,8 @@ devel/lib/visual_servoing/visual_servoing: /opt/ros/noetic/lib/libcpp_common.so
 devel/lib/visual_servoing/visual_servoing: /usr/lib/x86_64-linux-gnu/libboost_system.so.1.71.0
 devel/lib/visual_servoing/visual_servoing: /usr/lib/x86_64-linux-gnu/libboost_thread.so.1.71.0
 devel/lib/visual_servoing/visual_servoing: /usr/lib/x86_64-linux-gnu/libconsole_bridge.so.0.4
-devel/lib/visual_servoing/visual_servoing: devel/lib/libvisual_servoing_robot.so
 devel/lib/visual_servoing/visual_servoing: devel/lib/libvisual_servoing_robotController.so
+devel/lib/visual_servoing/visual_servoing: devel/lib/libvisual_servoing_robot.so
 devel/lib/visual_servoing/visual_servoing: /opt/ros/noetic/lib/libroscpp.so
 devel/lib/visual_servoing/visual_servoing: /usr/lib/x86_64-linux-gnu/libpthread.so
 devel/lib/visual_servoing/visual_servoing: /usr/lib/x86_64-linux-gnu/libboost_chrono.so.1.71.0

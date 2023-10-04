@@ -18,6 +18,11 @@ int main(int argc, char **argv)
   robot.calculateJointTransformsToBase();
   robot.calculateJacobian();
 
+  double gain = 0.1;
+  double errorThreshold = 1;
+
+  RobotController robotController(nh,&robot,gain,errorThreshold);
+
   ros::spin();
   ros::shutdown();
 
