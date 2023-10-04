@@ -17,6 +17,11 @@ When moving a fiducial/marker/object, the robot arm moves to point towards the f
 ## Industrial Robotics Specifics
 
 ## Dependent Packages
-Universal Robot Package - https://github.com/ros-industrial/universal_robot.git
-RealSense Gazebo Pluugin - https://github.com/pal-robotics/realsense_gazebo_plugin.git
-Intel realsense-ros - https://github.com/IntelRealSense/realsense-ros.git
+- Universal Robot Package - https://github.com/ros-industrial/universal_robot.git
+- RealSense Gazebo Pluugin - https://github.com/pal-robotics/realsense_gazebo_plugin.git
+- Intel realsense-ros - https://github.com/IntelRealSense/realsense-ros.git
+
+## Launch D435 RGBD w/ ArUco Marker Gazebo
+```
+roslaunch sensors_control_sim d435_arUco.launch
+```
