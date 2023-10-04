@@ -25,3 +25,7 @@ When moving a fiducial/marker/object, the robot arm moves to point towards the f
 ```
 roslaunch sensors_control_sim d435_arUco.launch
 ```
+## Launch UR3 w/ Mounted D435 RGBD & ArUco Marker Gazebo
+```
+roslaunch sensors_control_sim ur3_d435.launch
+```
