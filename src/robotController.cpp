@@ -10,7 +10,7 @@ RobotController::RobotController(ros::NodeHandle nh, Robot* robot, double gain, 
     robot_ = robot;
     gain_ = gain;
     errorThreshold_ = errorThreshold;
-    //fiducialPositionSub_ = nh_.subscribe("/aruco_single/pose", 1000, &RobotController::fiducialPositionCallBack, this);
+    fiducialPositionSub_ = nh_.subscribe("/aruco_single/pose", 10, &RobotController::fiducialPositionCallBack, this);
     jointVelocityPub_ = nh_.advertise<std_msgs::Float64MultiArray>("joint_group_vel_controller/command", 10, false);
 }
 
@@ -18,8 +18,9 @@ RobotController::RobotController(ros::NodeHandle nh, Robot* robot, double gain, 
 // Setters
 /////////////////////////////////////////////////////////////////////////////////////////
 
-void RobotController::setFiducialPostition(geometry_msgs::PoseWithCovariancePtr &msg){
-    fiducialPositionCallBack(msg);
+void RobotController::setFiducialPostition(Eigen::MatrixXd fiducialTranslationLocal , Eigen::Quaterniond fiducialRotationLocal){
+    fiducialTranslationLocal_ = fiducialTranslationLocal;
+    fiducialRotationLocal_ = fiducialRotationLocal;
 }
 
 ///////////////////////////////////////////////////////////

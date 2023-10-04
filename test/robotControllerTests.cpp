@@ -17,8 +17,27 @@ TEST(RobotController,testEndEffectorVelocity){
     double errorThreshold = 1;
 
     RobotController robotController(nh,&robot,gain,errorThreshold);
-    geometry_msgs::PoseWithCovariancePtr msg;
-    robotController.setFiducialPostition(msg);
+
+    Eigen::Vector3d fiducialTranslationLocal;
+
+    //X
+    fiducialTranslationLocal(0,0) = 0.5;
+
+    //Y
+    fiducialTranslationLocal(1,0) = 0.5;
+
+    //Z
+    fiducialTranslationLocal(2,0) = 0.5;
+
+
+    float roll = M_PI/2, pitch = 0, yaw = M_PI/4;    
+    Eigen::Quaterniond fiducialRotationLocal;
+    fiducialRotationLocal = Eigen::AngleAxisd(roll, Eigen::Vector3d::UnitX())
+    * Eigen::AngleAxisd(pitch, Eigen::Vector3d::UnitY())
+    * Eigen::AngleAxisd(yaw, Eigen::Vector3d::UnitZ());
+    
+   robotController.setFiducialPostition(fiducialTranslationLocal,fiducialRotationLocal);
+    
 }
 
 TEST(RobotController,testJointVelocity){
@@ -36,5 +55,6 @@ TEST(RobotController,testConverging){
 
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
+    ros::init(argc, argv, "visual_servoing_robot_tests");
     return RUN_ALL_TESTS();
 }
