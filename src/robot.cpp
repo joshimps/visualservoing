@@ -213,7 +213,7 @@ void Robot::calculateJointTransformsToBase(){
 
     Eigen::MatrixXd jointTransformToBase = jointTransforms_.at(0);
     jointTransformsToBase_.push_back(jointTransformToBase);
-    
+
     for(int i = 1; i < jointTransforms_.size(); i++){
         
         jointTransformToBase = jointTransformToBase * jointTransforms_.at(i); 
@@ -241,8 +241,6 @@ void Robot::calculateJacobian(){
     unitVector(1,0) = 0;
     unitVector(2,0) = 1;  
 
-    //Get the transformations of the joints with respect to the base
-    calculateJointTransformsToBase();
 
     //The translationMatrixNto0 will be the translation part of the transformation matrix N to 0
     translationMatrixNtoB(0,0) = jointTransformsToBase_.at(jointTransformsToBase_.size())(0,3);

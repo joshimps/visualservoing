@@ -323,6 +323,28 @@ TEST(Robot,testJointTransformsToBase){
     ASSERT_NEAR(robot.getJointTransformToBase(0)(3,3),1,0.01);
 }
 
+TEST(Robot,testJacobian){
+    //Create a robot
+    ros::NodeHandle nh;
+    
+    std::vector<double> d{0.1519,0,0,0.11235,0.08535,0.0819};
+    std::vector<double> a{0,-0.24365,-0.21325,0,0,0};
+    std::vector<double> alpha{M_PI/2,0,0,M_PI/2,-M_PI/2,0};
+    Robot robot(nh,d,a,alpha);
+    
+    //Lets set the joint angles and compare with values obtained from Matlab
+    std::vector<double> theta{0,0,0,0,0,0};
+    robot.setTheta(theta);
+   
+    //Now lets calculate the joint transforms
+    robot.calculateJointTransforms();
+
+    //Calculate the joint transforms with respect to the base
+    robot.calculateJointTransformsToBase();
+
+    //Calculate the jacobian
+}
+
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
     ros::init(argc, argv, "visual_servoing_robot_tests");
