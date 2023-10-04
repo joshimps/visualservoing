@@ -64,20 +64,18 @@ void RobotController::moveRobot(){
 // Callbacks and Services
 //////////////////////////////////////////////////////////
 
-void RobotController::fiducialPositionCallBack(geometry_msgs::PoseWithCovariancePtr &msg){
-
+void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedPtr &msg){
     std::unique_lock<std::mutex> lck(fiducialPoseMutex_);
 
-    geometry_msgs::PoseWithCovariance fiducialPoseWithCovarianceLocal_ = *msg;
+    geometry_msgs::PoseStamped fiducialPoseStampedLocal_ = *msg;
 
-    fiducialTranslationLocal_(0,0) = fiducialPoseWithCovarianceLocal_.pose.position.x;
-    fiducialTranslationLocal_(1,0) = fiducialPoseWithCovarianceLocal_.pose.position.y;
-    fiducialTranslationLocal_(2,0) = fiducialPoseWithCovarianceLocal_.pose.position.z;
+    fiducialTranslationLocal_(0,0) = fiducialPoseStampedLocal_.pose.position.x;
+    fiducialTranslationLocal_(1,0) = fiducialPoseStampedLocal_.pose.position.y;
+    fiducialTranslationLocal_(2,0) = fiducialPoseStampedLocal_.pose.position.z;
 
-    Eigen::Quaterniond fiducialRotationLocal(fiducialPoseWithCovarianceLocal_.pose.orientation.w,
-                                              fiducialPoseWithCovarianceLocal_.pose.orientation.x,
-                                              fiducialPoseWithCovarianceLocal_.pose.orientation.y,
-                                              fiducialPoseWithCovarianceLocal_.pose.orientation.z);
+    Eigen::Quaterniond fiducialRotationLocal(fiducialPoseStampedLocal_.pose.orientation.w,
+                                              fiducialPoseStampedLocal_.pose.orientation.x,
+                                              fiducialPoseStampedLocal_.pose.orientation.y,
+                                              fiducialPoseStampedLocal_.pose.orientation.z);
     fiducialRotationLocal_ = fiducialRotationLocal;                                           
-    
 }

@@ -255,7 +255,7 @@ void Robot::calculateJacobian(){
     translationMatrixNtoB(1,0) = jointTransformsToBase_.at(jointTransformsToBase_.size()-1)(1,3);
     translationMatrixNtoB(2,0) = jointTransformsToBase_.at(jointTransformsToBase_.size()-1)(2,3);
     
-    for(int i = 0; i < jointTransforms_.size()-1; i++){
+    for(int i = 0; i < jointTransforms_.size(); i++){
         //Get the rotation matrix from i to 0 and the translation matrix from i to 0
         
         if(i == 0){
@@ -304,7 +304,8 @@ void Robot::calculateJacobian(){
         ROS_INFO_STREAM(translationMatrixItoB);
         jacobianLinearVelocityComponent = (rotationMatrixItoB * unitVector).cross((translationMatrixNtoB - translationMatrixItoB));
         jacobianRotationalVelocityComponent = rotationMatrixItoB * unitVector;
-        
+
+
         //Row 1
         jacobian_(0,i) = jacobianLinearVelocityComponent(0,0);
         //Row 2
