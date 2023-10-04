@@ -20,6 +20,7 @@ TEST(RobotController,testEndEffectorVelocity){
 }
 
 TEST(RobotController,testJointVelocity){
+    
 
 }
 

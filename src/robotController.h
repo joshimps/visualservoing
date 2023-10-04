@@ -7,6 +7,7 @@
 #include "tf2/LinearMath/Scalar.h"
 #include "tf2/LinearMath/Quaternion.h"
 #include "eigen3/Eigen/Dense"
+#include "std_msgs/Float64MultiArray.h"
 #include <atomic>
 #include <mutex>
 #include <vector>
@@ -19,7 +20,6 @@ class RobotController{
     /////////////////////////////////////////////////////////////////////////////////////////
 
     RobotController(ros::NodeHandle nh, Robot* robot, double gain, double errorThreshold);
-    ~RobotController();
 
     ///////////////////////////////////////////////////////////
     // Action
@@ -27,6 +27,11 @@ class RobotController{
 
     void moveRobot();
     
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    // Setters
+    /////////////////////////////////////////////////////////////////////////////////////////
+
+    void setFiducialPostition(geometry_msgs::PoseWithCovariancePtr msg);
 
     protected:
 
