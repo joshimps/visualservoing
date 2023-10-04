@@ -10,7 +10,7 @@ RobotController::RobotController(ros::NodeHandle nh, Robot* robot, double gain, 
     robot_ = robot;
     gain_ = gain;
     errorThreshold_ = errorThreshold;
-    //fiducialPositionSub_ = nh_.subscribe("fiducialPositionTopic", 1000, &RobotController::fiducialPositionCallBack, this);
+    fiducialPositionSub_ = nh_.subscribe("/aruco_single/pose", 1000, &RobotController::fiducialPositionCallBack, this);
     jointVelocityPub_ = nh_.advertise<std_msgs::Float64MultiArray>("joint_group_vel_controller/command", 10, false);
 }
 
