@@ -7,7 +7,7 @@
 #include <atomic>
 #include <mutex>
 #include <vector>
-#include "Eigen/Dense"
+#include "eigen3/Eigen/Dense"
 
 class Robot{
     public:
@@ -25,7 +25,8 @@ class Robot{
 
     void calculateJointTransforms();
     void calculateJacobian();
-
+    void calculateJointTransformsToBase();
+    
     protected:
 
     private:
@@ -58,8 +59,9 @@ class Robot{
     /////////////////////////////////////////////////////////////////////
     Eigen::MatrixXd baseTransform_;
     sensor_msgs::JointState jointStates_;
-    std::vector<Eigen::MatrixXf> jointTransforms_;
-    Eigen::MatrixXf jacobian_;
+    std::vector<Eigen::MatrixXd> jointTransforms_;
+    std::vector<Eigen::MatrixXd> jointTransformsToBase_;
+    Eigen::MatrixXd jacobian_;
 
     ///////////////////////////////////////////////////////////////////////
     // Robot DH Params

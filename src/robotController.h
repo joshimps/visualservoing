@@ -2,12 +2,14 @@
 #include "ros/ros.h"
 #include "geometry_msgs/PoseWithCovariance.h"
 #include "tf2/LinearMath/Transform.h"
-#include <vector>
 #include "tf2/LinearMath/Vector3.h"
 #include "tf2/LinearMath/Matrix3x3.h"
 #include "tf2/LinearMath/Scalar.h"
 #include "tf2/LinearMath/Quaternion.h"
-#include "Eigen/Dense"
+#include "eigen3/Eigen/Dense"
+#include <atomic>
+#include <mutex>
+#include <vector>
 
 class RobotController{
     public:
@@ -27,7 +29,7 @@ class RobotController{
     // Calculation
     //////////////////////////////////////////////////////////
 
-    void RobotController::moveRobot();
+    void moveRobot();
     
     ///////////////////////////////////////////////////////////
     // Callbacks and Services
@@ -44,6 +46,11 @@ class RobotController{
     ros::Publisher jointVelocityPub_;
 
     ///////////////////////////////////////////////////////////////////////
+    // Data Security and Pointers
+    /////////////////////////////////////////////////////////////////////
+    std::mutex fiducialPoseMutex_;
+
+    ///////////////////////////////////////////////////////////////////////
     // Controller Parameters
     /////////////////////////////////////////////////////////////////////
     double gain_;
@@ -52,7 +59,7 @@ class RobotController{
     ///////////////////////////////////////////////////////////////////////
     // Variables
     /////////////////////////////////////////////////////////////////////
-
+    
     Eigen::MatrixXd fiducialTranslationLocal_;
     Eigen::Quaterniond fiducialRotationLocal_;
 

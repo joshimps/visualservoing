@@ -190,89 +190,95 @@ void Robot::calculateJointTransforms(){
     }   
 }
 
+void Robot::calculateJointTransformsToBase(){
+
+    Eigen::MatrixXd jointTransformToBase = jointTransforms_.at(0);
+
+    for(int i = 1; i < jointTransforms_.size(); i++){
+        
+        for(int j = 1; j < i; j++){
+            jointTransformToBase = jointTransformToBase * jointTransforms_.at(j); 
+        }
+
+        jointTransformsToBase_.at(i) = jointTransformToBase;
+    }
+}
+
+// Please please please this needs unit testing to ensure its right
 void Robot::calculateJacobian(){
-    Eigen::MatrixXd unitVector(3,1);
-    Eigen::MatrixXd rotationMatrixIto0(3,3);
-    Eigen::MatrixXd translationMatrixIto0(3,1);
-    Eigen::MatrixXd translationMatrixNto0(3,1);
-    Eigen::MatrixXd jacobianLinearVelocityComponent(3,1);
+    Eigen::Vector3d unitVector;
+    Eigen::MatrixXd rotationMatrixItoB(3,3);
+    Eigen::Vector3d translationMatrixItoB;
+    Eigen::Vector3d translationMatrixNtoB;
+    Eigen::MatrixXd jacobianLinearVelocityComponent;
 
     //Lets fill in each column of the jacobian
     //Each column can be represented by the formula
-    //For a robot with N DOF where I is the column number
-    //rotationMatrixIToBase x unitVector x (translationMatrixN - translationMatrix(I-1))
-
+    //For a robot with N DOF where I is the jacobian column index and B is the base transform
+    //If I was 0 then the transform would be from BtoB or 0to0
+    //rotationMatrixIToB x unitVector x (translationMatrixNtoB - translationMatrix(ItoB) }->First three rows
+    //unitVector }->Last three rows
+    
     //The unit vector is 0;0;1 as with DH params we always rotate about z axis
     unitVector(0,0) = 0; 
     unitVector(1,0) = 0;
     unitVector(2,0) = 1;  
 
-    //The translationMatrixNto0 will be the product of all translation parts of the joint transforms
-    for(int i = 0; i < jointTransforms_.size();i++){
-        Eigen::MatrixXd translationMatrixI(3,1);
-        translationMatrixI(0,0) = jointTransforms_.at(i)(0,0); 
-        translationMatrixI(1,0) = jointTransforms_.at(i)(0,1);
-        translationMatrixI(2,0) = jointTransforms_.at(i)(0,2);
+    //Get the transformations of the joints with respect to the base
+    calculateJointTransformsToBase();
 
-        if(i == 0){
-            translationMatrixNto0 = translationMatrixI;
-        }
-        else{
-            translationMatrixNto0 = translationMatrixNto0 * translationMatrixI;
-        }
-    }
-    
-    for(int i = 0; i < jointTransforms_.size();i++){
-        //Calculate rotation matrix from i to 0 and the translation matrix from i to 0
-        if(i == 0){
+    //The translationMatrixNto0 will be the translation part of the transformation matrix N to 0
+    translationMatrixNtoB(0,0) = jointTransformsToBase_.at(jointTransformsToBase_.size())(0,3);
+    translationMatrixNtoB(1,0) = jointTransformsToBase_.at(jointTransformsToBase_.size())(1,3);
+    translationMatrixNtoB(2,0) = jointTransformsToBase_.at(jointTransformsToBase_.size())(2,3);
+
+    for(int i = -1; i < jointTransforms_.size()-1; i++){
+        //Get the rotation matrix from i to 0 and the translation matrix from i to 0
+        
+        if(i == -1){
+            //Build the matrices rotationMatrixIto0 and translationMatrixIto0
+            translationMatrixItoB(0,0) = baseTransform_(0,3);
+            translationMatrixItoB(1,0) = baseTransform_(1,3);
+            translationMatrixItoB(2,0) = baseTransform_(2,3);
+
             //Row 1
-            rotationMatrixIto0(0,0) = baseTransform_(0,0);
-            rotationMatrixIto0(0,1) = baseTransform_(0,1);
-            rotationMatrixIto0(0,2) = baseTransform_(0,2);
+            rotationMatrixItoB(0,0) = baseTransform_(0,0);
+            rotationMatrixItoB(0,1) = baseTransform_(0,1);
+            rotationMatrixItoB(0,2) = baseTransform_(0,2);
 
             //Row 2
-            rotationMatrixIto0(1,0) = baseTransform_(1,0);
-            rotationMatrixIto0(1,1) = baseTransform_(1,2);
-            rotationMatrixIto0(1,2) = baseTransform_(1,2);
+            rotationMatrixItoB(1,0) = baseTransform_(1,0);
+            rotationMatrixItoB(1,1) = baseTransform_(1,2);
+            rotationMatrixItoB(1,2) = baseTransform_(1,2);
 
             //Row 3
-            rotationMatrixIto0(2,0) = baseTransform_(2,0);
-            rotationMatrixIto0(2,1) = baseTransform_(2,1);
-            rotationMatrixIto0(2,2) = baseTransform_(2,2);
+            rotationMatrixItoB(2,0) = baseTransform_(2,0);
+            rotationMatrixItoB(2,1) = baseTransform_(2,1);
+            rotationMatrixItoB(2,2) = baseTransform_(2,2);
         }
         else{
-            for(int j = 1; j < i; j++){
-                //Calculating rotationMatrixIto0 by multiplying rotation component of joints transform together
-                Eigen::MatrixXd rotationMatrixI(3,3);
-                //Row 1
-                rotationMatrixI(0,0) = jointTransforms_.at(j)(0,0);
-                rotationMatrixI(0,1) = jointTransforms_.at(j)(0,1);
-                rotationMatrixI(0,2) = jointTransforms_.at(j)(0,2);
+            //Build the matrices rotationMatrixIto0 and translationMatrixIto0
+            translationMatrixItoB(0,0) = jointTransformsToBase_.at(i)(0,3);
+            translationMatrixItoB(1,0) = jointTransformsToBase_.at(i)(1,3);
+            translationMatrixItoB(2,0) = jointTransformsToBase_.at(i)(2,3);
 
-                //Row 2
-                rotationMatrixI(1,0) = jointTransforms_.at(j)(1,0);
-                rotationMatrixI(1,1) = jointTransforms_.at(j)(1,1);
-                rotationMatrixI(1,2) = jointTransforms_.at(j)(1,2);
-
-                //Row 3
-                rotationMatrixI(2,0) = jointTransforms_.at(j)(2,0);
-                rotationMatrixI(2,1) = jointTransforms_.at(j)(2,1);
-                rotationMatrixI(2,2) = jointTransforms_.at(j)(2,2);
-
-                rotationMatrixIto0 = rotationMatrixIto0 * rotationMatrixI;
-
-                //Calculating translationMatrixIto0 by multiplying trabslation component of joints transform together
-                Eigen::MatrixXd translationMatrixI(3,1);
-                translationMatrixI(0,0) = jointTransforms_.at(j)(0,0); 
-                translationMatrixI(1,0) = jointTransforms_.at(j)(0,1);
-                translationMatrixI(2,0) = jointTransforms_.at(j)(0,2);
-
-                translationMatrixIto0 = translationMatrixIto0 * translationMatrixI;
-            }
+            //Row 1
+            rotationMatrixItoB(0,0) = jointTransformsToBase_.at(i)(0,0);
+            rotationMatrixItoB(0,1) = jointTransformsToBase_.at(i)(0,1);
+            rotationMatrixItoB(0,2) = jointTransformsToBase_.at(i)(0,2);
+            
+            //Row 2
+            rotationMatrixItoB(1,0) = jointTransformsToBase_.at(i)(1,0);
+            rotationMatrixItoB(1,1) = jointTransformsToBase_.at(i)(1,2);
+            rotationMatrixItoB(1,2) = jointTransformsToBase_.at(i)(1,2);
+            //Row 3
+            rotationMatrixItoB(2,0) = jointTransformsToBase_.at(i)(2,0);
+            rotationMatrixItoB(2,1) = jointTransformsToBase_.at(i)(2,1);
+            rotationMatrixItoB(2,2) = jointTransformsToBase_.at(i)(2,2);
         }
 
         //Create the coiumn in the jacobian matrix
-        jacobianLinearVelocityComponent = (rotationMatrixIto0 * unitVector).cross((translationMatrixNto0 - translationMatrixIto0));
+        jacobianLinearVelocityComponent = rotationMatrixItoB * unitVector.cross((translationMatrixNtoB - translationMatrixItoB));
         //Row 1
         jacobian_(0,i) = jacobianLinearVelocityComponent(0,0);
         //Row 2
