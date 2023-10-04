@@ -334,15 +334,16 @@ TEST(Robot,testJacobian){
     
     //Lets set the joint angles and compare with values obtained from Matlab
     std::vector<double> theta{0,0,0,0,0,0};
-    robot.setTheta(theta);
-   
+    robot.setTheta(theta); 
+    
     //Now lets calculate the joint transforms
     robot.calculateJointTransforms();
-
+    
     //Calculate the joint transforms with respect to the base
     robot.calculateJointTransformsToBase();
-
+    
     //Calculate the jacobian
+    robot.calculateJacobian();
 }
 
 int main(int argc, char **argv) {

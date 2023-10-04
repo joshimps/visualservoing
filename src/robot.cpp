@@ -11,7 +11,8 @@ Robot::Robot(ros::NodeHandle nh, std::vector<double> d, std::vector<double> a, s
     d_ = d;
     a_ = a;
     alpha_ = alpha;
-    
+    jacobian_.resize(6,d.size());
+
     //Row 1
     baseTransform_(0,0) = 1;
     baseTransform_(0,1) = 0;
@@ -95,6 +96,8 @@ void Robot::setTheta(std::vector<double> theta){
 
 void Robot::calculateJointTransforms(){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
+    jointTransforms_.clear();
+
     Eigen::Matrix4d tRz;
     Eigen::Matrix4d tz;
     Eigen::Matrix4d tx;
@@ -210,7 +213,7 @@ void Robot::calculateJointTransforms(){
 }
 
 void Robot::calculateJointTransformsToBase(){
-
+    jointTransformsToBase_.clear();
     Eigen::MatrixXd jointTransformToBase = jointTransforms_.at(0);
     jointTransformsToBase_.push_back(jointTransformToBase);
 
@@ -223,11 +226,12 @@ void Robot::calculateJointTransformsToBase(){
 
 // Please please please this needs unit testing to ensure its right
 void Robot::calculateJacobian(){
+    
     Eigen::Vector3d unitVector;
-    Eigen::MatrixXd rotationMatrixItoB(3,3);
+    Eigen::Matrix3d rotationMatrixItoB;
     Eigen::Vector3d translationMatrixItoB;
     Eigen::Vector3d translationMatrixNtoB;
-    Eigen::MatrixXd jacobianLinearVelocityComponent;
+    Eigen::Vector3d jacobianLinearVelocityComponent;
 
     //Lets fill in each column of the jacobian
     //Each column can be represented by the formula
@@ -241,16 +245,15 @@ void Robot::calculateJacobian(){
     unitVector(1,0) = 0;
     unitVector(2,0) = 1;  
 
-
     //The translationMatrixNto0 will be the translation part of the transformation matrix N to 0
-    translationMatrixNtoB(0,0) = jointTransformsToBase_.at(jointTransformsToBase_.size())(0,3);
-    translationMatrixNtoB(1,0) = jointTransformsToBase_.at(jointTransformsToBase_.size())(1,3);
-    translationMatrixNtoB(2,0) = jointTransformsToBase_.at(jointTransformsToBase_.size())(2,3);
-
-    for(int i = -1; i < jointTransforms_.size()-1; i++){
+    translationMatrixNtoB(0,0) = jointTransformsToBase_.at(jointTransformsToBase_.size()-1)(0,3);
+    translationMatrixNtoB(1,0) = jointTransformsToBase_.at(jointTransformsToBase_.size()-1)(1,3);
+    translationMatrixNtoB(2,0) = jointTransformsToBase_.at(jointTransformsToBase_.size()-1)(2,3);
+    
+    for(int i = 0; i < jointTransforms_.size()-1; i++){
         //Get the rotation matrix from i to 0 and the translation matrix from i to 0
         
-        if(i == -1){
+        if(i == 0){
             //Build the matrices rotationMatrixIto0 and translationMatrixIto0
             translationMatrixItoB(0,0) = baseTransform_(0,3);
             translationMatrixItoB(1,0) = baseTransform_(1,3);
@@ -263,7 +266,7 @@ void Robot::calculateJacobian(){
 
             //Row 2
             rotationMatrixItoB(1,0) = baseTransform_(1,0);
-            rotationMatrixItoB(1,1) = baseTransform_(1,2);
+            rotationMatrixItoB(1,1) = baseTransform_(1,1);
             rotationMatrixItoB(1,2) = baseTransform_(1,2);
 
             //Row 3
@@ -276,7 +279,7 @@ void Robot::calculateJacobian(){
             translationMatrixItoB(0,0) = jointTransformsToBase_.at(i)(0,3);
             translationMatrixItoB(1,0) = jointTransformsToBase_.at(i)(1,3);
             translationMatrixItoB(2,0) = jointTransformsToBase_.at(i)(2,3);
-
+            
             //Row 1
             rotationMatrixItoB(0,0) = jointTransformsToBase_.at(i)(0,0);
             rotationMatrixItoB(0,1) = jointTransformsToBase_.at(i)(0,1);
@@ -284,16 +287,18 @@ void Robot::calculateJacobian(){
             
             //Row 2
             rotationMatrixItoB(1,0) = jointTransformsToBase_.at(i)(1,0);
-            rotationMatrixItoB(1,1) = jointTransformsToBase_.at(i)(1,2);
+            rotationMatrixItoB(1,1) = jointTransformsToBase_.at(i)(1,1);
             rotationMatrixItoB(1,2) = jointTransformsToBase_.at(i)(1,2);
             //Row 3
             rotationMatrixItoB(2,0) = jointTransformsToBase_.at(i)(2,0);
             rotationMatrixItoB(2,1) = jointTransformsToBase_.at(i)(2,1);
             rotationMatrixItoB(2,2) = jointTransformsToBase_.at(i)(2,2);
         }
-
+        
         //Create the coiumn in the jacobian matrix
+      
         jacobianLinearVelocityComponent = rotationMatrixItoB * unitVector.cross((translationMatrixNtoB - translationMatrixItoB));
+        
         //Row 1
         jacobian_(0,i) = jacobianLinearVelocityComponent(0,0);
         //Row 2

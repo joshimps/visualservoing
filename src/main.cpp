@@ -3,10 +3,21 @@
 
 int main(int argc, char **argv)
 {
-
   ros::init(argc, argv, "visual_servoing");
-  Robot robot();
+
   ros::NodeHandle nh;
+  std::vector<double> d{0.1519,0,0,0.11235,0.08535,0.0819};
+  std::vector<double> a{0,-0.24365,-0.21325,0,0,0};
+  std::vector<double> alpha{M_PI/2,0,0,M_PI/2,-M_PI/2,0};
+  Robot robot(nh,d,a,alpha);
+  
+  //Lets set the joint angles and compare with values obtained from Matlab
+  std::vector<double> theta{0,0,0,0,0,0};
+  robot.setTheta(theta); 
+  robot.calculateJointTransforms();
+  robot.calculateJointTransformsToBase();
+  robot.calculateJacobian();
+
   ros::spin();
   ros::shutdown();
 
