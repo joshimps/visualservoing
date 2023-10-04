@@ -6,7 +6,7 @@
 #include "tf2/LinearMath/Matrix3x3.h"
 #include "tf2/LinearMath/Scalar.h"
 #include "tf2/LinearMath/Quaternion.h"
-#include "Eigen/Dense"
+#include "eigen3/Eigen/Dense"
 #include <atomic>
 #include <mutex>
 #include <vector>

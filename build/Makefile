@@ -168,84 +168,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named run_tests_visual_servoing_gtest_visual_servoing_test
-
-# Build rule for target.
-run_tests_visual_servoing_gtest_visual_servoing_test: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 run_tests_visual_servoing_gtest_visual_servoing_test
-.PHONY : run_tests_visual_servoing_gtest_visual_servoing_test
-
-# fast build rule for target.
-run_tests_visual_servoing_gtest_visual_servoing_test/fast:
-	$(MAKE) -f CMakeFiles/run_tests_visual_servoing_gtest_visual_servoing_test.dir/build.make CMakeFiles/run_tests_visual_servoing_gtest_visual_servoing_test.dir/build
-.PHONY : run_tests_visual_servoing_gtest_visual_servoing_test/fast
-
-#=============================================================================
-# Target rules for targets named clean_test_results_visual_servoing
-
-# Build rule for target.
-clean_test_results_visual_servoing: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 clean_test_results_visual_servoing
-.PHONY : clean_test_results_visual_servoing
-
-# fast build rule for target.
-clean_test_results_visual_servoing/fast:
-	$(MAKE) -f CMakeFiles/clean_test_results_visual_servoing.dir/build.make CMakeFiles/clean_test_results_visual_servoing.dir/build
-.PHONY : clean_test_results_visual_servoing/fast
-
-#=============================================================================
-# Target rules for targets named _run_tests_visual_servoing
-
-# Build rule for target.
-_run_tests_visual_servoing: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 _run_tests_visual_servoing
-.PHONY : _run_tests_visual_servoing
-
-# fast build rule for target.
-_run_tests_visual_servoing/fast:
-	$(MAKE) -f CMakeFiles/_run_tests_visual_servoing.dir/build.make CMakeFiles/_run_tests_visual_servoing.dir/build
-.PHONY : _run_tests_visual_servoing/fast
-
-#=============================================================================
-# Target rules for targets named run_tests_visual_servoing
-
-# Build rule for target.
-run_tests_visual_servoing: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 run_tests_visual_servoing
-.PHONY : run_tests_visual_servoing
-
-# fast build rule for target.
-run_tests_visual_servoing/fast:
-	$(MAKE) -f CMakeFiles/run_tests_visual_servoing.dir/build.make CMakeFiles/run_tests_visual_servoing.dir/build
-.PHONY : run_tests_visual_servoing/fast
-
-#=============================================================================
-# Target rules for targets named visual_servoing_test
-
-# Build rule for target.
-visual_servoing_test: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 visual_servoing_test
-.PHONY : visual_servoing_test
-
-# fast build rule for target.
-visual_servoing_test/fast:
-	$(MAKE) -f CMakeFiles/visual_servoing_test.dir/build.make CMakeFiles/visual_servoing_test.dir/build
-.PHONY : visual_servoing_test/fast
-
-#=============================================================================
-# Target rules for targets named visual_servoing_node
-
-# Build rule for target.
-visual_servoing_node: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 visual_servoing_node
-.PHONY : visual_servoing_node
-
-# fast build rule for target.
-visual_servoing_node/fast:
-	$(MAKE) -f CMakeFiles/visual_servoing_node.dir/build.make CMakeFiles/visual_servoing_node.dir/build
-.PHONY : visual_servoing_node/fast
-
-#=============================================================================
 # Target rules for targets named visual_servoing_robotController
 
 # Build rule for target.
@@ -309,19 +231,6 @@ actionlib_msgs_generate_messages_cpp: cmake_check_build_system
 actionlib_msgs_generate_messages_cpp/fast:
 	$(MAKE) -f CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/build.make CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/build
 .PHONY : actionlib_msgs_generate_messages_cpp/fast
-
-#=============================================================================
-# Target rules for targets named run_tests_visual_servoing_gtest
-
-# Build rule for target.
-run_tests_visual_servoing_gtest: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 run_tests_visual_servoing_gtest
-.PHONY : run_tests_visual_servoing_gtest
-
-# fast build rule for target.
-run_tests_visual_servoing_gtest/fast:
-	$(MAKE) -f CMakeFiles/run_tests_visual_servoing_gtest.dir/build.make CMakeFiles/run_tests_visual_servoing_gtest.dir/build
-.PHONY : run_tests_visual_servoing_gtest/fast
 
 #=============================================================================
 # Target rules for targets named rosgraph_msgs_generate_messages_eus
@@ -415,19 +324,6 @@ geometry_msgs_generate_messages_cpp/fast:
 .PHONY : geometry_msgs_generate_messages_cpp/fast
 
 #=============================================================================
-# Target rules for targets named _run_tests_visual_servoing_gtest
-
-# Build rule for target.
-_run_tests_visual_servoing_gtest: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 _run_tests_visual_servoing_gtest
-.PHONY : _run_tests_visual_servoing_gtest
-
-# fast build rule for target.
-_run_tests_visual_servoing_gtest/fast:
-	$(MAKE) -f CMakeFiles/_run_tests_visual_servoing_gtest.dir/build.make CMakeFiles/_run_tests_visual_servoing_gtest.dir/build
-.PHONY : _run_tests_visual_servoing_gtest/fast
-
-#=============================================================================
 # Target rules for targets named geometry_msgs_generate_messages_nodejs
 
 # Build rule for target.
@@ -491,6 +387,19 @@ roscpp_generate_messages_py: cmake_check_build_system
 roscpp_generate_messages_py/fast:
 	$(MAKE) -f CMakeFiles/roscpp_generate_messages_py.dir/build.make CMakeFiles/roscpp_generate_messages_py.dir/build
 .PHONY : roscpp_generate_messages_py/fast
+
+#=============================================================================
+# Target rules for targets named visual_servoing
+
+# Build rule for target.
+visual_servoing: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 visual_servoing
+.PHONY : visual_servoing
+
+# fast build rule for target.
+visual_servoing/fast:
+	$(MAKE) -f CMakeFiles/visual_servoing.dir/build.make CMakeFiles/visual_servoing.dir/build
+.PHONY : visual_servoing/fast
 
 #=============================================================================
 # Target rules for targets named rosgraph_msgs_generate_messages_py
@@ -688,19 +597,6 @@ rosgraph_msgs_generate_messages_nodejs/fast:
 .PHONY : rosgraph_msgs_generate_messages_nodejs/fast
 
 #=============================================================================
-# Target rules for targets named _run_tests_visual_servoing_gtest_visual_servoing_test
-
-# Build rule for target.
-_run_tests_visual_servoing_gtest_visual_servoing_test: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 _run_tests_visual_servoing_gtest_visual_servoing_test
-.PHONY : _run_tests_visual_servoing_gtest_visual_servoing_test
-
-# fast build rule for target.
-_run_tests_visual_servoing_gtest_visual_servoing_test/fast:
-	$(MAKE) -f CMakeFiles/_run_tests_visual_servoing_gtest_visual_servoing_test.dir/build.make CMakeFiles/_run_tests_visual_servoing_gtest_visual_servoing_test.dir/build
-.PHONY : _run_tests_visual_servoing_gtest_visual_servoing_test/fast
-
-#=============================================================================
 # Target rules for targets named std_msgs_generate_messages_py
 
 # Build rule for target.
@@ -817,13 +713,52 @@ gtest/fast:
 	$(MAKE) -f gtest/googletest/CMakeFiles/gtest.dir/build.make gtest/googletest/CMakeFiles/gtest.dir/build
 .PHONY : gtest/fast
 
+#=============================================================================
+# Target rules for targets named robotTests
+
+# Build rule for target.
+robotTests: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 robotTests
+.PHONY : robotTests
+
+# fast build rule for target.
+robotTests/fast:
+	$(MAKE) -f test/CMakeFiles/robotTests.dir/build.make test/CMakeFiles/robotTests.dir/build
+.PHONY : robotTests/fast
+
+#=============================================================================
+# Target rules for targets named robotControllerTests
+
+# Build rule for target.
+robotControllerTests: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 robotControllerTests
+.PHONY : robotControllerTests
+
+# fast build rule for target.
+robotControllerTests/fast:
+	$(MAKE) -f test/CMakeFiles/robotControllerTests.dir/build.make test/CMakeFiles/robotControllerTests.dir/build
+.PHONY : robotControllerTests/fast
+
+#=============================================================================
+# Target rules for targets named student_lib
+
+# Build rule for target.
+student_lib: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 student_lib
+.PHONY : student_lib
+
+# fast build rule for target.
+student_lib/fast:
+	$(MAKE) -f test/CMakeFiles/student_lib.dir/build.make test/CMakeFiles/student_lib.dir/build
+.PHONY : student_lib/fast
+
 src/main.o: src/main.cpp.o
 
 .PHONY : src/main.o
 
 # target to build an object file
 src/main.cpp.o:
-	$(MAKE) -f CMakeFiles/visual_servoing_node.dir/build.make CMakeFiles/visual_servoing_node.dir/src/main.cpp.o
+	$(MAKE) -f CMakeFiles/visual_servoing.dir/build.make CMakeFiles/visual_servoing.dir/src/main.cpp.o
 .PHONY : src/main.cpp.o
 
 src/main.i: src/main.cpp.i
@@ -832,7 +767,7 @@ src/main.i: src/main.cpp.i
 
 # target to preprocess a source file
 src/main.cpp.i:
-	$(MAKE) -f CMakeFiles/visual_servoing_node.dir/build.make CMakeFiles/visual_servoing_node.dir/src/main.cpp.i
+	$(MAKE) -f CMakeFiles/visual_servoing.dir/build.make CMakeFiles/visual_servoing.dir/src/main.cpp.i
 .PHONY : src/main.cpp.i
 
 src/main.s: src/main.cpp.s
@@ -841,7 +776,7 @@ src/main.s: src/main.cpp.s
 
 # target to generate assembly for a file
 src/main.cpp.s:
-	$(MAKE) -f CMakeFiles/visual_servoing_node.dir/build.make CMakeFiles/visual_servoing_node.dir/src/main.cpp.s
+	$(MAKE) -f CMakeFiles/visual_servoing.dir/build.make CMakeFiles/visual_servoing.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
 src/robot.o: src/robot.cpp.o
@@ -898,33 +833,6 @@ src/robotController.cpp.s:
 	$(MAKE) -f CMakeFiles/visual_servoing_robotController.dir/build.make CMakeFiles/visual_servoing_robotController.dir/src/robotController.cpp.s
 .PHONY : src/robotController.cpp.s
 
-test/utest.o: test/utest.cpp.o
-
-.PHONY : test/utest.o
-
-# target to build an object file
-test/utest.cpp.o:
-	$(MAKE) -f CMakeFiles/visual_servoing_test.dir/build.make CMakeFiles/visual_servoing_test.dir/test/utest.cpp.o
-.PHONY : test/utest.cpp.o
-
-test/utest.i: test/utest.cpp.i
-
-.PHONY : test/utest.i
-
-# target to preprocess a source file
-test/utest.cpp.i:
-	$(MAKE) -f CMakeFiles/visual_servoing_test.dir/build.make CMakeFiles/visual_servoing_test.dir/test/utest.cpp.i
-.PHONY : test/utest.cpp.i
-
-test/utest.s: test/utest.cpp.s
-
-.PHONY : test/utest.s
-
-# target to generate assembly for a file
-test/utest.cpp.s:
-	$(MAKE) -f CMakeFiles/visual_servoing_test.dir/build.make CMakeFiles/visual_servoing_test.dir/test/utest.cpp.s
-.PHONY : test/utest.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -935,19 +843,12 @@ help:
 	@echo "... install"
 	@echo "... list_install_components"
 	@echo "... edit_cache"
-	@echo "... run_tests_visual_servoing_gtest_visual_servoing_test"
-	@echo "... clean_test_results_visual_servoing"
-	@echo "... _run_tests_visual_servoing"
-	@echo "... run_tests_visual_servoing"
-	@echo "... visual_servoing_test"
-	@echo "... visual_servoing_node"
 	@echo "... visual_servoing_robotController"
 	@echo "... visual_servoing_robot"
 	@echo "... actionlib_msgs_generate_messages_nodejs"
 	@echo "... actionlib_msgs_generate_messages_lisp"
 	@echo "... actionlib_msgs_generate_messages_cpp"
 	@echo "... install/local"
-	@echo "... run_tests_visual_servoing_gtest"
 	@echo "... rosgraph_msgs_generate_messages_eus"
 	@echo "... test"
 	@echo "... rosgraph_msgs_generate_messages_cpp"
@@ -956,12 +857,12 @@ help:
 	@echo "... geometry_msgs_generate_messages_lisp"
 	@echo "... tf2_msgs_generate_messages_py"
 	@echo "... geometry_msgs_generate_messages_cpp"
-	@echo "... _run_tests_visual_servoing_gtest"
 	@echo "... geometry_msgs_generate_messages_nodejs"
 	@echo "... tf2_msgs_generate_messages_lisp"
 	@echo "... roscpp_generate_messages_cpp"
 	@echo "... geometry_msgs_generate_messages_py"
 	@echo "... roscpp_generate_messages_py"
+	@echo "... visual_servoing"
 	@echo "... rosgraph_msgs_generate_messages_py"
 	@echo "... doxygen"
 	@echo "... actionlib_msgs_generate_messages_eus"
@@ -978,7 +879,6 @@ help:
 	@echo "... tf2_msgs_generate_messages_eus"
 	@echo "... actionlib_msgs_generate_messages_py"
 	@echo "... rosgraph_msgs_generate_messages_nodejs"
-	@echo "... _run_tests_visual_servoing_gtest_visual_servoing_test"
 	@echo "... std_msgs_generate_messages_py"
 	@echo "... std_msgs_generate_messages_nodejs"
 	@echo "... geometry_msgs_generate_messages_eus"
@@ -988,6 +888,9 @@ help:
 	@echo "... gmock"
 	@echo "... gtest_main"
 	@echo "... gtest"
+	@echo "... robotTests"
+	@echo "... robotControllerTests"
+	@echo "... student_lib"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
@@ -997,9 +900,6 @@ help:
 	@echo "... src/robotController.o"
 	@echo "... src/robotController.i"
 	@echo "... src/robotController.s"
-	@echo "... test/utest.o"
-	@echo "... test/utest.i"
-	@echo "... test/utest.s"
 .PHONY : help
 
 

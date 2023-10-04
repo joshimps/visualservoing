@@ -1159,7 +1159,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "4"
+			"value" : "5"
 		},
 		{
 			"name" : "CMAKE_OBJCOPY",
@@ -1710,6 +1710,18 @@
 			"value" : "[/usr/include/eigen3][TRUE][v(2.91.0)]"
 		},
 		{
+			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_GTest",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Details about finding GTest"
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "[/usr/lib/x86_64-linux-gnu/libgtest.a][/usr/include][/usr/lib/x86_64-linux-gnu/libgtest_main.a][v()]"
+		},
+		{
 			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_PY_em",
 			"properties" : 
 			[
@@ -2032,6 +2044,18 @@
 			],
 			"type" : "FILEPATH",
 			"value" : "GTEST_MAIN_LIBRARY_DEBUG-NOTFOUND"
+		},
+		{
+			"name" : "GTEST_ROOT",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to googletest"
+				}
+			],
+			"type" : "PATH",
+			"value" : "/usr/src/gtest"
 		},
 		{
 			"name" : "GTest_DIR",
