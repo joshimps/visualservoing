@@ -18,8 +18,8 @@ RobotController::RobotController(ros::NodeHandle nh, Robot* robot, double gain, 
 // Setters
 /////////////////////////////////////////////////////////////////////////////////////////
 
-void setFiducialPostition(geometry_msgs::PoseWithCovariancePtr msg){
-    
+void RobotController::setFiducialPostition(geometry_msgs::PoseWithCovariancePtr msg){
+    fiducialPositionCallBack(msg);
 }
 
 ///////////////////////////////////////////////////////////

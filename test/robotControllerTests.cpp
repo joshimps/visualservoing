@@ -17,10 +17,12 @@ TEST(RobotController,testEndEffectorVelocity){
     double errorThreshold = 1;
 
     RobotController robotController(nh,&robot,gain,errorThreshold);
+    geometry_msgs::PoseWithCovariancePtr msg;
+    robotController.setFiducialPostition(msg);
 }
 
 TEST(RobotController,testJointVelocity){
-    
+
 
 }
 
