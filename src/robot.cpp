@@ -4,13 +4,14 @@
 // Constructors and Destructors
 /////////////////////////////////////////////////////////////////////////////////////////
 
+
 Robot::Robot(ros::NodeHandle nh, std::vector<double> d, std::vector<double> a, std::vector<double> alpha){
     nh_ = nh;
     jointStateSub_ = nh_.subscribe("/joint_states", 3, &Robot::jointStateCallBack, this);
     d_ = d;
     a_ = a;
     alpha_ = alpha;
-
+    
     //Row 1
     baseTransform_(0,0) = 1;
     baseTransform_(0,1) = 0;
@@ -34,6 +35,7 @@ Robot::Robot(ros::NodeHandle nh, std::vector<double> d, std::vector<double> a, s
     baseTransform_(3,1) = 0;
     baseTransform_(3,2) = 0;
     baseTransform_(3,3) = 1;
+    
 }
 
 ///////////////////////////////////////////////////////////
@@ -61,12 +63,29 @@ Eigen::MatrixXd Robot::getEndEffectorTransform(){
 
 Eigen::MatrixXd Robot::getJointTransform(int i){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
+    
     return jointTransforms_.at(i);
+}
+
+Eigen::MatrixXd Robot::getJointTransformToBase(int i){
+    std::unique_lock<std::mutex> lck(jointStateMutex_);
+    
+    return jointTransformsToBase_.at(i);
 }
 
 Eigen::MatrixXd Robot::getJacobian(){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
     return jacobian_;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////
+// Setters
+/////////////////////////////////////////////////////////////////////////////////////////
+
+void Robot::setTheta(std::vector<double> theta){
+    theta_ = theta;
+    sensor_msgs::JointState jointStates;
+    jointStates_.position = theta;
 }
 
 
@@ -76,20 +95,20 @@ Eigen::MatrixXd Robot::getJacobian(){
 
 void Robot::calculateJointTransforms(){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
-    Eigen::MatrixXd tRz(4,4);
-    Eigen::MatrixXd tz(4,4);
-    Eigen::MatrixXd tx(4,4);
-    Eigen::MatrixXd tRx(4,4);
+    Eigen::Matrix4d tRz;
+    Eigen::Matrix4d tz;
+    Eigen::Matrix4d tx;
+    Eigen::Matrix4d tRx;
 
-    for(int i = 0; i < jointStates_.position.size(); i++){
+    for(int i = 0; i < d_.size(); i++){
         //tRz
-
+        
         //Row 1
         tRz(0,0) = cos(jointStates_.position.at(i));
         tRz(0,1) = -sin(jointStates_.position.at(i));
         tRz(0,2) = 0;
         tRz(0,3) = 0;
-
+        
         //Row 2
         tRz(1,0) = sin(jointStates_.position.at(i));
         tRz(1,1) = cos(jointStates_.position.at(i));
@@ -125,8 +144,8 @@ void Robot::calculateJointTransforms(){
         //Row 3
         tz(2,0) = 0;
         tz(2,1) = 0;
-        tz(2,2) = d_.at(i);
-        tz(2,3) = 0;
+        tz(2,2) = 1;
+        tz(2,3) = d_.at(i);
 
         //Row 4
         tz(3,0) = 0;
@@ -151,7 +170,7 @@ void Robot::calculateJointTransforms(){
         //Row 3
         tx(2,0) = 0;
         tx(2,1) = 0;
-        tx(2,2) = 0;
+        tx(2,2) = 1;
         tx(2,3) = 0;
 
         //Row 4
@@ -166,18 +185,18 @@ void Robot::calculateJointTransforms(){
         tRx(0,0) = 1;
         tRx(0,1) = 0;
         tRx(0,2) = 0;
-        tRx(0,3) = a_.at(i);
+        tRx(0,3) = 0;
 
         //Row 2
         tRx(1,0) = 0;
-        tRx(1,1) = cos(jointStates_.position.at(i));
-        tRx(1,2) = -sin(jointStates_.position.at(i));
+        tRx(1,1) = cos(alpha_.at(i));
+        tRx(1,2) = -sin(alpha_.at(i));
         tRx(1,3) = 0;
 
         //Row 3
         tRx(2,0) = 0;
-        tRx(2,1) = sin(jointStates_.position.at(i));
-        tRx(2,2) = cos(jointStates_.position.at(i));
+        tRx(2,1) = sin(alpha_.at(i));
+        tRx(2,2) = cos(alpha_.at(i));
         tRx(2,3) = 0;
 
         //Row 4
@@ -185,8 +204,8 @@ void Robot::calculateJointTransforms(){
         tRx(3,1) = 0;
         tRx(3,2) = 0;
         tRx(3,3) = 1;
-
-        jointTransforms_.at(i) = tRz * tz * tx * tRx;
+        
+        jointTransforms_.push_back(tRz * tz * tx * tRx);
     }   
 }
 

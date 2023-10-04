@@ -188,7 +188,7 @@ CMakeFiles/run_tests_visual_servoing_gtest_robotTests.dir/all: CMakeFiles/robotT
 
 # Build rule for subdir invocation for target.
 CMakeFiles/run_tests_visual_servoing_gtest_robotTests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 8
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 4
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/run_tests_visual_servoing_gtest_robotTests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 0
 .PHONY : CMakeFiles/run_tests_visual_servoing_gtest_robotTests.dir/rule
@@ -207,9 +207,7 @@ CMakeFiles/run_tests_visual_servoing_gtest_robotTests.dir/clean:
 # Target rules for target CMakeFiles/robotTests.dir
 
 # All Build rule for target.
-CMakeFiles/robotTests.dir/all: CMakeFiles/visual_servoing_robotController.dir/all
 CMakeFiles/robotTests.dir/all: CMakeFiles/visual_servoing_robot.dir/all
-CMakeFiles/robotTests.dir/all: gtest/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) -f CMakeFiles/robotTests.dir/build.make CMakeFiles/robotTests.dir/depend
 	$(MAKE) -f CMakeFiles/robotTests.dir/build.make CMakeFiles/robotTests.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/joshimps/git/visualservoing/build/CMakeFiles --progress-num=11,12 "Built target robotTests"
@@ -217,7 +215,7 @@ CMakeFiles/robotTests.dir/all: gtest/googletest/CMakeFiles/gtest.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/robotTests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 8
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 4
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/robotTests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 0
 .PHONY : CMakeFiles/robotTests.dir/rule
@@ -246,7 +244,7 @@ CMakeFiles/_run_tests_visual_servoing_gtest_robotControllerTests.dir/all: CMakeF
 
 # Build rule for subdir invocation for target.
 CMakeFiles/_run_tests_visual_servoing_gtest_robotControllerTests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 10
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 8
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/_run_tests_visual_servoing_gtest_robotControllerTests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 0
 .PHONY : CMakeFiles/_run_tests_visual_servoing_gtest_robotControllerTests.dir/rule
@@ -273,7 +271,7 @@ CMakeFiles/run_tests_visual_servoing_gtest_robotControllerTests.dir/all: CMakeFi
 
 # Build rule for subdir invocation for target.
 CMakeFiles/run_tests_visual_servoing_gtest_robotControllerTests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 8
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 4
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/run_tests_visual_servoing_gtest_robotControllerTests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 0
 .PHONY : CMakeFiles/run_tests_visual_servoing_gtest_robotControllerTests.dir/rule
@@ -327,7 +325,7 @@ CMakeFiles/_run_tests_visual_servoing.dir/all: CMakeFiles/_run_tests_visual_serv
 
 # Build rule for subdir invocation for target.
 CMakeFiles/_run_tests_visual_servoing.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 10
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 8
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/_run_tests_visual_servoing.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 0
 .PHONY : CMakeFiles/_run_tests_visual_servoing.dir/rule
@@ -354,7 +352,7 @@ CMakeFiles/run_tests_visual_servoing.dir/all: CMakeFiles/run_tests_visual_servoi
 
 # Build rule for subdir invocation for target.
 CMakeFiles/run_tests_visual_servoing.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 10
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 8
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/run_tests_visual_servoing.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 0
 .PHONY : CMakeFiles/run_tests_visual_servoing.dir/rule
@@ -374,8 +372,6 @@ CMakeFiles/run_tests_visual_servoing.dir/clean:
 
 # All Build rule for target.
 CMakeFiles/robotControllerTests.dir/all: CMakeFiles/visual_servoing_robotController.dir/all
-CMakeFiles/robotControllerTests.dir/all: CMakeFiles/visual_servoing_robot.dir/all
-CMakeFiles/robotControllerTests.dir/all: gtest/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) -f CMakeFiles/robotControllerTests.dir/build.make CMakeFiles/robotControllerTests.dir/depend
 	$(MAKE) -f CMakeFiles/robotControllerTests.dir/build.make CMakeFiles/robotControllerTests.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/joshimps/git/visualservoing/build/CMakeFiles --progress-num=9,10 "Built target robotControllerTests"
@@ -383,7 +379,7 @@ CMakeFiles/robotControllerTests.dir/all: gtest/googletest/CMakeFiles/gtest.dir/a
 
 # Build rule for subdir invocation for target.
 CMakeFiles/robotControllerTests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 8
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 4
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/robotControllerTests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 0
 .PHONY : CMakeFiles/robotControllerTests.dir/rule
@@ -546,7 +542,7 @@ CMakeFiles/run_tests_visual_servoing_gtest.dir/all: CMakeFiles/run_tests_visual_
 
 # Build rule for subdir invocation for target.
 CMakeFiles/run_tests_visual_servoing_gtest.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 10
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 8
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/run_tests_visual_servoing_gtest.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 0
 .PHONY : CMakeFiles/run_tests_visual_servoing_gtest.dir/rule
@@ -592,8 +588,8 @@ CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/clean:
 # Target rules for target CMakeFiles/_run_tests_visual_servoing_gtest_robotTests.dir
 
 # All Build rule for target.
-CMakeFiles/_run_tests_visual_servoing_gtest_robotTests.dir/all: CMakeFiles/clean_test_results_visual_servoing.dir/all
 CMakeFiles/_run_tests_visual_servoing_gtest_robotTests.dir/all: CMakeFiles/robotTests.dir/all
+CMakeFiles/_run_tests_visual_servoing_gtest_robotTests.dir/all: CMakeFiles/clean_test_results_visual_servoing.dir/all
 CMakeFiles/_run_tests_visual_servoing_gtest_robotTests.dir/all: CMakeFiles/tests.dir/all
 	$(MAKE) -f CMakeFiles/_run_tests_visual_servoing_gtest_robotTests.dir/build.make CMakeFiles/_run_tests_visual_servoing_gtest_robotTests.dir/depend
 	$(MAKE) -f CMakeFiles/_run_tests_visual_servoing_gtest_robotTests.dir/build.make CMakeFiles/_run_tests_visual_servoing_gtest_robotTests.dir/build
@@ -602,7 +598,7 @@ CMakeFiles/_run_tests_visual_servoing_gtest_robotTests.dir/all: CMakeFiles/tests
 
 # Build rule for subdir invocation for target.
 CMakeFiles/_run_tests_visual_servoing_gtest_robotTests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 10
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 8
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/_run_tests_visual_servoing_gtest_robotTests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 0
 .PHONY : CMakeFiles/_run_tests_visual_servoing_gtest_robotTests.dir/rule
@@ -792,7 +788,7 @@ CMakeFiles/_run_tests_visual_servoing_gtest.dir/all: CMakeFiles/_run_tests_visua
 
 # Build rule for subdir invocation for target.
 CMakeFiles/_run_tests_visual_servoing_gtest.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 10
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 8
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/_run_tests_visual_servoing_gtest.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 0
 .PHONY : CMakeFiles/_run_tests_visual_servoing_gtest.dir/rule
@@ -949,6 +945,10 @@ CMakeFiles/roscpp_generate_messages_py.dir/clean:
 CMakeFiles/visual_servoing.dir/all: CMakeFiles/visual_servoing_robotController.dir/all
 CMakeFiles/visual_servoing.dir/all: CMakeFiles/visual_servoing_robot.dir/all
 CMakeFiles/visual_servoing.dir/all: CMakeFiles/actionlib_msgs_generate_messages_nodejs.dir/all
+CMakeFiles/visual_servoing.dir/all: CMakeFiles/actionlib_msgs_generate_messages_lisp.dir/all
+CMakeFiles/visual_servoing.dir/all: CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/all
+CMakeFiles/visual_servoing.dir/all: CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/all
+CMakeFiles/visual_servoing.dir/all: CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/all
 CMakeFiles/visual_servoing.dir/all: CMakeFiles/roscpp_generate_messages_nodejs.dir/all
 CMakeFiles/visual_servoing.dir/all: CMakeFiles/std_msgs_generate_messages_eus.dir/all
 CMakeFiles/visual_servoing.dir/all: CMakeFiles/geometry_msgs_generate_messages_lisp.dir/all
@@ -962,10 +962,6 @@ CMakeFiles/visual_servoing.dir/all: CMakeFiles/roscpp_generate_messages_py.dir/a
 CMakeFiles/visual_servoing.dir/all: CMakeFiles/rosgraph_msgs_generate_messages_py.dir/all
 CMakeFiles/visual_servoing.dir/all: CMakeFiles/actionlib_msgs_generate_messages_eus.dir/all
 CMakeFiles/visual_servoing.dir/all: CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/all
-CMakeFiles/visual_servoing.dir/all: CMakeFiles/actionlib_msgs_generate_messages_lisp.dir/all
-CMakeFiles/visual_servoing.dir/all: CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/all
-CMakeFiles/visual_servoing.dir/all: CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/all
-CMakeFiles/visual_servoing.dir/all: CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/all
 CMakeFiles/visual_servoing.dir/all: CMakeFiles/std_msgs_generate_messages_lisp.dir/all
 CMakeFiles/visual_servoing.dir/all: CMakeFiles/roscpp_generate_messages_lisp.dir/all
 CMakeFiles/visual_servoing.dir/all: CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/all
@@ -1147,7 +1143,7 @@ CMakeFiles/run_tests.dir/all: CMakeFiles/_run_tests_visual_servoing.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/run_tests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 10
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 8
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/run_tests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 0
 .PHONY : CMakeFiles/run_tests.dir/rule
@@ -1274,8 +1270,8 @@ CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/clean:
 # Target rules for target CMakeFiles/tests.dir
 
 # All Build rule for target.
-CMakeFiles/tests.dir/all: CMakeFiles/robotControllerTests.dir/all
 CMakeFiles/tests.dir/all: CMakeFiles/robotTests.dir/all
+CMakeFiles/tests.dir/all: CMakeFiles/robotControllerTests.dir/all
 	$(MAKE) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/depend
 	$(MAKE) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/joshimps/git/visualservoing/build/CMakeFiles --progress-num= "Built target tests"
@@ -1283,7 +1279,7 @@ CMakeFiles/tests.dir/all: CMakeFiles/robotTests.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/tests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 10
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 8
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/tests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/joshimps/git/visualservoing/build/CMakeFiles 0
 .PHONY : CMakeFiles/tests.dir/rule

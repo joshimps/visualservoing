@@ -22,14 +22,10 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/opt/ros/noetic/include"
   "/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp"
   "/usr/include/eigen3"
-  "/usr/src/googletest/googletest/include"
-  "/usr/src/googletest/googletest"
   )
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/joshimps/git/visualservoing/build/gtest/googletest/CMakeFiles/gtest.dir/DependInfo.cmake"
-  "/home/joshimps/git/visualservoing/build/CMakeFiles/visual_servoing_robot.dir/DependInfo.cmake"
   "/home/joshimps/git/visualservoing/build/CMakeFiles/visual_servoing_robotController.dir/DependInfo.cmake"
   )
 
