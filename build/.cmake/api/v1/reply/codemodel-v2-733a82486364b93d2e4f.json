@@ -8,8 +8,7 @@
 					"build" : ".",
 					"childIndexes" : 
 					[
-						1,
-						4
+						1
 					],
 					"hasInstallRule" : true,
 					"minimumCMakeVersion" : 
@@ -33,9 +32,11 @@
 						10,
 						11,
 						12,
-						19,
-						20,
-						21,
+						13,
+						14,
+						15,
+						16,
+						17,
 						22,
 						23,
 						24,
@@ -49,6 +50,7 @@
 						32,
 						33,
 						34,
+						35,
 						36,
 						37,
 						38,
@@ -57,7 +59,15 @@
 						41,
 						42,
 						43,
-						44
+						44,
+						45,
+						46,
+						47,
+						48,
+						49,
+						50,
+						51,
+						52
 					]
 				},
 				{
@@ -89,8 +99,8 @@
 					"source" : "/usr/src/googletest/googlemock",
 					"targetIndexes" : 
 					[
-						13,
-						14
+						18,
+						19
 					]
 				},
 				{
@@ -104,24 +114,8 @@
 					"source" : "/usr/src/googletest/googletest",
 					"targetIndexes" : 
 					[
-						15,
-						16
-					]
-				},
-				{
-					"build" : "test",
-					"minimumCMakeVersion" : 
-					{
-						"string" : "3.0.2"
-					},
-					"parentIndex" : 0,
-					"projectIndex" : 0,
-					"source" : "test",
-					"targetIndexes" : 
-					[
-						17,
-						18,
-						35
+						20,
+						21
 					]
 				}
 			],
@@ -135,8 +129,7 @@
 					],
 					"directoryIndexes" : 
 					[
-						0,
-						4
+						0
 					],
 					"name" : "visual_servoing",
 					"targetIndexes" : 
@@ -154,11 +147,11 @@
 						10,
 						11,
 						12,
+						13,
+						14,
+						15,
+						16,
 						17,
-						18,
-						19,
-						20,
-						21,
 						22,
 						23,
 						24,
@@ -181,7 +174,15 @@
 						41,
 						42,
 						43,
-						44
+						44,
+						45,
+						46,
+						47,
+						48,
+						49,
+						50,
+						51,
+						52
 					]
 				},
 				{
@@ -209,8 +210,8 @@
 					"parentIndex" : 1,
 					"targetIndexes" : 
 					[
-						13,
-						14
+						18,
+						19
 					]
 				},
 				{
@@ -222,13 +223,41 @@
 					"parentIndex" : 2,
 					"targetIndexes" : 
 					[
-						15,
-						16
+						20,
+						21
 					]
 				}
 			],
 			"targets" : 
 			[
+				{
+					"directoryIndex" : 0,
+					"id" : "_run_tests_visual_servoing::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-_run_tests_visual_servoing-Debug-6f8f624cbc326e5f9e9f.json",
+					"name" : "_run_tests_visual_servoing",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "_run_tests_visual_servoing_gtest::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-_run_tests_visual_servoing_gtest-Debug-2cad7ab85a61d2266ab1.json",
+					"name" : "_run_tests_visual_servoing_gtest",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "_run_tests_visual_servoing_gtest_robotControllerTests::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-_run_tests_visual_servoing_gtest_robotControllerTests-Debug-b7a4a199cd40a5c4d0f6.json",
+					"name" : "_run_tests_visual_servoing_gtest_robotControllerTests",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "_run_tests_visual_servoing_gtest_robotTests::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-_run_tests_visual_servoing_gtest_robotTests-Debug-978cefd2c92165496123.json",
+					"name" : "_run_tests_visual_servoing_gtest_robotTests",
+					"projectIndex" : 0
+				},
 				{
 					"directoryIndex" : 0,
 					"id" : "actionlib_msgs_generate_messages_cpp::@6890427a1f51a3e7e1df",
@@ -269,6 +298,13 @@
 					"id" : "clean_test_results::@6890427a1f51a3e7e1df",
 					"jsonFile" : "target-clean_test_results-Debug-18ff39d6dd17708d2174.json",
 					"name" : "clean_test_results",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "clean_test_results_visual_servoing::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-clean_test_results_visual_servoing-Debug-ee32d3bdfc986f3fe207.json",
+					"name" : "clean_test_results_visual_servoing",
 					"projectIndex" : 0
 				},
 				{
@@ -349,16 +385,16 @@
 					"projectIndex" : 3
 				},
 				{
-					"directoryIndex" : 4,
-					"id" : "robotControllerTests::@36f028580bb02cc8272a",
-					"jsonFile" : "target-robotControllerTests-Debug-c11af0958abde5659dac.json",
+					"directoryIndex" : 0,
+					"id" : "robotControllerTests::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-robotControllerTests-Debug-94912dc04814a98373dc.json",
 					"name" : "robotControllerTests",
 					"projectIndex" : 0
 				},
 				{
-					"directoryIndex" : 4,
-					"id" : "robotTests::@36f028580bb02cc8272a",
-					"jsonFile" : "target-robotTests-Debug-8f0837b3dcd5e1cf1180.json",
+					"directoryIndex" : 0,
+					"id" : "robotTests::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-robotTests-Debug-e0724387f470dbb66c78.json",
 					"name" : "robotTests",
 					"projectIndex" : 0
 				},
@@ -435,8 +471,36 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "run_tests::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-run_tests-Debug-1b638005f27c152ff854.json",
+					"jsonFile" : "target-run_tests-Debug-eab7a196b444711308e5.json",
 					"name" : "run_tests",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "run_tests_visual_servoing::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-run_tests_visual_servoing-Debug-8e6699673834543d8cbe.json",
+					"name" : "run_tests_visual_servoing",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "run_tests_visual_servoing_gtest::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-run_tests_visual_servoing_gtest-Debug-7abd829705ac6270adf6.json",
+					"name" : "run_tests_visual_servoing_gtest",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "run_tests_visual_servoing_gtest_robotControllerTests::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-run_tests_visual_servoing_gtest_robotControllerTests-Debug-b297843a74d141b9feeb.json",
+					"name" : "run_tests_visual_servoing_gtest_robotControllerTests",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "run_tests_visual_servoing_gtest_robotTests::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-run_tests_visual_servoing_gtest_robotTests-Debug-f9bc7fed679a69c20f45.json",
+					"name" : "run_tests_visual_servoing_gtest_robotTests",
 					"projectIndex" : 0
 				},
 				{
@@ -475,16 +539,9 @@
 					"projectIndex" : 0
 				},
 				{
-					"directoryIndex" : 4,
-					"id" : "student_lib::@36f028580bb02cc8272a",
-					"jsonFile" : "target-student_lib-Debug-6ea0aa793e4df0d869db.json",
-					"name" : "student_lib",
-					"projectIndex" : 0
-				},
-				{
 					"directoryIndex" : 0,
 					"id" : "tests::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-tests-Debug-8210aed86a390c0f40c3.json",
+					"jsonFile" : "target-tests-Debug-6378704c4be7eabc8fcb.json",
 					"name" : "tests",
 					"projectIndex" : 0
 				},
@@ -526,21 +583,21 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "visual_servoing::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-visual_servoing-Debug-4debbd681211eb3f91ef.json",
+					"jsonFile" : "target-visual_servoing-Debug-6f6fbf7682a4274b272d.json",
 					"name" : "visual_servoing",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "visual_servoing_robot::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-visual_servoing_robot-Debug-110212abda1464baf8f7.json",
+					"jsonFile" : "target-visual_servoing_robot-Debug-84f8fb1df7710023a8f2.json",
 					"name" : "visual_servoing_robot",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "visual_servoing_robotController::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-visual_servoing_robotController-Debug-799f574c10154fea08b3.json",
+					"jsonFile" : "target-visual_servoing_robotController-Debug-b15775fd84114e61c8bf.json",
 					"name" : "visual_servoing_robotController",
 					"projectIndex" : 0
 				}

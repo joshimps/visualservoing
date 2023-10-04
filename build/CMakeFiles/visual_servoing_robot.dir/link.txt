@@ -1,1 +1,1 @@
-/usr/bin/c++ -fPIC -g  -shared -Wl,-soname,libvisual_servoing_robot.so -o libvisual_servoing_robot.so CMakeFiles/visual_servoing_robot.dir/src/robot.cpp.o 
+/usr/bin/c++ -fPIC -g  -shared -Wl,-soname,libvisual_servoing_robot.so -o devel/lib/libvisual_servoing_robot.so CMakeFiles/visual_servoing_robot.dir/src/robot.cpp.o 

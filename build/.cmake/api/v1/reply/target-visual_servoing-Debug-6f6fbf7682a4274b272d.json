@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "visual_servoing"
+			"path" : "devel/lib/visual_servoing/visual_servoing"
 		}
 	],
 	"backtrace" : 1,
@@ -37,19 +37,19 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 145,
+				"line" : 136,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 158,
+				"line" : 141,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 155,
+				"line" : 138,
 				"parent" : 0
 			},
 			{
@@ -335,7 +335,7 @@
 				"role" : "flags"
 			},
 			{
-				"fragment" : "-Wl,-rpath,/opt/ros/noetic/lib:/home/joshimps/git/visualservoing/build",
+				"fragment" : "-Wl,-rpath,/opt/ros/noetic/lib:/home/joshimps/git/visualservoing/build/devel/lib",
 				"role" : "libraries"
 			},
 			{
@@ -412,12 +412,12 @@
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "libvisual_servoing_robot.so",
+				"fragment" : "devel/lib/libvisual_servoing_robot.so",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "libvisual_servoing_robotController.so",
+				"fragment" : "devel/lib/libvisual_servoing_robotController.so",
 				"role" : "libraries"
 			}
 		],

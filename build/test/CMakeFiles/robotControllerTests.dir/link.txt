@@ -1,1 +1,1 @@
-/usr/bin/c++  -g  -rdynamic CMakeFiles/robotControllerTests.dir/robotControllerTests.cpp.o  -o robotControllerTests  -Wl,-rpath,/home/joshimps/git/visualservoing/build/test -Wl,-Bstatic -lgtest -Wl,-Bdynamic -llinkcommand libstudent_lib.so 
+/usr/bin/c++  -g  -rdynamic CMakeFiles/robotControllerTests.dir/robotControllerTests.cpp.o  -o robotControllerTests  -Wl,-rpath,/home/joshimps/git/visualservoing/build/test -Wl,-Bstatic -lgtest -Wl,-Bdynamic libstudent_lib.so 

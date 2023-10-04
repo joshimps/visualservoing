@@ -760,6 +760,45 @@
 			"path" : "cmake/FindEigen3.cmake"
 		},
 		{
+			"path" : "package.xml"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "build/catkin_generated/package.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/opt/ros/noetic/share/catkin/cmake/templates/pkg.context.pc.in"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/opt/ros/noetic/share/catkin/cmake/em/pkg.pc.em"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/opt/ros/noetic/share/catkin/cmake/templates/pkgConfig.cmake.in"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/opt/ros/noetic/share/catkin/cmake/templates/pkgConfig-version.cmake.in"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/opt/ros/noetic/share/catkin/cmake/templates/pkg.context.pc.in"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/opt/ros/noetic/share/catkin/cmake/em/pkg.pc.em"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/opt/ros/noetic/share/catkin/cmake/templates/pkgConfig.cmake.in"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/opt/ros/noetic/share/catkin/cmake/templates/pkgConfig-version.cmake.in"
+		},
+		{
 			"isExternal" : true,
 			"path" : "/usr/src/googletest/CMakeLists.txt"
 		},
@@ -819,59 +858,6 @@
 			"isCMake" : true,
 			"isExternal" : true,
 			"path" : "/usr/share/cmake-3.16/Modules/FindPythonInterp.cmake"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "/usr/share/cmake-3.16/Modules/FindPackageHandleStandardArgs.cmake"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "/usr/share/cmake-3.16/Modules/FindPackageMessage.cmake"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "/usr/share/cmake-3.16/Modules/FindThreads.cmake"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "/usr/share/cmake-3.16/Modules/CheckLibraryExists.cmake"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "/usr/share/cmake-3.16/Modules/CheckIncludeFile.cmake"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "/usr/share/cmake-3.16/Modules/CheckCSourceCompiles.cmake"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "/usr/share/cmake-3.16/Modules/FindPackageHandleStandardArgs.cmake"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "/usr/share/cmake-3.16/Modules/FindPackageMessage.cmake"
-		},
-		{
-			"path" : "test/CMakeLists.txt"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "/usr/share/cmake-3.16/Modules/FindGTest.cmake"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "/usr/share/cmake-3.16/Modules/GoogleTest.cmake"
 		},
 		{
 			"isCMake" : true,

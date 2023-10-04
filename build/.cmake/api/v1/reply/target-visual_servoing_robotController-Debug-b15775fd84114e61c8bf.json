@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "libvisual_servoing_robotController.so"
+			"path" : "devel/lib/libvisual_servoing_robotController.so"
 		}
 	],
 	"backtrace" : 1,
@@ -35,7 +35,7 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 133,
+				"line" : 131,
 				"parent" : 0
 			},
 			{

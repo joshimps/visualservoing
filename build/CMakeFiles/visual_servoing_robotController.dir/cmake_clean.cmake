@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/visual_servoing_robotController.dir/src/robotController.cpp.o"
-  "libvisual_servoing_robotController.pdb"
-  "libvisual_servoing_robotController.so"
+  "devel/lib/libvisual_servoing_robotController.pdb"
+  "devel/lib/libvisual_servoing_robotController.so"
 )
 
 # Per-language clean rules from dependency scanning.
