@@ -14,6 +14,13 @@ RobotController::RobotController(ros::NodeHandle nh, Robot* robot, double gain, 
     jointVelocityPub_ = nh_.advertise<std_msgs::Float64MultiArray>("joint_group_vel_controller/command", 10, false);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+// Setters
+/////////////////////////////////////////////////////////////////////////////////////////
+
+void setFiducialPostition(geometry_msgs::PoseWithCovariancePtr msg){
+    
+}
 
 ///////////////////////////////////////////////////////////
 // Actions
@@ -49,6 +56,7 @@ void RobotController::moveRobot(){
         
         //Publish the joint velocities to the robot here
         std_msgs::Float64MultiArray msg;
+
 
     }
     
