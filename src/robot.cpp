@@ -219,7 +219,7 @@ void Robot::calculateJointTransformsToBase(){
             jointTransformToBase = jointTransformToBase * jointTransforms_.at(j); 
         }
 
-        jointTransformsToBase_.at(i) = jointTransformToBase;
+        jointTransformsToBase_.push_back(jointTransformToBase);
     }
 }
 
