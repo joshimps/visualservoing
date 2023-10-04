@@ -345,6 +345,8 @@ TEST(Robot,testJacobian){
     //Calculate the jacobian
     robot.calculateJacobian();
 
+    ROS_INFO_STREAM("/n" << robot.getJacobian());
+
     //Row 1
     ASSERT_NEAR(robot.getJacobian()(0,0),0.1943,0.01);
     ASSERT_NEAR(robot.getJacobian()(0,1),0.0853,0.01);
@@ -353,40 +355,40 @@ TEST(Robot,testJacobian){
     ASSERT_NEAR(robot.getJacobian()(0,4),-0.0819,0.01);
     ASSERT_NEAR(robot.getJacobian()(0,5),0,0.01);
     //Row 2()
-    ASSERT_NEAR(robot.getJacobian()(0,0),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,1),-0.4569,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,2),-0.2132,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,3),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,4),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,5),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(1,0),-0.4569 ,0.01);
+    ASSERT_NEAR(robot.getJacobian()(1,1),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(1,2),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(1,3),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(1,4),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(1,5),0,0.01);
     //Row 3()
-    ASSERT_NEAR(robot.getJacobian()(0,0), 0.4569 ,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,1),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,2),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,3),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,4),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,5),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(2,0),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(2,1),-0.4569 ,0.01);
+    ASSERT_NEAR(robot.getJacobian()(2,2),-0.2132,0.01);
+    ASSERT_NEAR(robot.getJacobian()(2,3),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(2,4),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(2,5),0,0.01);
     //Row 4()
-    ASSERT_NEAR(robot.getJacobian()(0,0),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,1),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,2),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,3),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,4),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,5),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(3,0),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(3,1),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(3,2),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(3,3),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(3,4),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(3,5),0,0.01);
     //Row 5()
-    ASSERT_NEAR(robot.getJacobian()(0,0),1,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,1),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,2),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,3),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,4),-1,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,5),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(4,0),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(4,1),-1,0.01);
+    ASSERT_NEAR(robot.getJacobian()(4,2),-1,0.01);
+    ASSERT_NEAR(robot.getJacobian()(4,3),-1,0.01);
+    ASSERT_NEAR(robot.getJacobian()(4,4),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(4,5),-1,0.01);
     //Row 6
-    ASSERT_NEAR(robot.getJacobian()(0,0),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,1),1,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,2),1,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,3),1,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,4),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,5),1,0.01);
+    ASSERT_NEAR(robot.getJacobian()(5,0),1,0.01);
+    ASSERT_NEAR(robot.getJacobian()(5,1),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(5,2),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(5,3),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(5,4),-1,0.01);
+    ASSERT_NEAR(robot.getJacobian()(5,5),0,0.01);
 }
 
 int main(int argc, char **argv) {

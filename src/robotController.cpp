@@ -11,7 +11,7 @@ RobotController::RobotController(ros::NodeHandle nh, Robot* robot, double gain, 
     gain_ = gain;
     errorThreshold_ = errorThreshold;
     //fiducialPositionSub_ = nh_.subscribe("fiducialPositionTopic", 1000, &RobotController::fiducialPositionCallBack, this);
-    //jointVelocityPub_ = nh_.publish("jointVelocityTopic", 3, false);
+    jointVelocityPub_ = nh_.advertise<std_msgs::Float64MultiArray>("joint_group_vel_controller/command", 10, false);
 }
 
 
@@ -22,14 +22,14 @@ RobotController::RobotController(ros::NodeHandle nh, Robot* robot, double gain, 
 void RobotController::moveRobot(){
     
     Eigen::MatrixXd endEffectorVelocity(6,1);
-    Eigen::MatrixXd jointVelocities;
+    Eigen::VectorXd jointVelocities;
 
     //Keep going until the norm of the error is greater than the threshold
     //Using Position Based servoing as explained here
     //https://canvas.uts.edu.au/courses/27375/pages/2-position-based-visual-servoing-pbvs?module_item_id=1290599
 
     while(endEffectorVelocity.norm() > errorThreshold_){
-        
+
         std::unique_lock<std::mutex> lck(fiducialPoseMutex_);
         //Calculate our end effector velocity from the positional and rotational error
         endEffectorVelocity(0,0) = gain_ * fiducialTranslationLocal_(0,0);
@@ -48,7 +48,8 @@ void RobotController::moveRobot(){
         jointVelocities = robot_->getJacobian().completeOrthogonalDecomposition().pseudoInverse() * endEffectorVelocity;
         
         //Publish the joint velocities to the robot here
-        
+        std_msgs::Float64MultiArray msg;
+
     }
     
 }
