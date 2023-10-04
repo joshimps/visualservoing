@@ -52,7 +52,7 @@ target_link_libraries(${PROJECT_NAME}_robot  ${catkin_LIBRARIES})
 
 ## Declare a C++ library
 add_library(${PROJECT_NAME}_robotController src/robotController.cpp) 
-target_link_libraries(${PROJECT_NAME}_robotController ${catkin_LIBRARIES} ${PROJECT_NAME}_robot )
+target_link_libraries(${PROJECT_NAME}_robotController ${PROJECT_NAME}_robot ${catkin_LIBRARIES})
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
@@ -73,6 +73,7 @@ catkin_add_gtest(robotTests test/robotTests.cpp)
 target_link_libraries(robotControllerTests
   ${catkin_LIBRARIES}
   ${PROJECT_NAME}_robotController
+  ${PROJECT_NAME}_robot
   pthread
 )
 

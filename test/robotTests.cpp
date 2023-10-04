@@ -344,6 +344,49 @@ TEST(Robot,testJacobian){
     
     //Calculate the jacobian
     robot.calculateJacobian();
+
+    //Row 1
+    ASSERT_NEAR(robot.getJacobian()(0,0),0.1943,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,1),0.0853,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,2),0.0853,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,3),0.0853,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,4),-0.0819,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,5),0,0.01);
+    //Row 2()
+    ASSERT_NEAR(robot.getJacobian()(0,0),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,1),-0.4569,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,2),-0.2132,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,3),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,4),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,5),0,0.01);
+    //Row 3()
+    ASSERT_NEAR(robot.getJacobian()(0,0), 0.4569 ,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,1),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,2),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,3),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,4),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,5),0,0.01);
+    //Row 4()
+    ASSERT_NEAR(robot.getJacobian()(0,0),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,1),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,2),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,3),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,4),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,5),0,0.01);
+    //Row 5()
+    ASSERT_NEAR(robot.getJacobian()(0,0),1,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,1),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,2),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,3),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,4),-1,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,5),0,0.01);
+    //Row 6
+    ASSERT_NEAR(robot.getJacobian()(0,0),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,1),1,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,2),1,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,3),1,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,4),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,5),1,0.01);
 }
 
 int main(int argc, char **argv) {
