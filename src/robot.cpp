@@ -212,13 +212,11 @@ void Robot::calculateJointTransforms(){
 void Robot::calculateJointTransformsToBase(){
 
     Eigen::MatrixXd jointTransformToBase = jointTransforms_.at(0);
-
+    jointTransformsToBase_.push_back(jointTransformToBase);
+    
     for(int i = 1; i < jointTransforms_.size(); i++){
         
-        for(int j = 1; j < i; j++){
-            jointTransformToBase = jointTransformToBase * jointTransforms_.at(j); 
-        }
-
+        jointTransformToBase = jointTransformToBase * jointTransforms_.at(i); 
         jointTransformsToBase_.push_back(jointTransformToBase);
     }
 }
