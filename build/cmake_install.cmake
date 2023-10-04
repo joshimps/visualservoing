@@ -128,21 +128,6 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 file(INSTALL DESTINATION "/usr/local" TYPE FILE FILES "/home/joshimps/git/visualservoing/build/catkin_generated/installspace/.rosinstall")
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/joshimps/git/visualservoing/build/catkin_generated/installspace/visual_servoing.pc")
-endif()
-
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/visual_servoing/cmake" TYPE FILE FILES
-    "/home/joshimps/git/visualservoing/build/catkin_generated/installspace/visual_servoingConfig.cmake"
-    "/home/joshimps/git/visualservoing/build/catkin_generated/installspace/visual_servoingConfig-version.cmake"
-    )
-endif()
-
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/visual_servoing" TYPE FILE FILES "/home/joshimps/git/visualservoing/package.xml")
-endif()
-
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/joshimps/git/visualservoing/build/gtest/cmake_install.cmake")

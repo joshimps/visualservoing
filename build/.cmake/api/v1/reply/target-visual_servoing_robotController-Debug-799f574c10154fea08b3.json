@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "devel/lib/libvisual_servoing_robotController.so"
+			"path" : "libvisual_servoing_robotController.so"
 		}
 	],
 	"backtrace" : 1,
@@ -164,6 +164,10 @@
 				{
 					"backtrace" : 16,
 					"path" : "/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp"
+				},
+				{
+					"backtrace" : 16,
+					"path" : "/usr/include/eigen3"
 				}
 			],
 			"language" : "CXX",

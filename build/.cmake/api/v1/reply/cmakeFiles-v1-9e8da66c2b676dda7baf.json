@@ -760,45 +760,6 @@
 			"path" : "cmake/FindEigen3.cmake"
 		},
 		{
-			"path" : "package.xml"
-		},
-		{
-			"isGenerated" : true,
-			"path" : "build/catkin_generated/package.cmake"
-		},
-		{
-			"isExternal" : true,
-			"path" : "/opt/ros/noetic/share/catkin/cmake/templates/pkg.context.pc.in"
-		},
-		{
-			"isExternal" : true,
-			"path" : "/opt/ros/noetic/share/catkin/cmake/em/pkg.pc.em"
-		},
-		{
-			"isExternal" : true,
-			"path" : "/opt/ros/noetic/share/catkin/cmake/templates/pkgConfig.cmake.in"
-		},
-		{
-			"isExternal" : true,
-			"path" : "/opt/ros/noetic/share/catkin/cmake/templates/pkgConfig-version.cmake.in"
-		},
-		{
-			"isExternal" : true,
-			"path" : "/opt/ros/noetic/share/catkin/cmake/templates/pkg.context.pc.in"
-		},
-		{
-			"isExternal" : true,
-			"path" : "/opt/ros/noetic/share/catkin/cmake/em/pkg.pc.em"
-		},
-		{
-			"isExternal" : true,
-			"path" : "/opt/ros/noetic/share/catkin/cmake/templates/pkgConfig.cmake.in"
-		},
-		{
-			"isExternal" : true,
-			"path" : "/opt/ros/noetic/share/catkin/cmake/templates/pkgConfig-version.cmake.in"
-		},
-		{
 			"isExternal" : true,
 			"path" : "/usr/src/googletest/CMakeLists.txt"
 		},

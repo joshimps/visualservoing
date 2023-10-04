@@ -786,6 +786,7 @@ src/robot.o: src/robot.cpp.o
 # target to build an object file
 src/robot.cpp.o:
 	$(MAKE) -f CMakeFiles/visual_servoing_robot.dir/build.make CMakeFiles/visual_servoing_robot.dir/src/robot.cpp.o
+	$(MAKE) -f CMakeFiles/visual_servoing.dir/build.make CMakeFiles/visual_servoing.dir/src/robot.cpp.o
 .PHONY : src/robot.cpp.o
 
 src/robot.i: src/robot.cpp.i
@@ -795,6 +796,7 @@ src/robot.i: src/robot.cpp.i
 # target to preprocess a source file
 src/robot.cpp.i:
 	$(MAKE) -f CMakeFiles/visual_servoing_robot.dir/build.make CMakeFiles/visual_servoing_robot.dir/src/robot.cpp.i
+	$(MAKE) -f CMakeFiles/visual_servoing.dir/build.make CMakeFiles/visual_servoing.dir/src/robot.cpp.i
 .PHONY : src/robot.cpp.i
 
 src/robot.s: src/robot.cpp.s
@@ -804,6 +806,7 @@ src/robot.s: src/robot.cpp.s
 # target to generate assembly for a file
 src/robot.cpp.s:
 	$(MAKE) -f CMakeFiles/visual_servoing_robot.dir/build.make CMakeFiles/visual_servoing_robot.dir/src/robot.cpp.s
+	$(MAKE) -f CMakeFiles/visual_servoing.dir/build.make CMakeFiles/visual_servoing.dir/src/robot.cpp.s
 .PHONY : src/robot.cpp.s
 
 src/robotController.o: src/robotController.cpp.o
@@ -813,6 +816,7 @@ src/robotController.o: src/robotController.cpp.o
 # target to build an object file
 src/robotController.cpp.o:
 	$(MAKE) -f CMakeFiles/visual_servoing_robotController.dir/build.make CMakeFiles/visual_servoing_robotController.dir/src/robotController.cpp.o
+	$(MAKE) -f CMakeFiles/visual_servoing.dir/build.make CMakeFiles/visual_servoing.dir/src/robotController.cpp.o
 .PHONY : src/robotController.cpp.o
 
 src/robotController.i: src/robotController.cpp.i
@@ -822,6 +826,7 @@ src/robotController.i: src/robotController.cpp.i
 # target to preprocess a source file
 src/robotController.cpp.i:
 	$(MAKE) -f CMakeFiles/visual_servoing_robotController.dir/build.make CMakeFiles/visual_servoing_robotController.dir/src/robotController.cpp.i
+	$(MAKE) -f CMakeFiles/visual_servoing.dir/build.make CMakeFiles/visual_servoing.dir/src/robotController.cpp.i
 .PHONY : src/robotController.cpp.i
 
 src/robotController.s: src/robotController.cpp.s
@@ -831,6 +836,7 @@ src/robotController.s: src/robotController.cpp.s
 # target to generate assembly for a file
 src/robotController.cpp.s:
 	$(MAKE) -f CMakeFiles/visual_servoing_robotController.dir/build.make CMakeFiles/visual_servoing_robotController.dir/src/robotController.cpp.s
+	$(MAKE) -f CMakeFiles/visual_servoing.dir/build.make CMakeFiles/visual_servoing.dir/src/robotController.cpp.s
 .PHONY : src/robotController.cpp.s
 
 # Help Target

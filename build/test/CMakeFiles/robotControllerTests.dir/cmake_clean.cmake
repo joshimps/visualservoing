@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
-  "../devel/lib/visual_servoing/robotControllerTests"
-  "../devel/lib/visual_servoing/robotControllerTests.pdb"
   "CMakeFiles/robotControllerTests.dir/robotControllerTests.cpp.o"
+  "robotControllerTests"
+  "robotControllerTests.pdb"
 )
 
 # Per-language clean rules from dependency scanning.

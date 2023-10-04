@@ -1,1 +1,1 @@
-/usr/bin/c++ -fPIC -g  -shared -Wl,-soname,libstudent_lib.so -o ../devel/lib/libstudent_lib.so CMakeFiles/student_lib.dir/__/src/main.cpp.o CMakeFiles/student_lib.dir/__/src/robot.cpp.o CMakeFiles/student_lib.dir/__/src/robotController.cpp.o 
+/usr/bin/c++ -fPIC -g  -shared -Wl,-soname,libstudent_lib.so -o libstudent_lib.so CMakeFiles/student_lib.dir/__/src/main.cpp.o CMakeFiles/student_lib.dir/__/src/robot.cpp.o CMakeFiles/student_lib.dir/__/src/robotController.cpp.o 

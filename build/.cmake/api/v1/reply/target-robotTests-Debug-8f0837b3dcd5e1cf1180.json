@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "devel/lib/visual_servoing/robotTests"
+			"path" : "test/robotTests"
 		}
 	],
 	"backtrace" : 1,
@@ -186,6 +186,10 @@
 					"path" : "/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp"
 				},
 				{
+					"backtrace" : 18,
+					"path" : "/usr/include/eigen3"
+				},
+				{
 					"backtrace" : 19,
 					"path" : "/home/joshimps/git/visualservoing/test/../include"
 				},
@@ -222,7 +226,7 @@
 				"role" : "flags"
 			},
 			{
-				"fragment" : "-Wl,-rpath,/home/joshimps/git/visualservoing/build/devel/lib",
+				"fragment" : "-Wl,-rpath,/home/joshimps/git/visualservoing/build/test",
 				"role" : "libraries"
 			},
 			{
@@ -243,7 +247,7 @@
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "../devel/lib/libstudent_lib.so",
+				"fragment" : "libstudent_lib.so",
 				"role" : "libraries"
 			}
 		],

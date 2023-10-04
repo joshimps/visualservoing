@@ -25,7 +25,8 @@ class Robot{
 
     void calculateJointTransforms();
     void calculateJacobian();
-
+    void calculateJointTransformsToBase();
+    
     protected:
 
     private:
@@ -59,6 +60,7 @@ class Robot{
     Eigen::MatrixXd baseTransform_;
     sensor_msgs::JointState jointStates_;
     std::vector<Eigen::MatrixXf> jointTransforms_;
+    std::vector<Eigen::MatrixXf> jointTransformsToBase_;
     Eigen::MatrixXf jacobian_;
 
     ///////////////////////////////////////////////////////////////////////

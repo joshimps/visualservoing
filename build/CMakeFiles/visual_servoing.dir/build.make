@@ -70,40 +70,71 @@ CMakeFiles/visual_servoing.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/visual_servoing.dir/src/main.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/joshimps/git/visualservoing/src/main.cpp -o CMakeFiles/visual_servoing.dir/src/main.cpp.s
 
+CMakeFiles/visual_servoing.dir/src/robotController.cpp.o: CMakeFiles/visual_servoing.dir/flags.make
+CMakeFiles/visual_servoing.dir/src/robotController.cpp.o: ../src/robotController.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/joshimps/git/visualservoing/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/visual_servoing.dir/src/robotController.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/visual_servoing.dir/src/robotController.cpp.o -c /home/joshimps/git/visualservoing/src/robotController.cpp
+
+CMakeFiles/visual_servoing.dir/src/robotController.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/visual_servoing.dir/src/robotController.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/joshimps/git/visualservoing/src/robotController.cpp > CMakeFiles/visual_servoing.dir/src/robotController.cpp.i
+
+CMakeFiles/visual_servoing.dir/src/robotController.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/visual_servoing.dir/src/robotController.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/joshimps/git/visualservoing/src/robotController.cpp -o CMakeFiles/visual_servoing.dir/src/robotController.cpp.s
+
+CMakeFiles/visual_servoing.dir/src/robot.cpp.o: CMakeFiles/visual_servoing.dir/flags.make
+CMakeFiles/visual_servoing.dir/src/robot.cpp.o: ../src/robot.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/joshimps/git/visualservoing/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/visual_servoing.dir/src/robot.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/visual_servoing.dir/src/robot.cpp.o -c /home/joshimps/git/visualservoing/src/robot.cpp
+
+CMakeFiles/visual_servoing.dir/src/robot.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/visual_servoing.dir/src/robot.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/joshimps/git/visualservoing/src/robot.cpp > CMakeFiles/visual_servoing.dir/src/robot.cpp.i
+
+CMakeFiles/visual_servoing.dir/src/robot.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/visual_servoing.dir/src/robot.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/joshimps/git/visualservoing/src/robot.cpp -o CMakeFiles/visual_servoing.dir/src/robot.cpp.s
+
 # Object files for target visual_servoing
 visual_servoing_OBJECTS = \
-"CMakeFiles/visual_servoing.dir/src/main.cpp.o"
+"CMakeFiles/visual_servoing.dir/src/main.cpp.o" \
+"CMakeFiles/visual_servoing.dir/src/robotController.cpp.o" \
+"CMakeFiles/visual_servoing.dir/src/robot.cpp.o"
 
 # External object files for target visual_servoing
 visual_servoing_EXTERNAL_OBJECTS =
 
-devel/lib/visual_servoing/visual_servoing: CMakeFiles/visual_servoing.dir/src/main.cpp.o
-devel/lib/visual_servoing/visual_servoing: CMakeFiles/visual_servoing.dir/build.make
-devel/lib/visual_servoing/visual_servoing: /opt/ros/noetic/lib/libroscpp.so
-devel/lib/visual_servoing/visual_servoing: /usr/lib/x86_64-linux-gnu/libpthread.so
-devel/lib/visual_servoing/visual_servoing: /usr/lib/x86_64-linux-gnu/libboost_chrono.so.1.71.0
-devel/lib/visual_servoing/visual_servoing: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so.1.71.0
-devel/lib/visual_servoing/visual_servoing: /opt/ros/noetic/lib/librosconsole.so
-devel/lib/visual_servoing/visual_servoing: /opt/ros/noetic/lib/librosconsole_log4cxx.so
-devel/lib/visual_servoing/visual_servoing: /opt/ros/noetic/lib/librosconsole_backend_interface.so
-devel/lib/visual_servoing/visual_servoing: /usr/lib/x86_64-linux-gnu/liblog4cxx.so
-devel/lib/visual_servoing/visual_servoing: /usr/lib/x86_64-linux-gnu/libboost_regex.so.1.71.0
-devel/lib/visual_servoing/visual_servoing: /opt/ros/noetic/lib/libxmlrpcpp.so
-devel/lib/visual_servoing/visual_servoing: /opt/ros/noetic/lib/libtf2.so
-devel/lib/visual_servoing/visual_servoing: /opt/ros/noetic/lib/libroscpp_serialization.so
-devel/lib/visual_servoing/visual_servoing: /opt/ros/noetic/lib/librostime.so
-devel/lib/visual_servoing/visual_servoing: /usr/lib/x86_64-linux-gnu/libboost_date_time.so.1.71.0
-devel/lib/visual_servoing/visual_servoing: /opt/ros/noetic/lib/libcpp_common.so
-devel/lib/visual_servoing/visual_servoing: /usr/lib/x86_64-linux-gnu/libboost_system.so.1.71.0
-devel/lib/visual_servoing/visual_servoing: /usr/lib/x86_64-linux-gnu/libboost_thread.so.1.71.0
-devel/lib/visual_servoing/visual_servoing: /usr/lib/x86_64-linux-gnu/libconsole_bridge.so.0.4
-devel/lib/visual_servoing/visual_servoing: devel/lib/libvisual_servoing_robotController.so
-devel/lib/visual_servoing/visual_servoing: CMakeFiles/visual_servoing.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/joshimps/git/visualservoing/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable devel/lib/visual_servoing/visual_servoing"
+visual_servoing: CMakeFiles/visual_servoing.dir/src/main.cpp.o
+visual_servoing: CMakeFiles/visual_servoing.dir/src/robotController.cpp.o
+visual_servoing: CMakeFiles/visual_servoing.dir/src/robot.cpp.o
+visual_servoing: CMakeFiles/visual_servoing.dir/build.make
+visual_servoing: /opt/ros/noetic/lib/libroscpp.so
+visual_servoing: /usr/lib/x86_64-linux-gnu/libpthread.so
+visual_servoing: /usr/lib/x86_64-linux-gnu/libboost_chrono.so.1.71.0
+visual_servoing: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so.1.71.0
+visual_servoing: /opt/ros/noetic/lib/librosconsole.so
+visual_servoing: /opt/ros/noetic/lib/librosconsole_log4cxx.so
+visual_servoing: /opt/ros/noetic/lib/librosconsole_backend_interface.so
+visual_servoing: /usr/lib/x86_64-linux-gnu/liblog4cxx.so
+visual_servoing: /usr/lib/x86_64-linux-gnu/libboost_regex.so.1.71.0
+visual_servoing: /opt/ros/noetic/lib/libxmlrpcpp.so
+visual_servoing: /opt/ros/noetic/lib/libtf2.so
+visual_servoing: /opt/ros/noetic/lib/libroscpp_serialization.so
+visual_servoing: /opt/ros/noetic/lib/librostime.so
+visual_servoing: /usr/lib/x86_64-linux-gnu/libboost_date_time.so.1.71.0
+visual_servoing: /opt/ros/noetic/lib/libcpp_common.so
+visual_servoing: /usr/lib/x86_64-linux-gnu/libboost_system.so.1.71.0
+visual_servoing: /usr/lib/x86_64-linux-gnu/libboost_thread.so.1.71.0
+visual_servoing: /usr/lib/x86_64-linux-gnu/libconsole_bridge.so.0.4
+visual_servoing: libvisual_servoing_robot.so
+visual_servoing: libvisual_servoing_robotController.so
+visual_servoing: CMakeFiles/visual_servoing.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/joshimps/git/visualservoing/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable visual_servoing"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/visual_servoing.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
-CMakeFiles/visual_servoing.dir/build: devel/lib/visual_servoing/visual_servoing
+CMakeFiles/visual_servoing.dir/build: visual_servoing
 
 .PHONY : CMakeFiles/visual_servoing.dir/build
 

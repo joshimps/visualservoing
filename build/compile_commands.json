@@ -1,18 +1,28 @@
 [
 {
   "directory": "/home/joshimps/git/visualservoing/build",
-  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"visual_servoing\\\" -Dvisual_servoing_robotController_EXPORTS -I/home/joshimps/git/visualservoing/include -I/home/joshimps/git/visualservoing/src -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -o CMakeFiles/visual_servoing_robotController.dir/src/robotController.cpp.o -c /home/joshimps/git/visualservoing/src/robotController.cpp",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"visual_servoing\\\" -Dvisual_servoing_robotController_EXPORTS -I/home/joshimps/git/visualservoing/include -I/home/joshimps/git/visualservoing/src -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3  -g -fPIC   -o CMakeFiles/visual_servoing_robotController.dir/src/robotController.cpp.o -c /home/joshimps/git/visualservoing/src/robotController.cpp",
   "file": "/home/joshimps/git/visualservoing/src/robotController.cpp"
 },
 {
   "directory": "/home/joshimps/git/visualservoing/build",
-  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"visual_servoing\\\" -Dvisual_servoing_robot_EXPORTS -I/home/joshimps/git/visualservoing/include -I/home/joshimps/git/visualservoing/src -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -o CMakeFiles/visual_servoing_robot.dir/src/robot.cpp.o -c /home/joshimps/git/visualservoing/src/robot.cpp",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"visual_servoing\\\" -Dvisual_servoing_robot_EXPORTS -I/home/joshimps/git/visualservoing/include -I/home/joshimps/git/visualservoing/src -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3  -g -fPIC   -o CMakeFiles/visual_servoing_robot.dir/src/robot.cpp.o -c /home/joshimps/git/visualservoing/src/robot.cpp",
   "file": "/home/joshimps/git/visualservoing/src/robot.cpp"
 },
 {
   "directory": "/home/joshimps/git/visualservoing/build",
-  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"visual_servoing\\\" -I/home/joshimps/git/visualservoing/include -I/home/joshimps/git/visualservoing/src -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/visual_servoing.dir/src/main.cpp.o -c /home/joshimps/git/visualservoing/src/main.cpp",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"visual_servoing\\\" -I/home/joshimps/git/visualservoing/include -I/home/joshimps/git/visualservoing/src -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3  -g   -o CMakeFiles/visual_servoing.dir/src/main.cpp.o -c /home/joshimps/git/visualservoing/src/main.cpp",
   "file": "/home/joshimps/git/visualservoing/src/main.cpp"
+},
+{
+  "directory": "/home/joshimps/git/visualservoing/build",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"visual_servoing\\\" -I/home/joshimps/git/visualservoing/include -I/home/joshimps/git/visualservoing/src -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3  -g   -o CMakeFiles/visual_servoing.dir/src/robotController.cpp.o -c /home/joshimps/git/visualservoing/src/robotController.cpp",
+  "file": "/home/joshimps/git/visualservoing/src/robotController.cpp"
+},
+{
+  "directory": "/home/joshimps/git/visualservoing/build",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"visual_servoing\\\" -I/home/joshimps/git/visualservoing/include -I/home/joshimps/git/visualservoing/src -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3  -g   -o CMakeFiles/visual_servoing.dir/src/robot.cpp.o -c /home/joshimps/git/visualservoing/src/robot.cpp",
+  "file": "/home/joshimps/git/visualservoing/src/robot.cpp"
 },
 {
   "directory": "/home/joshimps/git/visualservoing/build/gtest/googlemock",
@@ -36,27 +46,27 @@
 },
 {
   "directory": "/home/joshimps/git/visualservoing/build/test",
-  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"visual_servoing\\\" -I/home/joshimps/git/visualservoing/include -I/home/joshimps/git/visualservoing/src -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/joshimps/git/visualservoing/test/../include -I/home/joshimps/git/visualservoing/test/..  -g   -o CMakeFiles/robotTests.dir/robotTests.cpp.o -c /home/joshimps/git/visualservoing/test/robotTests.cpp",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"visual_servoing\\\" -I/home/joshimps/git/visualservoing/include -I/home/joshimps/git/visualservoing/src -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/home/joshimps/git/visualservoing/test/../include -I/home/joshimps/git/visualservoing/test/..  -g   -o CMakeFiles/robotTests.dir/robotTests.cpp.o -c /home/joshimps/git/visualservoing/test/robotTests.cpp",
   "file": "/home/joshimps/git/visualservoing/test/robotTests.cpp"
 },
 {
   "directory": "/home/joshimps/git/visualservoing/build/test",
-  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"visual_servoing\\\" -I/home/joshimps/git/visualservoing/include -I/home/joshimps/git/visualservoing/src -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/joshimps/git/visualservoing/test/../include -I/home/joshimps/git/visualservoing/test/..  -g   -o CMakeFiles/robotControllerTests.dir/robotControllerTests.cpp.o -c /home/joshimps/git/visualservoing/test/robotControllerTests.cpp",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"visual_servoing\\\" -I/home/joshimps/git/visualservoing/include -I/home/joshimps/git/visualservoing/src -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/home/joshimps/git/visualservoing/test/../include -I/home/joshimps/git/visualservoing/test/..  -g   -o CMakeFiles/robotControllerTests.dir/robotControllerTests.cpp.o -c /home/joshimps/git/visualservoing/test/robotControllerTests.cpp",
   "file": "/home/joshimps/git/visualservoing/test/robotControllerTests.cpp"
 },
 {
   "directory": "/home/joshimps/git/visualservoing/build/test",
-  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"visual_servoing\\\" -Dstudent_lib_EXPORTS -I/home/joshimps/git/visualservoing/include -I/home/joshimps/git/visualservoing/src -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/joshimps/git/visualservoing/test/../include -I/home/joshimps/git/visualservoing/test/..  -g -fPIC   -o CMakeFiles/student_lib.dir/__/src/main.cpp.o -c /home/joshimps/git/visualservoing/src/main.cpp",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"visual_servoing\\\" -Dstudent_lib_EXPORTS -I/home/joshimps/git/visualservoing/include -I/home/joshimps/git/visualservoing/src -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/home/joshimps/git/visualservoing/test/../include -I/home/joshimps/git/visualservoing/test/..  -g -fPIC   -o CMakeFiles/student_lib.dir/__/src/main.cpp.o -c /home/joshimps/git/visualservoing/src/main.cpp",
   "file": "/home/joshimps/git/visualservoing/src/main.cpp"
 },
 {
   "directory": "/home/joshimps/git/visualservoing/build/test",
-  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"visual_servoing\\\" -Dstudent_lib_EXPORTS -I/home/joshimps/git/visualservoing/include -I/home/joshimps/git/visualservoing/src -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/joshimps/git/visualservoing/test/../include -I/home/joshimps/git/visualservoing/test/..  -g -fPIC   -o CMakeFiles/student_lib.dir/__/src/robot.cpp.o -c /home/joshimps/git/visualservoing/src/robot.cpp",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"visual_servoing\\\" -Dstudent_lib_EXPORTS -I/home/joshimps/git/visualservoing/include -I/home/joshimps/git/visualservoing/src -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/home/joshimps/git/visualservoing/test/../include -I/home/joshimps/git/visualservoing/test/..  -g -fPIC   -o CMakeFiles/student_lib.dir/__/src/robot.cpp.o -c /home/joshimps/git/visualservoing/src/robot.cpp",
   "file": "/home/joshimps/git/visualservoing/src/robot.cpp"
 },
 {
   "directory": "/home/joshimps/git/visualservoing/build/test",
-  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"visual_servoing\\\" -Dstudent_lib_EXPORTS -I/home/joshimps/git/visualservoing/include -I/home/joshimps/git/visualservoing/src -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/joshimps/git/visualservoing/test/../include -I/home/joshimps/git/visualservoing/test/..  -g -fPIC   -o CMakeFiles/student_lib.dir/__/src/robotController.cpp.o -c /home/joshimps/git/visualservoing/src/robotController.cpp",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"visual_servoing\\\" -Dstudent_lib_EXPORTS -I/home/joshimps/git/visualservoing/include -I/home/joshimps/git/visualservoing/src -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/home/joshimps/git/visualservoing/test/../include -I/home/joshimps/git/visualservoing/test/..  -g -fPIC   -o CMakeFiles/student_lib.dir/__/src/robotController.cpp.o -c /home/joshimps/git/visualservoing/src/robotController.cpp",
   "file": "/home/joshimps/git/visualservoing/src/robotController.cpp"
 }
 ]
