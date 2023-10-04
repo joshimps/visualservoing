@@ -1,7 +1,6 @@
 <launch>
 
   <!-- add gazebo model path -->
-  <!-- <env name="GAZEBO_MODEL_PATH" value="$(find sensors_control_sim)/aruco"/> -->
   <env name="GAZEBO_MODEL_PATH" value="$(find sensors_control_sim)/aruco"/>
 
   <!-- these are the arguments you can pass this launch file, for example paused:=true -->
