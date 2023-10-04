@@ -59,9 +59,9 @@ class Robot{
     /////////////////////////////////////////////////////////////////////
     Eigen::MatrixXd baseTransform_;
     sensor_msgs::JointState jointStates_;
-    std::vector<Eigen::MatrixXf> jointTransforms_;
-    std::vector<Eigen::MatrixXf> jointTransformsToBase_;
-    Eigen::MatrixXf jacobian_;
+    std::vector<Eigen::MatrixXd> jointTransforms_;
+    std::vector<Eigen::MatrixXd> jointTransformsToBase_;
+    Eigen::MatrixXd jacobian_;
 
     ///////////////////////////////////////////////////////////////////////
     // Robot DH Params
