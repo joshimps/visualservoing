@@ -14,6 +14,10 @@ When moving a fiducial/marker/object, the robot arm moves to point towards the f
 ## Dependent Packages
 [UR3 Simulator with Camera and Gripper](https://github.com/sheepskins/sandc_simulation)
 
+[image pipeline](https://github.com/ros-perception/image_pipeline)
+
+
+
 ## USAGE
 ### Launch UR3 w/ Mounted D435 RGBD & ArUco Marker Gazebo
 ```
@@ -21,6 +25,12 @@ roslaunch ur3_gazebo ur_gripper_85_cubes.launch ur_robot:=ur3 grasp_plugin:=1
 ```
 ### Launch Aruco Ros Node
 ```
+ROS_NAMESPACE=/camera/color rosrun image_proc image_proc 
+```
+Update markerId and markerSize (in metres)
+
+```
+roslaunch visual_servoing aruco_marker_finder.launch camera:=/camera/color markerId:=26 markerSize:=0.08
 ```
 
 ### Launch Visual Servoing Node
