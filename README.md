@@ -16,7 +16,7 @@ When moving a fiducial/marker/object, the robot arm moves to point towards the f
 
 [image pipeline](https://github.com/ros-perception/image_pipeline)
 
-
+[aruco_ros](https://github.com/pal-robotics/aruco_ros)
 
 ## USAGE
 ### Launch UR3 w/ Mounted D435 RGBD & ArUco Marker Gazebo
