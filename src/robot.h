@@ -8,6 +8,7 @@
 #include <mutex>
 #include <vector>
 #include "eigen3/Eigen/Dense"
+#include <thread>
 
 class Robot{
     public:
@@ -40,16 +41,16 @@ class Robot{
     void calculateJointTransforms();
     void calculateJacobian();
     void calculateJointTransformsToBase();
+
+    ///////////////////////////////////////////////////////////
+    // Callbacks
+    //////////////////////////////////////////////////////////
+    void jointStateCallBack(const sensor_msgs::JointStateConstPtr &msg);
     
     protected:
 
     private:
     
-    ///////////////////////////////////////////////////////////
-    // Callbacks
-    //////////////////////////////////////////////////////////
-    void jointStateCallBack(const sensor_msgs::JointStateConstPtr &msg);
-
     ///////////////////////////////////////////////////////////////////////
     // Node, Publishers and Subscribers
     /////////////////////////////////////////////////////////////////////

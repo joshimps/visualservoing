@@ -13,6 +13,7 @@
 #include <atomic>
 #include <mutex>
 #include <vector>
+#include <thread>
 
 class RobotController{
     public:
@@ -68,7 +69,7 @@ class RobotController{
     // Variables
     /////////////////////////////////////////////////////////////////////
     
-    Eigen::MatrixXd fiducialTranslationLocal_;
+    Eigen::Vector3d fiducialTranslationLocal_;
     Eigen::Quaterniond fiducialRotationLocal_;
 
     ///////////////////////////////////////////////////////////////////////
