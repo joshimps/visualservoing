@@ -12,8 +12,6 @@ int main(int argc, char **argv)
   Robot robot(nh,d,a,alpha);
   
   //Lets set the joint angles and compare with values obtained from Matlab
-  std::vector<double> theta{0,0,0,0,0,0};
-  robot.setTheta(theta); 
   robot.calculateJointTransforms();
   robot.calculateJointTransformsToBase();
   robot.calculateJacobian();
