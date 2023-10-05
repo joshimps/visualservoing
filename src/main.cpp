@@ -23,7 +23,6 @@ int main(int argc, char **argv)
 
   RobotController robotController(nh,&robot,gain,errorThreshold);
 
-  
   robotController.moveRobot();
   
   ros::spin();
