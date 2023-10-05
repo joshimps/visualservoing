@@ -8,6 +8,7 @@
 Robot::Robot(ros::NodeHandle nh, std::vector<double> d, std::vector<double> a, std::vector<double> alpha){
     nh_ = nh;
     jointStateSub_ = nh_.subscribe("/joint_states", 3, &Robot::jointStateCallBack, this);
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
     d_ = d;
     a_ = a;
     alpha_ = alpha;
@@ -38,6 +39,7 @@ Robot::Robot(ros::NodeHandle nh, std::vector<double> d, std::vector<double> a, s
     baseTransform_(3,2) = 0;
     baseTransform_(3,3) = 1;
     
+    
 }
 
 ///////////////////////////////////////////////////////////
@@ -46,7 +48,7 @@ Robot::Robot(ros::NodeHandle nh, std::vector<double> d, std::vector<double> a, s
 
 void Robot::jointStateCallBack(const sensor_msgs::JointStateConstPtr &msg){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
-    sensor_msgs::JointState jointStates_ = *msg;
+    jointStates_ = *msg;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -100,13 +102,13 @@ void Robot::setTheta(std::vector<double> theta){
 /////////////////////////////////////////////////////////////////////////////////////////
 
 void Robot::calculateJointTransforms(){
-    std::unique_lock<std::mutex> lck(jointStateMutex_);
     jointTransforms_.clear();
 
     Eigen::Matrix4d tRz;
     Eigen::Matrix4d tz;
     Eigen::Matrix4d tx;
     Eigen::Matrix4d tRx;
+
     ROS_INFO_STREAM("JOINT TRANSFORMS");
     for(int i = 0; i < d_.size(); i++){
         //tRz
