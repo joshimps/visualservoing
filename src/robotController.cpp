@@ -41,7 +41,6 @@ void RobotController::moveRobot(){
     //https://canvas.uts.edu.au/courses/27375/pages/2-position-based-visual-servoing-pbvs?module_item_id=1290599
 
     while(euclidianNorm > errorThreshold_){
-        ROS_INFO_STREAM("MOVING ROBOT");
         jointVelocitySquaredSum = 0;
         //Calculate our end effector velocity from the positional and rotational error
         endEffectorVelocity(0,0) = gain_ * fiducialTranslationLocal_(0,0);
@@ -67,7 +66,6 @@ void RobotController::moveRobot(){
 
         jointVelocityPub_.publish(msg);
         euclidianNorm = sqrt(jointVelocitySquaredSum);
-        ROS_INFO_STREAM("PUBLISHED");
     }
 
     ROS_INFO_STREAM("END EFFECTOR AT \n" << robot_->getEndEffectorTransform());
