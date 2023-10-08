@@ -34,13 +34,15 @@ void RobotController::moveRobot(){
     Eigen::VectorXd endEffectorVelocity(6);
     Eigen::VectorXd jointVelocities(robot_->getNumberOfJoints());
 
+    double jointVelocitySquaredSum;
+    volatile double euclidianNorm = 100;
     //Keep going until the norm of the error is greater than the threshold
     //Using Position Based servoing as explained here
     //https://canvas.uts.edu.au/courses/27375/pages/2-position-based-visual-servoing-pbvs?module_item_id=1290599
 
-    //Need to decide on how to measure error
-    while(1 > errorThreshold_){
+    while(euclidianNorm > errorThreshold_){
         ROS_INFO_STREAM("MOVING ROBOT");
+        jointVelocitySquaredSum = 0;
         //Calculate our end effector velocity from the positional and rotational error
         endEffectorVelocity(0,0) = gain_ * fiducialTranslationLocal_(0,0);
         endEffectorVelocity(1,0) = gain_ * fiducialTranslationLocal_(1,0);
@@ -57,14 +59,15 @@ void RobotController::moveRobot(){
         ROS_INFO_STREAM(jointVelocities);
         //Publish the joint velocities to the robot here
         std_msgs::Float64MultiArray msg;
-        
+        std::stringstream ss;
         for(int i = 0; i < (robot_->getNumberOfJoints()); i++){
             msg.data.push_back(jointVelocities(i,0));
+            jointVelocitySquaredSum = jointVelocitySquaredSum + jointVelocities.coeff(i,0);
         }
 
         jointVelocityPub_.publish(msg);
+        euclidianNorm = sqrt(jointVelocitySquaredSum);
         ROS_INFO_STREAM("PUBLISHED");
-        
     }
 
     ROS_INFO_STREAM("END EFFECTOR AT \n" << robot_->getEndEffectorTransform());
@@ -91,5 +94,5 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
     fiducialRotationLocal_ = fiducialRotationLocal;      
     
     
-    moveRobot();                                     
+    moveRobot();     
 }
