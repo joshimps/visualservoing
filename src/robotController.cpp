@@ -31,16 +31,17 @@ void RobotController::setFiducialPostition(Eigen::MatrixXd fiducialTranslationLo
 
 void RobotController::moveRobot(){
     
-    double norm = 100;
     Eigen::VectorXd endEffectorVelocity(6);
     Eigen::VectorXd jointVelocities(robot_->getNumberOfJoints());
-    
+
+    double jointVelocitySquaredSum;
+    volatile double euclidianNorm = 100;
     //Keep going until the norm of the error is greater than the threshold
     //Using Position Based servoing as explained here
     //https://canvas.uts.edu.au/courses/27375/pages/2-position-based-visual-servoing-pbvs?module_item_id=1290599
 
-    while(norm > errorThreshold_){
-        // ROS_INFO_STREAM("MOVING ROBOT");
+    while(euclidianNorm > errorThreshold_){
+        jointVelocitySquaredSum = 0;
         //Calculate our end effector velocity from the positional and rotational error
         endEffectorVelocity(0,0) = gain_ * fiducialTranslationLocal_(0,0);
         endEffectorVelocity(1,0) = gain_ * fiducialTranslationLocal_(1,0);
@@ -48,24 +49,23 @@ void RobotController::moveRobot(){
         endEffectorVelocity(3,0) = gain_ * fiducialRotationLocal_.x();
         endEffectorVelocity(4,0) = gain_ * fiducialRotationLocal_.y();
         endEffectorVelocity(5,0) = gain_ * fiducialRotationLocal_.z();
-        ROS_INFO_STREAM(endEffectorVelocity);
-        // //Calculate the jacobian of the current pose 
-        // robot_->calculateJointTransforms();
-        // robot_->calculateJointTransformsToBase();
-        // robot_->calculateJacobian();
-        // //The joint velocity is the jacobian multiplied by the error 
-        // jointVelocities = robot_->getJacobian().completeOrthogonalDecomposition().pseudoInverse() * endEffectorVelocity;
-        // ROS_INFO_STREAM(jointVelocities);
-        // norm = endEffectorVelocity.norm();
-        // //Publish the joint velocities to the robot here
-        // std_msgs::Float64MultiArray msg;
-        // std::stringstream ss;
-        // for(int i = 0; i < (robot_->getNumberOfJoints()); i++){
-        //     msg.data.push_back(jointVelocities(i,0));
-        // }
+        //Calculate the jacobian of the current pose 
+        robot_->calculateJointTransforms();
+        robot_->calculateJointTransformsToBase();
+        robot_->calculateJacobian();
+        //The joint velocity is the jacobian multiplied by the error 
+        jointVelocities = robot_->getJacobian().completeOrthogonalDecomposition().pseudoInverse() * endEffectorVelocity;
+        ROS_INFO_STREAM(jointVelocities);
+        //Publish the joint velocities to the robot here
+        std_msgs::Float64MultiArray msg;
+        std::stringstream ss;
+        for(int i = 0; i < (robot_->getNumberOfJoints()); i++){
+            msg.data.push_back(jointVelocities(i,0));
+            jointVelocitySquaredSum = jointVelocitySquaredSum + jointVelocities.coeff(i,0);
+        }
 
-        // jointVelocityPub_.publish(msg);
-        // ROS_INFO_STREAM("PUBLISHED");
+        jointVelocityPub_.publish(msg);
+        euclidianNorm = sqrt(jointVelocitySquaredSum);
     }
 
     ROS_INFO_STREAM("END EFFECTOR AT \n" << robot_->getEndEffectorTransform());
@@ -92,5 +92,5 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
     fiducialRotationLocal_ = fiducialRotationLocal;      
     
     
-    moveRobot();                                     
+    moveRobot();     
 }

@@ -62,7 +62,7 @@ sensor_msgs::JointState Robot::getJointState(){
 
 Eigen::MatrixXd Robot::getEndEffectorTransform(){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
-    return jointTransforms_.at(jointStates_.position.size());
+    return jointTransforms_.at(numberOfJoints_-1);
 }
 
 Eigen::MatrixXd Robot::getJointTransform(int i){
