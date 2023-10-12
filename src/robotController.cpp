@@ -40,7 +40,7 @@ void RobotController::moveRobot(){
     //https://canvas.uts.edu.au/courses/27375/pages/2-position-based-visual-servoing-pbvs?module_item_id=1290599
 
     while(norm > errorThreshold_){
-        ROS_INFO_STREAM("MOVING ROBOT");
+        // ROS_INFO_STREAM("MOVING ROBOT");
         //Calculate our end effector velocity from the positional and rotational error
         endEffectorVelocity(0,0) = gain_ * fiducialTranslationLocal_(0,0);
         endEffectorVelocity(1,0) = gain_ * fiducialTranslationLocal_(1,0);
@@ -48,23 +48,24 @@ void RobotController::moveRobot(){
         endEffectorVelocity(3,0) = gain_ * fiducialRotationLocal_.x();
         endEffectorVelocity(4,0) = gain_ * fiducialRotationLocal_.y();
         endEffectorVelocity(5,0) = gain_ * fiducialRotationLocal_.z();
-        //Calculate the jacobian of the current pose 
-        robot_->calculateJointTransforms();
-        robot_->calculateJointTransformsToBase();
-        robot_->calculateJacobian();
-        //The joint velocity is the jacobian multiplied by the error 
-        jointVelocities = robot_->getJacobian().completeOrthogonalDecomposition().pseudoInverse() * endEffectorVelocity;
-        ROS_INFO_STREAM(jointVelocities);
-        norm = endEffectorVelocity.norm();
-        //Publish the joint velocities to the robot here
-        std_msgs::Float64MultiArray msg;
-        std::stringstream ss;
-        for(int i = 0; i < (robot_->getNumberOfJoints()); i++){
-            msg.data.push_back(jointVelocities(i,0));
-        }
+        ROS_INFO_STREAM(endEffectorVelocity);
+        // //Calculate the jacobian of the current pose 
+        // robot_->calculateJointTransforms();
+        // robot_->calculateJointTransformsToBase();
+        // robot_->calculateJacobian();
+        // //The joint velocity is the jacobian multiplied by the error 
+        // jointVelocities = robot_->getJacobian().completeOrthogonalDecomposition().pseudoInverse() * endEffectorVelocity;
+        // ROS_INFO_STREAM(jointVelocities);
+        // norm = endEffectorVelocity.norm();
+        // //Publish the joint velocities to the robot here
+        // std_msgs::Float64MultiArray msg;
+        // std::stringstream ss;
+        // for(int i = 0; i < (robot_->getNumberOfJoints()); i++){
+        //     msg.data.push_back(jointVelocities(i,0));
+        // }
 
-        jointVelocityPub_.publish(msg);
-        ROS_INFO_STREAM("PUBLISHED");
+        // jointVelocityPub_.publish(msg);
+        // ROS_INFO_STREAM("PUBLISHED");
     }
 
     ROS_INFO_STREAM("END EFFECTOR AT \n" << robot_->getEndEffectorTransform());
