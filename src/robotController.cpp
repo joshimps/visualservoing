@@ -40,7 +40,9 @@ void RobotController::moveRobot(){
     //Using Position Based servoing as explained here
     //https://canvas.uts.edu.au/courses/27375/pages/2-position-based-visual-servoing-pbvs?module_item_id=1290599
 
-    while(euclidianNorm > errorThreshold_){
+    std_msgs::Float64MultiArray msg;
+
+    if(euclidianNorm > errorThreshold_){
         jointVelocitySquaredSum = 0;
         //Calculate our end effector velocity from the positional and rotational error
         endEffectorVelocity(0,0) = gain_ * fiducialTranslationLocal_(0,0);
@@ -57,18 +59,22 @@ void RobotController::moveRobot(){
         jointVelocities = robot_->getJacobian().completeOrthogonalDecomposition().pseudoInverse() * endEffectorVelocity;
         ROS_INFO_STREAM(jointVelocities);
         //Publish the joint velocities to the robot here
-        std_msgs::Float64MultiArray msg;
         std::stringstream ss;
         for(int i = 0; i < (robot_->getNumberOfJoints()); i++){
             msg.data.push_back(jointVelocities(i,0));
             jointVelocitySquaredSum = jointVelocitySquaredSum + jointVelocities.coeff(i,0);
         }
-
-        jointVelocityPub_.publish(msg);
         euclidianNorm = sqrt(jointVelocitySquaredSum);
     }
-
-    ROS_INFO_STREAM("END EFFECTOR AT \n" << robot_->getEndEffectorTransform());
+    else
+    {
+        for(int i = 0; i < (robot_->getNumberOfJoints()); i++){
+            msg.data.push_back(0);
+        }
+        ROS_INFO_STREAM("END EFFECTOR AT \n" << robot_->getEndEffectorTransform());
+    }
+    
+    jointVelocityPub_.publish(msg);
 }
 
 ///////////////////////////////////////////////////////////
@@ -83,7 +89,7 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
     
     fiducialTranslationLocal_(0,0) = fiducialPoseStampedLocal_.pose.position.x;
     fiducialTranslationLocal_(1,0) = fiducialPoseStampedLocal_.pose.position.y;
-    fiducialTranslationLocal_(2,0) = fiducialPoseStampedLocal_.pose.position.z;
+    fiducialTranslationLocal_(2,0) = fiducialPoseStampedLocal_.pose.position.z - 1;
 
     Eigen::Quaterniond fiducialRotationLocal(fiducialPoseStampedLocal_.pose.orientation.w,
                                               fiducialPoseStampedLocal_.pose.orientation.x,
