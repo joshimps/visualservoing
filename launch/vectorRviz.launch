@@ -1,0 +1,9 @@
+<launch>
+  <!-- Start the visualization node -->
+  <node name="vector_visualisation_node" pkg="visual_servoing" type="servoViz.py"  output="screen" />
+
+  <node name="rviz" pkg="rviz" type="rviz" args=" -d $(find visual_servoing)/config/servo_vector.rviz">
+    <param name="fixed_frame" type="str" value="base_link" />
+  </node>  
+
+</launch>
