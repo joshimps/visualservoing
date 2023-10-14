@@ -2,7 +2,6 @@
 import rospy
 from visualization_msgs.msg import Marker
 from geometry_msgs.msg import Point
-from std_msgs.msg import Point as VectorData
 import numpy as np
 
 
@@ -13,20 +12,26 @@ def vector_visualisation():
     marker_pub = rospy.Publisher('visualization_marker', Marker, queue_size=1)
     
     #change the topic and message type that is being subscribed to for aruco marker.
-    vector_sub = rospy.Subscriber('vector_data', VectorData, vector_callback)
+    # vector_sub = rospy.Subscriber('vector_data', VectorData, vector_callback)
+
     rate = rospy.Rate(10)
     # current_vector = None
+    # vector_creator(endEffectorVelocity)
 
     # testing rviz
     current_vector.x = 1
     current_vector.y = 1
     current_vector.z = 1
+    w = 0
+    x = 0
+    y = 0
+    z = 0
     
 
     while not rospy.is_shutdown():
         if current_vector is not None:
             marker = Marker()
-            marker.header.frame_id = "base_link"
+            marker.header.frame_id = "map"
             marker.header.stamp = rospy.Time.now()
             marker.type = Marker.ARROW
             marker.action = Marker.ADD
@@ -50,10 +55,10 @@ def vector_visualisation():
             marker.color.b = 0.0
 
             # Set the orientation (quaternion) - Identity quaternion
-            marker.pose.orientation.x = 0.0
-            marker.pose.orientation.y = 0.0
-            marker.pose.orientation.z = 0.0
-            marker.pose.orientation.w = 1.0
+            marker.pose.orientation.x = x
+            marker.pose.orientation.y = y
+            marker.pose.orientation.z = z
+            marker.pose.orientation.w = w
 
             marker_pub.publish(marker)
 
@@ -64,16 +69,39 @@ def vector_callback(data):
     global endEffectorVelocity
     endEffectorVelocity = data
 
-# def vector_creator(EEvelocity):
-#     global velocity_x = EEvelocity.x
-#     global velocity_y = EEvelocity.y
-#     global velocity_z = EEvelocity.z
+def vector_creator(EEvelocity):
+    global velocity_x
+    velocity_x = EEvelocity.x
+    global velocity_y
+    velocity_y = EEvelocity.y
+    global velocity_z
+    velocity_z = EEvelocity.z
+    global w
+    global x 
+    global y 
+    global z 
+    w, x, y, z = euler_to_quaternion(EEvelocity.roll, EEvelocity.pitch, EEvelocity.yaw)
+
     
 
+def euler_to_quaternion(roll, pitch, yaw):
+    cy = np.cos(yaw * 0.5)
+    sy = np.sin(yaw * 0.5)
+    cp = np.cos(pitch * 0.5)
+    sp = np.sin(pitch * 0.5)
+    cr = np.cos(roll * 0.5)
+    sr = np.sin(roll * 0.5)
+
+    qw = cr * cp * cy + sr * sp * sy
+    qx = sr * cp * cy - cr * sp * sy
+    qy = cr * sp * cy + sr * cp * sy
+    qz = cr * cp * sy - sr * sp * cy
+
+    return qw, qx, qy, qz
     
 
 if __name__ == '__main__':
-    print("we made it to in the script")
+    
     try:
         vector_visualisation()
     except rospy.ROSInterruptException:
