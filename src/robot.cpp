@@ -109,7 +109,7 @@ void Robot::calculateJointTransforms(){
     Eigen::Matrix4d tx;
     Eigen::Matrix4d tRx;
 
-    ROS_INFO_STREAM("JOINT TRANSFORMS");
+    ROS_DEBUG_STREAM("JOINT TRANSFORMS");
     for(int i = 0; i < d_.size(); i++){
         //tRz
         
@@ -217,7 +217,7 @@ void Robot::calculateJointTransforms(){
         
         jointTransforms_.push_back(tRz * tz * tx * tRx);
         
-        ROS_INFO_STREAM("\n" << tRz * tz * tx * tRx);
+        ROS_DEBUG_STREAM("\n" << tRz * tz * tx * tRx);
 
     }   
 }
@@ -226,11 +226,11 @@ void Robot::calculateJointTransformsToBase(){
     jointTransformsToBase_.clear();
     Eigen::MatrixXd jointTransformToBase = jointTransforms_.at(0);
     jointTransformsToBase_.push_back(jointTransformToBase);
-    ROS_INFO_STREAM("JOINT TO BASE TRANSFORMS");
+    ROS_DEBUG_STREAM("JOINT TO BASE TRANSFORMS");
     for(int i = 1; i < jointTransforms_.size(); i++){
         
         jointTransformToBase = jointTransformToBase * jointTransforms_.at(i); 
-        ROS_INFO_STREAM("\n" << jointTransformToBase);
+        ROS_DEBUG_STREAM("\n" << jointTransformToBase);
         jointTransformsToBase_.push_back(jointTransformToBase);
     }
 }
@@ -308,7 +308,6 @@ void Robot::calculateJacobian(){
         }
         
         //Create the coiumn in the jacobian matrix
-        ROS_INFO_STREAM(translationMatrixItoB);
         jacobianLinearVelocityComponent = (rotationMatrixItoB * unitVector).cross((translationMatrixNtoB - translationMatrixItoB));
         jacobianRotationalVelocityComponent = rotationMatrixItoB * unitVector;
 
@@ -326,6 +325,6 @@ void Robot::calculateJacobian(){
         //Row 6
         jacobian_(5,i) = jacobianRotationalVelocityComponent(2,0);
     }
-    ROS_INFO_STREAM("JACOBIAN");
-    ROS_INFO_STREAM("\n" << jacobian_);
+    ROS_DEBUG_STREAM("JACOBIAN");
+    ROS_DEBUG_STREAM("\n" << jacobian_);
 }

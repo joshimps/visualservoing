@@ -13,6 +13,7 @@
         "/home/josh/RosWorkspaces/VisualServoingWs/src/image_pipeline/depth_image_proc/include/**",
         "/home/josh/RosWorkspaces/VisualServoingWs/src/gazebo_ros_link_attacher/include/**",
         "/home/josh/RosWorkspaces/VisualServoingWs/src/image_pipeline/image_proc/include/**",
+        "/home/josh/RosWorkspaces/VisualServoingWs/src/realsense_gazebo_plugin/include/**",
         "/home/josh/RosWorkspaces/VisualServoingWs/src/robotiq/robotiq_ft_sensor/include/**",
         "/home/josh/RosWorkspaces/VisualServoingWs/src/robotiq/robotiq_gazebo/include/**",
         "/home/josh/RosWorkspaces/VisualServoingWs/src/image_pipeline/stereo_image_proc/include/**",
