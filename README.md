@@ -18,6 +18,10 @@ When moving a fiducial/marker/object, the robot arm moves to point towards the f
 
 [aruco_ros](https://github.com/pal-robotics/aruco_ros)
 
+[realsense2_ros](https://github.com/IntelRealSense/realsense-ros/tree/ros1-legacy)
+
+[realsense2_gazebo](https://github.com/pal-robotics/realsense_gazebo_plugin/tree/melodic-devel)
+
 ## USAGE
 ### Launch UR3 w/ Mounted D435 RGBD & ArUco Marker Gazebo
 ```
