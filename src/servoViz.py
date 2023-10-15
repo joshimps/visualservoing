@@ -22,7 +22,7 @@ def vector_visualisation():
     current_vector.x = 1
     current_vector.y = 1
     current_vector.z = 1
-    w = 0
+    w = 1
     x = 0
     y = 0
     z = 0
@@ -61,6 +61,36 @@ def vector_visualisation():
             marker.pose.orientation.w = w
 
             marker_pub.publish(marker)
+    
+            # Plane Marker
+            plane = Marker()
+            plane.header.frame_id = "map"
+            plane.header.stamp = rospy.Time.now()
+            plane.type = Marker.MESH_RESOURCE
+            plane.mesh_resource = "package://visual_servoing/src/include/airplane.stl"
+            plane.action = Marker.ADD
+            plane.ns = "airplane"
+
+            plane.scale.x = 1.0
+            plane.scale.y = 1.0
+            plane.scale.z = 1.0
+            plane.color.a = 1.0
+            plane.color.r = 1.0
+            plane.color.g = 1.0
+            plane.color.b = 1.0
+
+            # set marker position
+            plane.pose.position.x = 0.2
+            plane.pose.position.y = -0.2
+            plane.pose.position.z = 0.1
+
+            # Set the orientation (quaternion) - Identity quaternion
+            plane.pose.orientation.x = x
+            plane.pose.orientation.y = y
+            plane.pose.orientation.z = z
+            plane.pose.orientation.w = w
+
+            marker_pub.publish(plane)
 
         rate.sleep()
 
