@@ -109,7 +109,7 @@ Visualization Manager:
       Value: true
     - Class: rviz_textured_quads/MeshDisplayCustom
       Enabled: true
-      Image Topic: /usb_cam/image_raw
+      Image Topic: /camera/color/image_raw
       Meters per pixel: 0.0020000000949949026
       Name: MeshDisplayCustom
       Quad Frame: quad

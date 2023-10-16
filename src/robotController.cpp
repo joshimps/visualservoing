@@ -22,9 +22,13 @@ RobotController::RobotController(ros::NodeHandle nh, Robot* robot, double gain, 
     fiducialPositionSub_ = nh_.subscribe("/aruco_single/pose", 10, &RobotController::fiducialPositionCallBack, this);
     clockSub_ = nh_.subscribe("/clock", 10, &RobotController::clockCallback, this);
     jointVelocityPub_ = nh_.advertise<std_msgs::Float64MultiArray>("joint_group_vel_controller/command", 10, false);
+<<<<<<< HEAD
+    eeVelocityPub_ = nh_.advertise<std_msgs::Float64MultiArray>("eeVel", 10, false);
+=======
     endEffectorVelocityPub_ = nh_.advertise<std_msgs::Float64MultiArray>("visual_servoing/end_effector_velocity", 10, false);
     fiducialNewPose_ = nh_.advertise<geometry_msgs::Pose>("visual_servoing/fiducial_pose", 10, false);
 
+>>>>>>> 2e9c24189abbe0d366a678c0fbd2ee6d565d1008
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
 }
@@ -52,6 +56,53 @@ void RobotController::moveRobot(){
     //https://canvas.uts.edu.au/courses/27375/pages/2-position-based-visual-servoing-pbvs?module_item_id=1290599
 
     std_msgs::Float64MultiArray msg;
+<<<<<<< HEAD
+    jointVelocitySquaredSum = 0;
+    //Calculate our end effector velocity from the positional and rotational error
+    endEffectorVelocity(0,0) = gain_ * fiducialTranslationLocal_(0,0);
+    endEffectorVelocity(1,0) = gain_ * fiducialTranslationLocal_(1,0);
+    endEffectorVelocity(2,0) = gain_ * fiducialTranslationLocal_(2,0);
+    endEffectorVelocity(3,0) = gain_ * fiducialRotationLocal_.x();
+    endEffectorVelocity(4,0) = gain_ * fiducialRotationLocal_.y();
+    endEffectorVelocity(5,0) = gain_ * fiducialRotationLocal_.z();
+    std_msgs::Float64MultiArray eeMsg;
+    for (int i = 0; i < 6; i ++)
+    {
+        eeMsg.data.push_back(endEffectorVelocity(i,0));
+    }
+    eeVelocityPub_.publish(eeMsg);
+
+    // if(euclidianNorm_ > errorThreshold_){
+        // //Calculate the jacobian of the current pose 
+        // robot_->calculateJointTransforms();
+        // robot_->calculateJointTransformsToBase();
+        // robot_->calculateJacobian();
+        
+        // //The joint velocity is the jacobian multiplied by the error 
+        // jointVelocities = robot_->getJacobian().completeOrthogonalDecomposition().pseudoInverse() * endEffectorVelocity;
+        
+        // //Publish the joint velocities to the robot here
+        // std::stringstream ss;
+        // for(int i = 0; i < (robot_->getNumberOfJoints()); i++){
+        //     msg.data.push_back(jointVelocities(i,0));
+        //     jointVelocitySquaredSum = jointVelocitySquaredSum + jointVelocities(i,0);
+        // }
+        // euclidianNorm_ = sqrt(jointVelocitySquaredSum);
+        // ROS_INFO_STREAM("EUCLIDIAN ERROR \n" << euclidianNorm_);
+    // }
+    // else
+    // {
+    //     ROS_INFO_STREAM("REACHED TARGET \n");
+    //     for(int i = 0; i < (robot_->getNumberOfJoints()); i++){
+    //         msg.data.push_back(0);
+    //     }
+        
+    //     ROS_INFO_STREAM("END EFFECTOR AT \n" << robot_->getEndEffectorTransform());
+    // }
+    
+    // jointVelocityPub_.publish(msg);
+    // ROS_INFO_STREAM("HERE \n");
+=======
     
     
     jointVelocitySquaredSum = 0;
@@ -115,6 +166,7 @@ void RobotController::calculateEndEffectorVelocity(){
 
     endEffectorVelocityPub_.publish(msg);
 
+>>>>>>> 2e9c24189abbe0d366a678c0fbd2ee6d565d1008
 }
 
 ///////////////////////////////////////////////////////////

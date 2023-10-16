@@ -2,7 +2,7 @@
   <node
     pkg="visual_servoing"
     type="visual_servoing"
-    name="visual_servoing_node" 
+    name="visual_servoin_node" 
     output="screen"
   />
 </launch> 
