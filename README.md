@@ -39,3 +39,8 @@ roslaunch visual_servoing aruco_marker_finder.launch
 ```
 rosrun visual_servoing visual_servoing
 ```
+
+### Launch RViz Visual Servoing Simulation
+```
+roslaunch visual_servoing cameraRviz.launch
+```
