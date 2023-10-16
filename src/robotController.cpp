@@ -22,13 +22,9 @@ RobotController::RobotController(ros::NodeHandle nh, Robot* robot, double gain, 
     fiducialPositionSub_ = nh_.subscribe("/aruco_single/pose", 10, &RobotController::fiducialPositionCallBack, this);
     clockSub_ = nh_.subscribe("/clock", 10, &RobotController::clockCallback, this);
     jointVelocityPub_ = nh_.advertise<std_msgs::Float64MultiArray>("joint_group_vel_controller/command", 10, false);
-<<<<<<< HEAD
-    eeVelocityPub_ = nh_.advertise<std_msgs::Float64MultiArray>("eeVel", 10, false);
-=======
     endEffectorVelocityPub_ = nh_.advertise<std_msgs::Float64MultiArray>("visual_servoing/end_effector_velocity", 10, false);
     fiducialNewPose_ = nh_.advertise<geometry_msgs::Pose>("visual_servoing/fiducial_pose", 10, false);
 
->>>>>>> 2e9c24189abbe0d366a678c0fbd2ee6d565d1008
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
 }
@@ -56,53 +52,6 @@ void RobotController::moveRobot(){
     //https://canvas.uts.edu.au/courses/27375/pages/2-position-based-visual-servoing-pbvs?module_item_id=1290599
 
     std_msgs::Float64MultiArray msg;
-<<<<<<< HEAD
-    jointVelocitySquaredSum = 0;
-    //Calculate our end effector velocity from the positional and rotational error
-    endEffectorVelocity(0,0) = gain_ * fiducialTranslationLocal_(0,0);
-    endEffectorVelocity(1,0) = gain_ * fiducialTranslationLocal_(1,0);
-    endEffectorVelocity(2,0) = gain_ * fiducialTranslationLocal_(2,0);
-    endEffectorVelocity(3,0) = gain_ * fiducialRotationLocal_.x();
-    endEffectorVelocity(4,0) = gain_ * fiducialRotationLocal_.y();
-    endEffectorVelocity(5,0) = gain_ * fiducialRotationLocal_.z();
-    std_msgs::Float64MultiArray eeMsg;
-    for (int i = 0; i < 6; i ++)
-    {
-        eeMsg.data.push_back(endEffectorVelocity(i,0));
-    }
-    eeVelocityPub_.publish(eeMsg);
-
-    // if(euclidianNorm_ > errorThreshold_){
-        // //Calculate the jacobian of the current pose 
-        // robot_->calculateJointTransforms();
-        // robot_->calculateJointTransformsToBase();
-        // robot_->calculateJacobian();
-        
-        // //The joint velocity is the jacobian multiplied by the error 
-        // jointVelocities = robot_->getJacobian().completeOrthogonalDecomposition().pseudoInverse() * endEffectorVelocity;
-        
-        // //Publish the joint velocities to the robot here
-        // std::stringstream ss;
-        // for(int i = 0; i < (robot_->getNumberOfJoints()); i++){
-        //     msg.data.push_back(jointVelocities(i,0));
-        //     jointVelocitySquaredSum = jointVelocitySquaredSum + jointVelocities(i,0);
-        // }
-        // euclidianNorm_ = sqrt(jointVelocitySquaredSum);
-        // ROS_INFO_STREAM("EUCLIDIAN ERROR \n" << euclidianNorm_);
-    // }
-    // else
-    // {
-    //     ROS_INFO_STREAM("REACHED TARGET \n");
-    //     for(int i = 0; i < (robot_->getNumberOfJoints()); i++){
-    //         msg.data.push_back(0);
-    //     }
-        
-    //     ROS_INFO_STREAM("END EFFECTOR AT \n" << robot_->getEndEffectorTransform());
-    // }
-    
-    // jointVelocityPub_.publish(msg);
-    // ROS_INFO_STREAM("HERE \n");
-=======
     
     
     jointVelocitySquaredSum = 0;
@@ -115,12 +64,12 @@ void RobotController::moveRobot(){
     for(int i = 0; i < (robot_->getNumberOfJoints()); i++){
         msg.data.push_back(jointVelocities(i,0));
         ROS_DEBUG_STREAM("JOINT " << i+1 << " VELOCITY: \n" << jointVelocities(i,0));
-        jointVelocitySquaredSum = jointVelocitySquaredSum + jointVelocities(i,0);
+        jointVelocitySquaredSum = jointVelocitySquaredSum + pow(jointVelocities(i,0),2);
     }
     euclidianNorm_ = sqrt(jointVelocitySquaredSum);
     ROS_INFO_STREAM("EUCLIDIAN ERROR \n" << euclidianNorm_);
         
-    //jointVelocityPub_.publish(msg);
+    jointVelocityPub_.publish(msg);
     ROS_DEBUG_STREAM("PUBLISHED JOINT VELOCITY \n" << jointVelocities);
 }
 
@@ -139,10 +88,10 @@ void RobotController::stallRobot(){
     //Publish the joint velocities to the robot here
     for(int i = 0; i < (robot_->getNumberOfJoints()); i++){
         msg.data.push_back(0);
-        jointVelocitySquaredSum = jointVelocitySquaredSum + jointVelocities(i,0);
+        jointVelocitySquaredSum = jointVelocitySquaredSum + pow(jointVelocities(i,0),2);
     }
     euclidianNorm_ = sqrt(jointVelocitySquaredSum);
-    
+    ROS_INFO_STREAM("EUCLIDIAN ERROR \n" << euclidianNorm_);
     jointVelocityPub_.publish(msg);
     ROS_DEBUG_STREAM("PUBLISHED JOINT VELOCITY \n" << jointVelocities);
 }
@@ -166,7 +115,6 @@ void RobotController::calculateEndEffectorVelocity(){
 
     endEffectorVelocityPub_.publish(msg);
 
->>>>>>> 2e9c24189abbe0d366a678c0fbd2ee6d565d1008
 }
 
 ///////////////////////////////////////////////////////////
@@ -178,91 +126,33 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
     recievedFiducial_ = true;
     timeAtFiducialPublish_ = ros::Time::now();
     std::unique_lock<std::mutex> lck(fiducialPoseMutex_);
+
+    robot_->calculateJointTransforms();
+    robot_->calculateJointTransformsToBase();
+    robot_->calculateJacobian(); 
     
     geometry_msgs::PoseStamped fiducialPoseStampedLocal_ = *msg;
 
     //These fiducial positions need to be updated as the camera has a different coord system to the end effector
 
-    Eigen::Quaterniond fiducialRotationWrong(fiducialPoseStampedLocal_.pose.orientation.w,
+    Eigen::Quaterniond fiducialQuaternion(fiducialPoseStampedLocal_.pose.orientation.w,
                                               fiducialPoseStampedLocal_.pose.orientation.x,
                                               fiducialPoseStampedLocal_.pose.orientation.y,
                                               fiducialPoseStampedLocal_.pose.orientation.z);
 
-    Eigen::Matrix3d rotationMatrix = fiducialRotationWrong.normalized().toRotationMatrix();
+    fiducialTranslationLocal_(0,0) = fiducialPoseStampedLocal_.pose.position.x;
+    fiducialTranslationLocal_(1,0) = fiducialPoseStampedLocal_.pose.position.y;
+    fiducialTranslationLocal_(2,0) = fiducialPoseStampedLocal_.pose.position.z - 1;
     
-    Eigen::Matrix4d transformationMatrix;
-    transformationMatrix(0,0) = rotationMatrix(0,0);
-    transformationMatrix(0,1) = rotationMatrix(0,1);
-    transformationMatrix(0,2) = rotationMatrix(0,2);
-    transformationMatrix(0,3) = fiducialPoseStampedLocal_.pose.position.x;
-
-    transformationMatrix(1,0) = rotationMatrix(1,0);
-    transformationMatrix(1,1) = rotationMatrix(1,1);
-    transformationMatrix(1,2) = rotationMatrix(1,2);
-    transformationMatrix(1,3) = fiducialPoseStampedLocal_.pose.position.y;
-
-    transformationMatrix(2,0) = rotationMatrix(2,0);
-    transformationMatrix(2,1) = rotationMatrix(2,1);
-    transformationMatrix(2,2) = rotationMatrix(2,2);
-    transformationMatrix(2,3) = fiducialPoseStampedLocal_.pose.position.z;
-
-    transformationMatrix(3,0) = 0;
-    transformationMatrix(3,1) = 0;
-    transformationMatrix(3,2) = 0;
-    transformationMatrix(3,3) = 1;
-
-  
-    ROS_INFO_STREAM(transformationMatrix);
-
-    transformationMatrix = transformationMatrix;
-
-    Eigen::Matrix3d newRotationMatrix;
-
-    newRotationMatrix(0,0) = transformationMatrix(0,0);
-    newRotationMatrix(0,1) = transformationMatrix(0,1);
-    newRotationMatrix(0,2) = transformationMatrix(0,2);
-
-    newRotationMatrix(1,0) = transformationMatrix(1,0);
-    newRotationMatrix(1,1) = transformationMatrix(1,1);
-    newRotationMatrix(1,2) = transformationMatrix(1,2);
-
-    newRotationMatrix(2,0) = transformationMatrix(2,0);
-    newRotationMatrix(2,1) = transformationMatrix(2,1);
-    newRotationMatrix(2,2) = transformationMatrix(2,2);
-
-    Eigen::Quaterniond newQuaternion(newRotationMatrix);
-
-    fiducialTranslationLocal_(0,0) = transformationMatrix(0,3);
-    fiducialTranslationLocal_(1,0) = transformationMatrix(1,3);
-    fiducialTranslationLocal_(2,0) = transformationMatrix(2,3);
-
-    ROS_INFO_STREAM(transformationMatrix);
-    
-    fiducialRotationLocal_ = newQuaternion;     
+    fiducialRotationLocal_ = fiducialQuaternion;     
 
     calculateEndEffectorVelocity();
-    robot_->calculateJointTransforms();
-    robot_->calculateJointTransformsToBase();
-    robot_->calculateJacobian(); 
-
-    geometry_msgs::Pose pose;
-
-    pose.orientation.w = newQuaternion.w();
-    pose.orientation.x = newQuaternion.x();
-    pose.orientation.y = newQuaternion.y();
-    pose.orientation.w = newQuaternion.z();
-    
-    pose.position.x = transformationMatrix(0,3);
-    pose.position.y = transformationMatrix(1,3);
-    pose.position.z = transformationMatrix(2,3);
-
-    fiducialNewPose_.publish(pose);
     
     if(euclidianNorm_ > errorThreshold_){
-        //moveRobot();     
+        moveRobot();     
     }
     else{
-        //stallRobot();
+        stallRobot();
     }
     
 }
