@@ -10,6 +10,7 @@
 #include "eigen3/Eigen/Dense"
 #include "std_msgs/Float64MultiArray.h"
 #include "geometry_msgs/PoseStamped.h"
+#include "rosgraph_msgs/Clock.h"
 #include <atomic>
 #include <mutex>
 #include <vector>
@@ -29,6 +30,8 @@ class RobotController{
     //////////////////////////////////////////////////////////
 
     void moveRobot();
+    void stallRobot();
+    void calculateEndEffectorVelocity();
     
     ///////////////////////////////////////////////////////////////////////////////////////////
     // Setters
@@ -45,6 +48,7 @@ class RobotController{
     //////////////////////////////////////////////////////////
 
     void fiducialPositionCallBack(const geometry_msgs::PoseStampedPtr &msg);
+    void clockCallback(const rosgraph_msgs::ClockConstPtr &msg);
 
     ///////////////////////////////////////////////////////////////////////
     // Node, Publishers and Subscribers
@@ -52,7 +56,9 @@ class RobotController{
 
     ros::NodeHandle nh_;
     ros::Subscriber fiducialPositionSub_;
+    ros::Subscriber clockSub_;
     ros::Publisher jointVelocityPub_;
+    ros::Publisher endEffectorVelocityPub_;
 
     ///////////////////////////////////////////////////////////////////////
     // Data Security and Pointers
@@ -72,10 +78,16 @@ class RobotController{
     
     Eigen::Vector3d fiducialTranslationLocal_;
     Eigen::Quaterniond fiducialRotationLocal_;
+    Eigen::VectorXd endEffectorVelocity_;
+    ros::Time timeAtFiducialPublish_;
 
     ///////////////////////////////////////////////////////////////////////
     // Robot To Control Velocity
     /////////////////////////////////////////////////////////////////////
     Robot* robot_;
 
+    ///////////////////////////////////////////////////////////////////////
+    // Flags
+    /////////////////////////////////////////////////////////////////////
+    bool recievedFiducial_;
 };

@@ -47,6 +47,7 @@ Robot::Robot(ros::NodeHandle nh, std::vector<double> d, std::vector<double> a, s
 //////////////////////////////////////////////////////////
 
 void Robot::jointStateCallBack(const sensor_msgs::JointStateConstPtr &msg){
+    ROS_DEBUG_STREAM("RECIEVED JOINT TRANSFORM");
     std::unique_lock<std::mutex> lck(jointStateMutex_);
     jointStates_ = *msg;
 }
