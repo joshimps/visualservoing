@@ -59,6 +59,7 @@ class RobotController{
     ros::Subscriber clockSub_;
     ros::Publisher jointVelocityPub_;
     ros::Publisher endEffectorVelocityPub_;
+    ros::Publisher fiducialNewPose_;
 
     ///////////////////////////////////////////////////////////////////////
     // Data Security and Pointers

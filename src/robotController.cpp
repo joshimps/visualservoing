@@ -23,6 +23,7 @@ RobotController::RobotController(ros::NodeHandle nh, Robot* robot, double gain, 
     clockSub_ = nh_.subscribe("/clock", 10, &RobotController::clockCallback, this);
     jointVelocityPub_ = nh_.advertise<std_msgs::Float64MultiArray>("joint_group_vel_controller/command", 10, false);
     endEffectorVelocityPub_ = nh_.advertise<std_msgs::Float64MultiArray>("visual_servoing/end_effector_velocity", 10, false);
+    fiducialNewPose_ = nh_.advertise<geometry_msgs::Pose>("visual_servoing/fiducial_pose", 10, false);
 
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
@@ -68,7 +69,7 @@ void RobotController::moveRobot(){
     euclidianNorm_ = sqrt(jointVelocitySquaredSum);
     ROS_INFO_STREAM("EUCLIDIAN ERROR \n" << euclidianNorm_);
         
-    jointVelocityPub_.publish(msg);
+    //jointVelocityPub_.publish(msg);
     ROS_DEBUG_STREAM("PUBLISHED JOINT VELOCITY \n" << jointVelocities);
 }
 
@@ -191,12 +192,25 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
     robot_->calculateJointTransforms();
     robot_->calculateJointTransformsToBase();
     robot_->calculateJacobian(); 
+
+    geometry_msgs::Pose pose;
+
+    pose.orientation.w = newQuaternion.w();
+    pose.orientation.x = newQuaternion.x();
+    pose.orientation.y = newQuaternion.y();
+    pose.orientation.w = newQuaternion.z();
+    
+    pose.position.x = transformationMatrix(0,3);
+    pose.position.y = transformationMatrix(1,3);
+    pose.position.z = transformationMatrix(2,3);
+
+    fiducialNewPose_.publish(pose);
     
     if(euclidianNorm_ > errorThreshold_){
-        moveRobot();     
+        //moveRobot();     
     }
     else{
-        stallRobot();
+        //stallRobot();
     }
     
 }
