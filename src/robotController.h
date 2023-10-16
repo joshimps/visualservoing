@@ -53,6 +53,7 @@ class RobotController{
     ros::NodeHandle nh_;
     ros::Subscriber fiducialPositionSub_;
     ros::Publisher jointVelocityPub_;
+    ros::Publisher eeVelocityPub_;
 
     ///////////////////////////////////////////////////////////////////////
     // Data Security and Pointers
