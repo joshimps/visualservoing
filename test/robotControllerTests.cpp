@@ -80,13 +80,6 @@ TEST(RobotController,testJointVelocity){
 
 }
 
-TEST(RobotController,testStable){
-
-}
-
-TEST(RobotController,testConverging){
-
-}
 
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
