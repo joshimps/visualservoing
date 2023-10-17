@@ -30,6 +30,14 @@ RobotController::RobotController(ros::NodeHandle nh, Robot* robot, double gain, 
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
+// Getters
+/////////////////////////////////////////////////////////////////////////////////////////
+
+Eigen::VectorXd RobotController::getEndEffectorVelocity(){
+    return endEffectorVelocity_;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////
 // Setters
 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -82,7 +90,7 @@ void RobotController::moveRobot(){
         msg.data.push_back(jointVelocities(i,0));
         jointVelocitySquaredSum = jointVelocitySquaredSum + pow(jointVelocities(i,0),2);
     }
-    euclidianNorm_ = sqrt(jointVelocitySquaredSum);
+    euclidianNorm_ = endEffectorVelocity_.norm();
     ROS_INFO_STREAM("EUCLIDIAN ERROR \n" << euclidianNorm_);
     jointVelocityPub_.publish(msg);
     ROS_DEBUG_STREAM("PUBLISHED JOINT VELOCITY \n" << jointVelocities);
@@ -125,7 +133,7 @@ void RobotController::stallRobot(){
         msg.data.push_back(0);
         jointVelocitySquaredSum = jointVelocitySquaredSum + pow(jointVelocities(i,0),2);
     }
-    euclidianNorm_ = sqrt(jointVelocitySquaredSum);
+    euclidianNorm_ = endEffectorVelocity_.norm();
     ROS_INFO_STREAM("EUCLIDIAN ERROR \n" << euclidianNorm_);
     jointVelocityPub_.publish(msg);
     ROS_DEBUG_STREAM("PUBLISHED JOINT VELOCITY \n" << jointVelocities);
@@ -137,8 +145,8 @@ void RobotController::calculateEndEffectorVelocity(){
     endEffectorVelocity_(0,0) = gain_ * fiducialTranslationLocal_(0,0);
     endEffectorVelocity_(1,0) = gain_ * fiducialTranslationLocal_(1,0);
     endEffectorVelocity_(2,0) = gain_ * fiducialTranslationLocal_(2,0);
-    endEffectorVelocity_(3,0) = 0; //gain_ * fiducialRotationLocal_.normalized().toRotationMatrix().eulerAngles(0,1,2)(0,0);
-    endEffectorVelocity_(4,0) = 0; //gain_ * fiducialRotationLocal_.normalized().toRotationMatrix().eulerAngles(0,1,2)(1,0);
+    endEffectorVelocity_(3,0) = gain_ * fiducialRotationLocal_.normalized().toRotationMatrix().eulerAngles(0,1,2)(0,0);
+    endEffectorVelocity_(4,0) = gain_ * fiducialRotationLocal_.normalized().toRotationMatrix().eulerAngles(0,1,2)(1,0);
     endEffectorVelocity_(5,0) = gain_ * fiducialRotationLocal_.normalized().toRotationMatrix().eulerAngles(0,1,2)(2,0);
 
     msg.data.push_back(endEffectorVelocity_(0,0));
@@ -179,7 +187,7 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
 
     fiducialTranslationLocal_(0,0) = fiducialPoseStampedLocal_.pose.position.x;
     fiducialTranslationLocal_(1,0) = fiducialPoseStampedLocal_.pose.position.y;
-    fiducialTranslationLocal_(2,0) = fiducialPoseStampedLocal_.pose.position.z - 1;
+    fiducialTranslationLocal_(2,0) = fiducialPoseStampedLocal_.pose.position.z;
     
     fiducialRotationLocal_ = fiducialQuaternion;     
 
