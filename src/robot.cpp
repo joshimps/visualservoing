@@ -309,7 +309,6 @@ void Robot::calculateJacobian(){
         }
         
         //Create the coiumn in the jacobian matrix
-        Eigen::Quaterniond quaternionIToB(rotationMatrixItoB);
         jacobianLinearVelocityComponent = (rotationMatrixItoB * unitVector).cross((translationMatrixNtoB - translationMatrixItoB));
         jacobianRotationalVelocityComponent = rotationMatrixItoB * unitVector;
 

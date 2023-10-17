@@ -17,7 +17,7 @@ int main(int argc, char **argv)
   std::vector<double> alpha{M_PI/2,0,0,M_PI/2,-M_PI/2,0};
   
   double gain = 0.01;
-  double errorThreshold = 0.05;
+  double errorThreshold = 0.1;
 
   ros::AsyncSpinner spinner(0);
   spinner.start();

@@ -86,7 +86,8 @@ void RobotController::stallRobot(){
     //The joint velocity is the jacobian multiplied by the error 
     Eigen::MatrixXd transposeJacobian = robot_->getJacobian().transpose();
     Eigen::MatrixXd psuedoInverseJacobian = transposeJacobian * (robot_->getJacobian()*transposeJacobian).inverse();
-    jointVelocities = psuedoInverseJacobian * endEffectorVelocity_;
+    ROS_INFO_STREAM("Pseudo Inverse Jacobian \n" << psuedoInverseJacobian);
+    jointVelocities =  psuedoInverseJacobian * endEffectorVelocity_;
     //Publish the joint velocities to the robot here
     for(int i = 0; i < (robot_->getNumberOfJoints()); i++){
         msg.data.push_back(0);
@@ -104,8 +105,8 @@ void RobotController::calculateEndEffectorVelocity(){
     endEffectorVelocity_(0,0) = gain_ * fiducialTranslationLocal_(0,0);
     endEffectorVelocity_(1,0) = gain_ * fiducialTranslationLocal_(1,0);
     endEffectorVelocity_(2,0) = gain_ * fiducialTranslationLocal_(2,0);
-    endEffectorVelocity_(3,0) = gain_ * fiducialRotationLocal_.normalized().toRotationMatrix().eulerAngles(0,1,2)(0,0);
-    endEffectorVelocity_(4,0) = gain_ * fiducialRotationLocal_.normalized().toRotationMatrix().eulerAngles(0,1,2)(1,0);
+    endEffectorVelocity_(3,0) = 0; //gain_ * fiducialRotationLocal_.normalized().toRotationMatrix().eulerAngles(0,1,2)(0,0);
+    endEffectorVelocity_(4,0) = 0; //gain_ * fiducialRotationLocal_.normalized().toRotationMatrix().eulerAngles(0,1,2)(1,0);
     endEffectorVelocity_(5,0) = gain_ * fiducialRotationLocal_.normalized().toRotationMatrix().eulerAngles(0,1,2)(2,0);
 
     msg.data.push_back(endEffectorVelocity_(0,0));
@@ -114,6 +115,8 @@ void RobotController::calculateEndEffectorVelocity(){
     msg.data.push_back(endEffectorVelocity_(3,0));
     msg.data.push_back(endEffectorVelocity_(4,0));
     msg.data.push_back(endEffectorVelocity_(5,0));
+
+     ROS_DEBUG_STREAM("END EFFECTOR VELOCITIES \n" << endEffectorVelocity_);
 
     endEffectorVelocityPub_.publish(msg);
 
@@ -144,7 +147,7 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
 
     fiducialTranslationLocal_(0,0) = fiducialPoseStampedLocal_.pose.position.x;
     fiducialTranslationLocal_(1,0) = fiducialPoseStampedLocal_.pose.position.y;
-    fiducialTranslationLocal_(2,0) = fiducialPoseStampedLocal_.pose.position.z;
+    fiducialTranslationLocal_(2,0) = fiducialPoseStampedLocal_.pose.position.z - 1;
     
     fiducialRotationLocal_ = fiducialQuaternion;     
 
