@@ -92,9 +92,9 @@ void RobotController::calculateEndEffectorVelocity(){
     endEffectorVelocity_(0,0) = gain_ * fiducialTranslationLocal_(0,0);
     endEffectorVelocity_(1,0) = gain_ * fiducialTranslationLocal_(1,0);
     endEffectorVelocity_(2,0) = gain_ * fiducialTranslationLocal_(2,0);
-    endEffectorVelocity_(3,0) = gain_ * fiducialRotationLocal_.normalized().toRotationMatrix().eulerAngles(0,1,2)(0,0);
-    endEffectorVelocity_(4,0) = gain_ * fiducialRotationLocal_.normalized().toRotationMatrix().eulerAngles(0,1,2)(1,0);
-    endEffectorVelocity_(5,0) = gain_ * fiducialRotationLocal_.normalized().toRotationMatrix().eulerAngles(0,1,2)(2,0);
+    endEffectorVelocity_(3,0) = gain_ * fiducialRotationLocal_.x();
+    endEffectorVelocity_(4,0) = gain_ * fiducialRotationLocal_.y();
+    endEffectorVelocity_(5,0) = gain_ * fiducialRotationLocal_.z();
 
     msg.data.push_back(endEffectorVelocity_(0,0));
     msg.data.push_back(endEffectorVelocity_(1,0));
@@ -127,10 +127,11 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
 
     //These fiducial positions need to be updated as the camera has a different coord system to the end effector
 
-    Eigen::Quaterniond fiducialQuaternion(fiducialPoseStampedLocal_.pose.orientation.w,
-                                          fiducialPoseStampedLocal_.pose.orientation.x,
-                                          fiducialPoseStampedLocal_.pose.orientation.y,
-                                          fiducialPoseStampedLocal_.pose.orientation.z);
+    Eigen::Quaterniond fiducialQuaternion;
+    fiducialQuaternion.w() = fiducialPoseStampedLocal_.pose.orientation.w;
+    fiducialQuaternion.x() = fiducialPoseStampedLocal_.pose.orientation.x;
+    fiducialQuaternion.y() = fiducialPoseStampedLocal_.pose.orientation.y;
+    fiducialQuaternion.z() = fiducialPoseStampedLocal_.pose.orientation.z;
 
     fiducialTranslationLocal_(0,0) = fiducialPoseStampedLocal_.pose.position.x;
     fiducialTranslationLocal_(1,0) = fiducialPoseStampedLocal_.pose.position.y;
