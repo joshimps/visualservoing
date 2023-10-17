@@ -117,7 +117,7 @@ TEST(RobotController,testJointVelocity){
     robot.calculateJacobian(); 
 
     double gain = 0.1;
-    double errorThreshold = 1;
+    double errorThreshold = 0.001;
 
     RobotController robotController(nh,&robot,gain,errorThreshold);
 
@@ -127,33 +127,18 @@ TEST(RobotController,testJointVelocity){
     fiducialTranslationLocal(0,0) = 0.3124;
 
     //Y
-    fiducialTranslationLocal(1,0) = -0.3152;
+    fiducialTranslationLocal(1,0) = 0.2848;
 
     //Z
     fiducialTranslationLocal(2,0) = -0.2640;
 
-    Eigen::Matrix3d rotationMatrix;
-
-    rotationMatrix(0,0) = 1;
-    rotationMatrix(0,1) = 0;
-    rotationMatrix(0,2) = 0;
-
-    rotationMatrix(1,0) = 0;
-    rotationMatrix(1,1) = 0.8660;
-    rotationMatrix(1,2) = -0.5;
-
-    rotationMatrix(2,0) = 0;
-    rotationMatrix(2,1) = 0.5;
-    rotationMatrix(2,2) = 0.866;
-
-    Eigen::Quaterniond fiducialRotationLocal;
-    fiducialRotationLocal = rotationMatrix;
+    Eigen::Quaterniond fiducialRotationLocal(0.9659 ,0.2588 , 0, 0);
     
     robotController.setFiducialPostition(fiducialTranslationLocal,fiducialRotationLocal);
     robotController.calculateEndEffectorVelocity();
 
     ASSERT_NEAR(robotController.getEndEffectorVelocity()(0,0),0.0312,0.001);
-    ASSERT_NEAR(robotController.getEndEffectorVelocity()(1,0),-0.0315,0.001);
+    ASSERT_NEAR(robotController.getEndEffectorVelocity()(1,0),0.0285,0.001);
     ASSERT_NEAR(robotController.getEndEffectorVelocity()(2,0),-0.0264,0.001);
     ASSERT_NEAR(robotController.getEndEffectorVelocity()(3,0),0.0259,0.001);
     ASSERT_NEAR(robotController.getEndEffectorVelocity()(4,0),0,0.001);
@@ -165,11 +150,10 @@ TEST(RobotController,testJointVelocity){
 
     ASSERT_NEAR(jointVelocities(0,0),-0.1465,0.001);
     ASSERT_NEAR(jointVelocities(1,0),0.0584,0.001);
-    ASSERT_NEAR(jointVelocities(2,0),-0.0753,0.001);
+    ASSERT_NEAR(jointVelocities(2,0),0.0753,0.001);
     ASSERT_NEAR(jointVelocities(3,0),-0.1596,0.001);
     ASSERT_NEAR(jointVelocities(4,0),0.1465,0.001);
     ASSERT_NEAR(jointVelocities(5,0),0,0.001);
-
 }
 
 
