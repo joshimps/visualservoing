@@ -22,6 +22,8 @@ class Robot{
     Eigen::MatrixXd getJointTransform(int i);
     Eigen::MatrixXd getJointTransformToBase(int i);
     Eigen::MatrixXd getJacobian();
+    Eigen::MatrixXd getTransposeJacobian();
+    Eigen::MatrixXd getPseudoInverseJacobian();
     int getNumberOfJoints();
 
     ///////////////////////////////////////////////////////////////////////////////////////////

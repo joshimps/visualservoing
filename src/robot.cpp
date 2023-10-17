@@ -82,6 +82,38 @@ Eigen::MatrixXd Robot::getJacobian(){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
     return jacobian_;
 }
+Eigen::MatrixXd Robot::getTransposeJacobian(){
+    std::unique_lock<std::mutex> lck(jointStateMutex_);
+    return jacobian_.transpose();
+}
+Eigen::MatrixXd Robot::getPseudoInverseJacobian(){
+    std::unique_lock<std::mutex> lck(jointStateMutex_);
+
+    Eigen::MatrixXd transposeJacobian;
+    Eigen::MatrixXd psuedoInverseJacobian;
+    double jacobianDeterminant = jacobian_.determinant();
+    double damping = 0.1;
+    Eigen::MatrixXd identityMatrix = Eigen::MatrixXd::Identity(jacobian_.rows(), jacobian_.cols()) ;
+
+    if(jacobianDeterminant == 0 || jacobianDeterminant == -0){
+        ROS_INFO_STREAM("USING DLS");
+        transposeJacobian = jacobian_.transpose();
+        ROS_DEBUG_STREAM("TRANSPOSE JACOBIAN \n" << transposeJacobian);
+        psuedoInverseJacobian = transposeJacobian * (jacobian_*transposeJacobian + damping * identityMatrix).inverse();
+        ROS_DEBUG_STREAM("PSUEDO INVERSE JACOBIAN \n" << psuedoInverseJacobian);
+    }
+    else{
+        ROS_INFO_STREAM("NOT USING DLS");
+        transposeJacobian = jacobian_.transpose();
+        ROS_DEBUG_STREAM("TRANSPOSE JACOBIAN \n" << transposeJacobian);
+        psuedoInverseJacobian = transposeJacobian * (jacobian_*transposeJacobian).inverse();
+        ROS_DEBUG_STREAM("PSUEDO INVERSE JACOBIAN \n" << psuedoInverseJacobian);
+    }
+
+
+    return psuedoInverseJacobian;
+}
+
 
 int Robot::getNumberOfJoints(){
     return numberOfJoints_;
