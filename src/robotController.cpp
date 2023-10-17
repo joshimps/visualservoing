@@ -43,32 +43,47 @@ void RobotController::setFiducialPostition(Eigen::MatrixXd fiducialTranslationLo
 //////////////////////////////////////////////////////////
 
 void RobotController::moveRobot(){
-    ROS_DEBUG_STREAM("MOVING ROBOT \n");
+    ROS_INFO_STREAM("MOVING ROBOT \n");
+    std_msgs::Float64MultiArray msg;
     Eigen::VectorXd jointVelocities(robot_->getNumberOfJoints());
 
     double jointVelocitySquaredSum;
-    //Keep going until the norm of the error is greater than the threshold
-    //Using Position Based servoing as explained here
-    //https://canvas.uts.edu.au/courses/27375/pages/2-position-based-visual-servoing-pbvs?module_item_id=1290599
 
-    std_msgs::Float64MultiArray msg;
-    
     
     jointVelocitySquaredSum = 0;
     //Calculate the jacobian of the current pose 
-    
     //The joint velocity is the jacobian multiplied by the error 
-    jointVelocities = robot_->getJacobian().completeOrthogonalDecomposition().pseudoInverse() * endEffectorVelocity_;
-    
+
+    double jacobianDeterminant = robot_->getJacobian().determinant();
+    double damping = 0.1;
+    Eigen::MatrixXd transposeJacobian;
+    Eigen::MatrixXd psuedoInverseJacobian;
+    Eigen::MatrixXd identityMatrix = Eigen::MatrixXd::Identity(robot_->getJacobian().rows(), robot_->getJacobian().cols()) ;
+
+    //If there is a singularity apply damping
+    if(jacobianDeterminant == 0 || jacobianDeterminant == -0){
+        ROS_INFO_STREAM("USING DLS");
+        transposeJacobian = robot_->getJacobian().transpose();
+        ROS_DEBUG_STREAM("TRANSPOSE JACOBIAN \n" << transposeJacobian);
+        psuedoInverseJacobian = transposeJacobian * (robot_->getJacobian()*transposeJacobian + damping * identityMatrix).inverse();
+        ROS_DEBUG_STREAM("PSUEDO INVERSE JACOBIAN \n" << psuedoInverseJacobian);
+    }
+    else{
+        ROS_INFO_STREAM("NOT USING DLS");
+        transposeJacobian = robot_->getJacobian().transpose();
+        ROS_DEBUG_STREAM("TRANSPOSE JACOBIAN \n" << transposeJacobian);
+        psuedoInverseJacobian = transposeJacobian * (robot_->getJacobian()*transposeJacobian).inverse();
+        ROS_DEBUG_STREAM("PSUEDO INVERSE JACOBIAN \n" << psuedoInverseJacobian);
+    }
+   
+    jointVelocities =  psuedoInverseJacobian * endEffectorVelocity_;
     //Publish the joint velocities to the robot here
     for(int i = 0; i < (robot_->getNumberOfJoints()); i++){
         msg.data.push_back(jointVelocities(i,0));
-        ROS_DEBUG_STREAM("JOINT " << i+1 << " VELOCITY: \n" << jointVelocities(i,0));
         jointVelocitySquaredSum = jointVelocitySquaredSum + pow(jointVelocities(i,0),2);
     }
     euclidianNorm_ = sqrt(jointVelocitySquaredSum);
     ROS_INFO_STREAM("EUCLIDIAN ERROR \n" << euclidianNorm_);
-        
     jointVelocityPub_.publish(msg);
     ROS_DEBUG_STREAM("PUBLISHED JOINT VELOCITY \n" << jointVelocities);
 }
@@ -78,10 +93,7 @@ void RobotController::stallRobot(){
     std_msgs::Float64MultiArray msg;
     Eigen::VectorXd jointVelocities(robot_->getNumberOfJoints());
 
-    double jointVelocitySquaredSum;
-
-    
-    jointVelocitySquaredSum = 0;
+    double jointVelocitySquaredSum = 0;
     //Calculate the jacobian of the current pose 
     //The joint velocity is the jacobian multiplied by the error 
 
