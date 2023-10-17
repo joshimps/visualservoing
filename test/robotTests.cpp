@@ -333,7 +333,7 @@ TEST(Robot,testJacobian){
     Robot robot(nh,d,a,alpha);
     
     //Lets set the joint angles and compare with values obtained from Matlab
-    std::vector<double> theta{0,0,0,0,0,0};
+    std::vector<double> theta{3*M_PI/2, 3*M_PI/2, M_PI/2, M_PI, 3*M_PI/2,0};
     robot.setTheta(theta); 
     
     //Now lets calculate the joint transforms
@@ -347,48 +347,44 @@ TEST(Robot,testJacobian){
 
     ROS_INFO_STREAM("/n" << robot.getJacobian());
 
-    //Row 1
-    ASSERT_NEAR(robot.getJacobian()(0,0),0.1943,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,1),0.0853,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,2),0.0853,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,3),0.0853,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,0),-0.29515,0.01  );
+    ASSERT_NEAR(robot.getJacobian()(0,1),4.2364e-17,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,2),-2.3942e-18,0.01);
+    ASSERT_NEAR(robot.getJacobian()(0,3),1.0664e-17,0.01);
     ASSERT_NEAR(robot.getJacobian()(0,4),-0.0819,0.01);
     ASSERT_NEAR(robot.getJacobian()(0,5),0,0.01);
-    //Row 2()
-    ASSERT_NEAR(robot.getJacobian()(1,0),-0.4569 ,0.01);
-    ASSERT_NEAR(robot.getJacobian()(1,1),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(1,2),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(1,3),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(1,4),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(1,0),-0.11235,0.01);
+    ASSERT_NEAR(robot.getJacobian()(1,1),0.329,0.01);
+    ASSERT_NEAR(robot.getJacobian()(1,2),0.08535,0.01);
+    ASSERT_NEAR(robot.getJacobian()(1,3),0.08535,0.01);
+    ASSERT_NEAR(robot.getJacobian()(1,4),3.009e-17,0.01);
     ASSERT_NEAR(robot.getJacobian()(1,5),0,0.01);
-    //Row 3()
-    ASSERT_NEAR(robot.getJacobian()(2,0),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(2,1),-0.4569 ,0.01);
-    ASSERT_NEAR(robot.getJacobian()(2,2),-0.2132,0.01);
-    ASSERT_NEAR(robot.getJacobian()(2,3),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(2,4),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(2,0),-6.163e-33,0.01);
+    ASSERT_NEAR(robot.getJacobian()(2,1),-0.29515,0.01);
+    ASSERT_NEAR(robot.getJacobian()(2,2),-0.29515,0.01);
+    ASSERT_NEAR(robot.getJacobian()(2,3),-0.0819,0.01);
+    ASSERT_NEAR(robot.getJacobian()(2,4),4.9978e-33,0.01);
     ASSERT_NEAR(robot.getJacobian()(2,5),0,0.01);
-    //Row 4()
-    ASSERT_NEAR(robot.getJacobian()(3,0),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(3,1),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(3,2),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(3,3),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(3,4),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(3,5),0,0.01);
-    //Row 5()
+    ASSERT_NEAR(robot.getJacobian()(3,0),-1.2933e-32,0.01);
+    ASSERT_NEAR(robot.getJacobian()(3,1),-1,0.01);
+    ASSERT_NEAR(robot.getJacobian()(3,2),-1,0.01);
+    ASSERT_NEAR(robot.getJacobian()(3,3),-1,0.01);
+    ASSERT_NEAR(robot.getJacobian()(3,4),-7.3956e-32,0.01);
+    ASSERT_NEAR(robot.getJacobian()(3,5),3.6739e-16,0.01);
     ASSERT_NEAR(robot.getJacobian()(4,0),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(4,1),-1,0.01);
-    ASSERT_NEAR(robot.getJacobian()(4,2),-1,0.01);
-    ASSERT_NEAR(robot.getJacobian()(4,3),-1,0.01);
-    ASSERT_NEAR(robot.getJacobian()(4,4),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(4,5),-1,0.01);
-    //Row 6
+    ASSERT_NEAR(robot.getJacobian()(4,1),1.837e-16,0.01);
+    ASSERT_NEAR(robot.getJacobian()(4,2),1.837e-16,0.01);
+    ASSERT_NEAR(robot.getJacobian()(4,3),1.837e-16,0.01);
+    ASSERT_NEAR(robot.getJacobian()(4,4),-3.6739e-16,0.01);
+    ASSERT_NEAR(robot.getJacobian()(4,5),1,0.01);
     ASSERT_NEAR(robot.getJacobian()(5,0),1,0.01);
-    ASSERT_NEAR(robot.getJacobian()(5,1),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(5,2),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(5,3),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(5,4),-1,0.01);
-    ASSERT_NEAR(robot.getJacobian()(5,5),0,0.01);
+    ASSERT_NEAR(robot.getJacobian()(5,1),6.1232e-17,0.01);
+    ASSERT_NEAR(robot.getJacobian()(5,2),6.1232e-17,0.01);
+    ASSERT_NEAR(robot.getJacobian()(5,3),6.1232e-17,0.01);
+    ASSERT_NEAR(robot.getJacobian()(5,4),1,0.01);
+    ASSERT_NEAR(robot.getJacobian()(5,5),4.2863e-16,0.01);
+
+    
 }
 
 TEST(Robot,testJacobianTranspose){
@@ -401,7 +397,7 @@ TEST(Robot,testJacobianTranspose){
     Robot robot(nh,d,a,alpha);
     
     //Lets set the joint angles and compare with values obtained from Matlab
-    std::vector<double> theta{0,0,0,0,0,0};
+    std::vector<double> theta{3*M_PI/2, 3*M_PI/2, M_PI/2, M_PI, 3*M_PI/2,0};
     robot.setTheta(theta); 
     
     //Now lets calculate the joint transforms
@@ -415,48 +411,42 @@ TEST(Robot,testJacobianTranspose){
 
     ROS_INFO_STREAM("/n" << robot.getJacobian());
 
-    //Row 1
-    ASSERT_NEAR(robot.getJacobian()(0,0),0.1943,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,1),0.0853,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,2),0.0853,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,3),0.0853,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,4),-0.0819,0.01);
-    ASSERT_NEAR(robot.getJacobian()(0,5),0,0.01);
-    //Row 2()
-    ASSERT_NEAR(robot.getJacobian()(1,0),-0.4569 ,0.01);
-    ASSERT_NEAR(robot.getJacobian()(1,1),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(1,2),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(1,3),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(1,4),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(1,5),0,0.01);
-    //Row 3()
-    ASSERT_NEAR(robot.getJacobian()(2,0),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(2,1),-0.4569 ,0.01);
-    ASSERT_NEAR(robot.getJacobian()(2,2),-0.2132,0.01);
-    ASSERT_NEAR(robot.getJacobian()(2,3),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(2,4),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(2,5),0,0.01);
-    //Row 4()
-    ASSERT_NEAR(robot.getJacobian()(3,0),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(3,1),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(3,2),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(3,3),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(3,4),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(3,5),0,0.01);
-    //Row 5()
-    ASSERT_NEAR(robot.getJacobian()(4,0),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(4,1),-1,0.01);
-    ASSERT_NEAR(robot.getJacobian()(4,2),-1,0.01);
-    ASSERT_NEAR(robot.getJacobian()(4,3),-1,0.01);
-    ASSERT_NEAR(robot.getJacobian()(4,4),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(4,5),-1,0.01);
-    //Row 6
-    ASSERT_NEAR(robot.getJacobian()(5,0),1,0.01);
-    ASSERT_NEAR(robot.getJacobian()(5,1),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(5,2),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(5,3),0,0.01);
-    ASSERT_NEAR(robot.getJacobian()(5,4),-1,0.01);
-    ASSERT_NEAR(robot.getJacobian()(5,5),0,0.001);
+    ASSERT_NEAR(robot.getJacobian().transpose()(0,0),-0.29515,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(0,1),-0.11235,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(0,2),-6.163e-33,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(0,3),-1.2933e-32,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(0,4),0,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(0,5),1,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(1,0),4.2364e-17,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(1,1),0.329,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(1,2),-0.29515,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(1,3),-1,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(1,4),1.837e-16,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(1,5),6.1232e-17,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(2,0),-2.3942e-18,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(2,1),0.08535,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(2,2),-0.29515,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(2,3),-1,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(2,4),1.837e-16,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(2,5),6.1232e-17,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(3,0),1.0664e-17,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(3,1),0.08535,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(3,2),-0.0819,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(3,3),-1,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(3,4),1.837e-16,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(3,5),6.1232e-17,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(4,0),-0.0819,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(4,1),3.009e-17,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(4,2),4.9978e-33,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(4,3),-7.3956e-32,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(4,4),-3.6739e-16,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(4,5),1,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(5,0),0,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(5,1),0,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(5,2),0,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(5,3),3.6739e-16,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(5,4),1,0.01);
+    ASSERT_NEAR(robot.getJacobian().transpose()(5,5),4.2863e-16,0.01);
 }
 
 TEST(Robot,testJacobianPseudoInverse){
@@ -469,7 +459,7 @@ TEST(Robot,testJacobianPseudoInverse){
     Robot robot(nh,d,a,alpha);
     
     //Lets set the joint angles and compare with values obtained from Matlab
-    std::vector<double> theta{0,0,0,0,0,0};
+    std::vector<double> theta{3*M_PI/2, 3*M_PI/2, M_PI/2, M_PI, 3*M_PI/2,0};
     robot.setTheta(theta); 
     
     //Now lets calculate the joint transforms
@@ -481,48 +471,43 @@ TEST(Robot,testJacobianPseudoInverse){
     //Calculate the jacobian
     robot.calculateJacobian();
 
-    //Row 1
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(0,0), 0.2747,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(0,1),-1.1056,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(0,2),0.0172 ,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(0,3),0,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(0,4),0.0143,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(0,5),0.1995,0.001);
-    //Row 2()
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(1,0),0.0412  ,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(1,1),0.0056,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(1,2),-1.1967,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(1,3),0,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(1,4),-0.0457,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(1,5),-0.0042,0.001);
-    //Row 3()
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(2,0),0,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(2,1),-0.4569 ,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(2,2),-0.2132,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(2,3),0,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(2,4),0,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(2,5),0,0.001);
-    //Row 4()
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(3,0),0,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(3,1),0,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(3,2),0,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(3,3),0,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(3,4),0,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(3,5),0,0.001);
-    //Row 5()
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(4,0),0,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(4,1),-1,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(4,2),-1,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(4,3),-1,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(4,4),0,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(4,5),-1,0.001);
-    //Row 6
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(5,0),1,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(5,1),0,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(5,2),0,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(5,3),0,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(5,4),-1,0.001);
-    ASSERT_NEAR(robot.getPseudoInverseJacobian()(5,5),0,0.001);
+    
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(0,0),-4.6893,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(0,1),2.4425e-15,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(0,2),7.7716e-16,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(0,3),2.0817e-17,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(0,4),1.6462e-16,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(0,5),-0.38406,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(1,0),-2.1623,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(1,1),4.1042,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(1,2),-5.085e-17,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(1,3),0.3503,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(1,4),-5.279e-17,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(1,5),-0.17709,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(2,0),2.1623,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(2,1),-4.1042,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(2,2),-4.6893,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(2,3),0.033759,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(2,4),-8.831e-17,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(2,5),0.17709,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(3,0),4.4357e-16,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(3,1),-9.7719e-16,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(3,2),4.6893,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(3,3),-1.3841,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(3,4),5.0849e-16,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(3,5),6.772e-17,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(4,0),4.6893,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(4,1),4.4409e-16,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(4,2),3.3307e-16,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(4,3),1.1102e-16,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(4,4),-5.9324e-16,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(4,5),1.3841,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(5,0),1.7228e-15,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(5,1),7.0521e-31,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(5,2),5.4772e-31,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(5,3),1.837e-16,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(5,4),1,0.01);
+    ASSERT_NEAR(robot.getPseudoInverseJacobian()(5,5),5.0849e-16,0.01);
 }
 
 
