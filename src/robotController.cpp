@@ -84,9 +84,29 @@ void RobotController::stallRobot(){
     jointVelocitySquaredSum = 0;
     //Calculate the jacobian of the current pose 
     //The joint velocity is the jacobian multiplied by the error 
-    Eigen::MatrixXd transposeJacobian = robot_->getJacobian().transpose();
-    Eigen::MatrixXd psuedoInverseJacobian = transposeJacobian * (robot_->getJacobian()*transposeJacobian).inverse();
-    ROS_INFO_STREAM("Pseudo Inverse Jacobian \n" << psuedoInverseJacobian);
+
+    double jacobianDeterminant = robot_->getJacobian().determinant();
+    double damping = 0.1;
+    Eigen::MatrixXd transposeJacobian;
+    Eigen::MatrixXd psuedoInverseJacobian;
+    Eigen::MatrixXd identityMatrix = Eigen::MatrixXd::Identity(robot_->getJacobian().rows(), robot_->getJacobian().cols()) ;
+
+    //If there is a singularity apply damping
+    if(jacobianDeterminant == 0 || jacobianDeterminant == -0){
+        ROS_INFO_STREAM("USING DLS");
+        transposeJacobian = robot_->getJacobian().transpose();
+        ROS_DEBUG_STREAM("TRANSPOSE JACOBIAN \n" << transposeJacobian);
+        psuedoInverseJacobian = transposeJacobian * (robot_->getJacobian()*transposeJacobian + damping * identityMatrix).inverse();
+        ROS_DEBUG_STREAM("PSUEDO INVERSE JACOBIAN \n" << psuedoInverseJacobian);
+    }
+    else{
+        ROS_INFO_STREAM("NOT USING DLS");
+        transposeJacobian = robot_->getJacobian().transpose();
+        ROS_DEBUG_STREAM("TRANSPOSE JACOBIAN \n" << transposeJacobian);
+        psuedoInverseJacobian = transposeJacobian * (robot_->getJacobian()*transposeJacobian).inverse();
+        ROS_DEBUG_STREAM("PSUEDO INVERSE JACOBIAN \n" << psuedoInverseJacobian);
+    }
+   
     jointVelocities =  psuedoInverseJacobian * endEffectorVelocity_;
     //Publish the joint velocities to the robot here
     for(int i = 0; i < (robot_->getNumberOfJoints()); i++){
