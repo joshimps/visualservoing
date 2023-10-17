@@ -14,7 +14,7 @@
 
     <include>
       <uri>model://aruco-marker-id=1</uri>
-      <pose>0.594 0.748 0.788 0 0 -1.5707</pose>
+      <pose>0.59 0.74 0.78 0 0 -1.57</pose>
     </include>
 
   </world>
