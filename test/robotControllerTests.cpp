@@ -93,6 +93,10 @@ TEST(RobotController,tesEndEffectorVelocity){
     ASSERT_NEAR(robotController.getEndEffectorVelocity()(5,0),-0.2944,0.001);
 }
 
+TEST(RobotController,testJointVelocity){
+    
+}
+
 
 
 
