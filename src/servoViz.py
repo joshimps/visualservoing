@@ -4,8 +4,11 @@ from visualization_msgs.msg import Marker
 from geometry_msgs.msg import Point
 from geometry_msgs.msg import PoseStamped
 from std_msgs.msg import Float64MultiArray
+import math
+import time
+from tf.transformations import quaternion_from_euler
+# from scipy.spatial.transform import Rotation as R
 import numpy as np
-
 
 
 def vector_callback(data):
@@ -71,19 +74,38 @@ def vector_callback(data):
     plane.pose.position.y = -0.2
     plane.pose.position.z = 0.1
 
-    # Set the orientation (quaternion) - Identity quaternion
-    w, x, y, z = get_quaternion_from_euler(data.data[3]*10, data.data[4]*10, data.data[5]*10)
+    # # Set the orientation (quaternion) - Identity quaternion
+    # rospy.loginfo("New Pose Reading")
+    # rospy.loginfo("Original Euler angles (roll, pitch, yaw): {}, {}, {}".format(data.data[3], data.data[4], data.data[5]))
+
+    # # tf.transformations method
+    # orientation = quaternion_from_euler(data.data[3], data.data[4], data.data[5], axes='rxyz')
+    # rospy.loginfo("Quaternion values: {}".format(orientation))
+
+    # w = orientation[3]
+    # x = orientation[0]
+    # y = orientation[1]
+    # z = orientation[2]
+    # convert_back = euler_from_quaternion(x,y,z,w)
+    
+    # rospy.loginfo("Euler angles (roll, pitch, yaw): {}".format(convert_back))
+
     # w, x, y, z = get_quaternion_from_euler(d, data.pose.orientation.y, data.pose.orientation.z)
 
-    # plane.pose.orientation.x = -data.pose.orientation.x
-    # plane.pose.orientation.y = -data.pose.orientation.y
-    # plane.pose.orientation.z = -data.pose.orientation.z
-    # plane.pose.orientation.w = -data.pose.orientation.w
+    # plane.pose.orientation.x = data.pose.orientation.x
+    # plane.pose.orientation.y = data.pose.orientation.y
+    # plane.pose.orientation.z = data.pose.orientation.z
+    # plane.pose.orientation.w = data.pose.orientation.w
 
-    plane.pose.orientation.x = x
-    plane.pose.orientation.y = y
-    plane.pose.orientation.z = z
-    plane.pose.orientation.w = w
+    plane.pose.orientation.x = data.data[4]
+    plane.pose.orientation.y = data.data[5]
+    plane.pose.orientation.z = data.data[6]
+    plane.pose.orientation.w = -data.data[3]
+
+    # plane.pose.orientation.x = x
+    # plane.pose.orientation.y = y
+    # plane.pose.orientation.z = z
+    # plane.pose.orientation.w = w
 
     marker_pub.publish(plane)
 
@@ -108,6 +130,28 @@ def get_quaternion_from_euler(roll, pitch, yaw):
  
   return [qx, qy, qz, qw]
 
+def euler_from_quaternion(x, y, z, w):
+        """
+        Convert a quaternion into euler angles (roll, pitch, yaw)
+        roll is rotation around x in radians (counterclockwise)
+        pitch is rotation around y in radians (counterclockwise)
+        yaw is rotation around z in radians (counterclockwise)
+        """
+        t0 = +2.0 * (w * x + y * z)
+        t1 = +1.0 - 2.0 * (x * x + y * y)
+        roll_x = math.atan2(t0, t1)
+     
+        t2 = +2.0 * (w * y - z * x)
+        t2 = +1.0 if t2 > +1.0 else t2
+        t2 = -1.0 if t2 < -1.0 else t2
+        pitch_y = math.asin(t2)
+     
+        t3 = +2.0 * (w * z + x * y)
+        t4 = +1.0 - 2.0 * (y * y + z * z)
+        yaw_z = math.atan2(t3, t4)
+     
+        return roll_x, pitch_y, yaw_z # in radians
+
 # def euler_to_quaternion(roll, pitch, yaw):
 #     cy = np.cos(yaw * 0.5)
 #     sy = np.sin(yaw * 0.5)
@@ -128,6 +172,6 @@ if __name__ == '__main__':
     
     rospy.init_node('vector_visualisation_node', anonymous= True)
     marker_pub = rospy.Publisher('visualization_marker', Marker, queue_size=1)
-    velocity_sub = rospy.Subscriber('visual_servoing/end_effector_velocity', Float64MultiArray,  vector_callback)
+    velocity_sub = rospy.Subscriber('end_effector_velocity_reporting/end_effector_velocity', Float64MultiArray,  vector_callback)
     # velocity_sub = rospy.Subscriber('/aruco_single/pose', PoseStamped, vector_callback)
     rospy.spin()
