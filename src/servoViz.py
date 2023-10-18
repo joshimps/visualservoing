@@ -20,12 +20,14 @@ def vector_callback(data):
     start_point.y = 0.0
     start_point.z = 0.0
     end_point = Point()
-    # end_point.x = -10* data.data[2]
-    # end_point.y = -10* data.data[0]
-    # end_point.z = -10* data.data[1]
-    end_point.x = data.pose.position.z
-    end_point.y = -data.pose.position.x
-    end_point.z = -data.pose.position.y
+
+    # End Effector Movement
+    end_point.x = 10* data.data[0]
+    end_point.y = 10* data.data[1]
+    end_point.z = 10* data.data[2]
+    # end_point.x = data.pose.position.z
+    # end_point.y = -data.pose.position.x
+    # end_point.z = -data.pose.position.y
 
     marker.points.append(start_point)
     marker.points.append(end_point)
@@ -70,13 +72,18 @@ def vector_callback(data):
     plane.pose.position.z = 0.1
 
     # Set the orientation (quaternion) - Identity quaternion
-    # w, x, y, z = get_quaternion_from_euler(data.data[3]*10, data.data[4]*10, data.data[5]*10)
+    w, x, y, z = get_quaternion_from_euler(data.data[3]*10, data.data[4]*10, data.data[5]*10)
     # w, x, y, z = get_quaternion_from_euler(d, data.pose.orientation.y, data.pose.orientation.z)
 
-    plane.pose.orientation.x = -data.pose.orientation.x
-    plane.pose.orientation.y = -data.pose.orientation.y
-    plane.pose.orientation.z = -data.pose.orientation.z
-    plane.pose.orientation.w = -data.pose.orientation.w
+    # plane.pose.orientation.x = -data.pose.orientation.x
+    # plane.pose.orientation.y = -data.pose.orientation.y
+    # plane.pose.orientation.z = -data.pose.orientation.z
+    # plane.pose.orientation.w = -data.pose.orientation.w
+
+    plane.pose.orientation.x = x
+    plane.pose.orientation.y = y
+    plane.pose.orientation.z = z
+    plane.pose.orientation.w = w
 
     marker_pub.publish(plane)
 
@@ -121,6 +128,6 @@ if __name__ == '__main__':
     
     rospy.init_node('vector_visualisation_node', anonymous= True)
     marker_pub = rospy.Publisher('visualization_marker', Marker, queue_size=1)
-    # velocity_sub = rospy.Subscriber('eeVel', Float64MultiArray,  vector_callback)
-    velocity_sub = rospy.Subscriber('/aruco_single/pose', PoseStamped, vector_callback)
+    velocity_sub = rospy.Subscriber('visual_servoing/end_effector_velocity', Float64MultiArray,  vector_callback)
+    # velocity_sub = rospy.Subscriber('/aruco_single/pose', PoseStamped, vector_callback)
     rospy.spin()
