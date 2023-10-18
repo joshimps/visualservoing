@@ -43,7 +43,7 @@
   <node name="spawn_gazebo_model_0" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param robot_description -model robot 
               -x 0.11 -z 0.69 -y 0
-              -J shoulder_pan_joint 4.712
+              -J shoulder_pan_joint 0
               -J shoulder_lift_joint 0
               -J elbow_joint 0
               -J wrist_1_joint 0
