@@ -156,7 +156,5 @@ void RobotController::clockCallback(const rosgraph_msgs::ClockConstPtr &msg){
     //If gretaer than 1 second since fiducial publish
     if(clock.clock.sec - timeAtFiducialPublish_.sec > 1 && recievedFiducial_){
         ROS_ERROR_STREAM("LOST SIGHT OF FIDUCIAL");
-        stallRobot();
-        ros::shutdown();
     }
 }
