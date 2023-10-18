@@ -16,14 +16,14 @@ Robot::Robot(ros::NodeHandle nh, std::vector<double> d, std::vector<double> a, s
     numberOfJoints_ = d_.size();
 
     //Row 1
-    baseTransform_(0,0) = 1;
+    baseTransform_(0,0) = -1;
     baseTransform_(0,1) = 0;
     baseTransform_(0,2) = 0;
     baseTransform_(0,3) = 0;
 
     //Row 2
     baseTransform_(1,0) = 0;
-    baseTransform_(1,1) = 1;
+    baseTransform_(1,1) = -1;
     baseTransform_(1,2) = 0;
     baseTransform_(1,3) = 0;
 
@@ -31,14 +31,13 @@ Robot::Robot(ros::NodeHandle nh, std::vector<double> d, std::vector<double> a, s
     baseTransform_(2,0) = 0;
     baseTransform_(2,1) = 0;
     baseTransform_(2,2) = 1;
-    baseTransform_(2,3) = 0;
+    baseTransform_(2,3) = 0.69;
 
     //Row 4
     baseTransform_(3,0) = 0;
     baseTransform_(3,1) = 0;
     baseTransform_(3,2) = 0;
     baseTransform_(3,3) = 1;
-    
     
 }
 
@@ -259,7 +258,10 @@ void Robot::calculateJointTransformsToBase(){
     jointTransformsToBase_.clear();
     Eigen::MatrixXd jointTransformToBase = jointTransforms_.at(0);
     jointTransformsToBase_.push_back(jointTransformToBase);
+
+    ROS_DEBUG_STREAM("\n" << baseTransform_);
     ROS_DEBUG_STREAM("JOINT TO BASE TRANSFORMS");
+    ROS_DEBUG_STREAM("\n" << jointTransformToBase);
     for(int i = 1; i < jointTransforms_.size(); i++){
         
         jointTransformToBase = jointTransformToBase * jointTransforms_.at(i); 
@@ -268,7 +270,6 @@ void Robot::calculateJointTransformsToBase(){
     }
 }
 
-// Please please please this needs unit testing to ensure its right
 void Robot::calculateJacobian(){
     
     Eigen::Vector3d unitVector;

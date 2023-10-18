@@ -136,9 +136,26 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
     fiducialTranslationLocal_(0,0) = fiducialPoseStampedLocal_.pose.position.x;
     fiducialTranslationLocal_(1,0) = fiducialPoseStampedLocal_.pose.position.y;
     fiducialTranslationLocal_(2,0) = fiducialPoseStampedLocal_.pose.position.z;
-    
-    fiducialRotationLocal_ = fiducialQuaternion;     
 
+    Eigen::Matrix3d rotationMatrix = fiducialQuaternion.normalized().toRotationMatrix();
+    Eigen::Matrix3d adjustmentMatrix;
+
+    adjustmentMatrix(0,0) = 1;
+    adjustmentMatrix(0,1) = 0;
+    adjustmentMatrix(0,2) = 0;
+
+    adjustmentMatrix(1,0) = 0;
+    adjustmentMatrix(1,1) = -1;
+    adjustmentMatrix(1,2) = 0;
+
+    adjustmentMatrix(2,0) = 0;
+    adjustmentMatrix(2,1) = 0;
+    adjustmentMatrix(2,2) = -1;
+
+    fiducialRotationLocal_ = (rotationMatrix*adjustmentMatrix);     
+
+    ROS_INFO_STREAM("\n" << fiducialTranslationLocal_);
+    ROS_INFO_STREAM("\n" << fiducialRotationLocal_.toRotationMatrix());
     calculateEndEffectorVelocity();
     
     if(euclidianNorm_ > errorThreshold_){
