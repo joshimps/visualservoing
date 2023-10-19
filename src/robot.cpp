@@ -67,7 +67,7 @@ sensor_msgs::JointState Robot::getJointState(){
 
 Eigen::MatrixXd Robot::getEndEffectorTransform(){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
-    return jointTransformsToBase_.at(numberOfJoints_-1);
+    return jointTransformsToBase_.at(numberOfJoints_-1) * baseTransform_;
 }
 
 Eigen::MatrixXd Robot::getJointTransform(int i){
@@ -85,6 +85,12 @@ Eigen::MatrixXd Robot::getJointTransformToBase(int i){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
     
     return jointTransformsToBase_.at(i);
+}
+
+Eigen::MatrixXd Robot::getJointTransformToWorld(int i){
+    std::unique_lock<std::mutex> lck(jointStateMutex_);
+    
+    return jointTransformsToWorld_.at(i);
 }
 
 Eigen::MatrixXd Robot::getJacobian(){
@@ -217,7 +223,7 @@ void Robot::calculateJointTransforms(){
         tz(2,0) = 0;
         tz(2,1) = 0;
         tz(2,2) = 1;
-        tz(2,3) = d_.at(i);
+        tz(2,3) = d_.at(jointOrder.at(i));
 
         //Row 4
         tz(3,0) = 0;
@@ -231,7 +237,7 @@ void Robot::calculateJointTransforms(){
         tx(0,0) = 1;
         tx(0,1) = 0;
         tx(0,2) = 0;
-        tx(0,3) = a_.at(i);
+        tx(0,3) = a_.at(jointOrder.at(i));
 
         //Row 2
         tx(1,0) = 0;
@@ -261,14 +267,14 @@ void Robot::calculateJointTransforms(){
 
         //Row 2
         tRx(1,0) = 0;
-        tRx(1,1) = cos(alpha_.at(i));
-        tRx(1,2) = -sin(alpha_.at(i));
+        tRx(1,1) = cos(alpha_.at(jointOrder.at(i)));
+        tRx(1,2) = -sin(alpha_.at(jointOrder.at(i)));
         tRx(1,3) = 0;
 
         //Row 3
         tRx(2,0) = 0;
-        tRx(2,1) = sin(alpha_.at(i));
-        tRx(2,2) = cos(alpha_.at(i));
+        tRx(2,1) = sin(alpha_.at(jointOrder.at(i)));
+        tRx(2,2) = cos(alpha_.at(jointOrder.at(i)));
         tRx(2,3) = 0;
 
         //Row 4
@@ -296,6 +302,17 @@ void Robot::calculateJointTransformsToBase(){
         jointTransformToBase = jointTransformToBase * jointTransforms_.at(i); 
         ROS_DEBUG_STREAM("\n" << jointTransformToBase);
         jointTransformsToBase_.push_back(jointTransformToBase);
+    }
+}
+
+void Robot::calculateJointTransformsToWorld(){
+    jointTransformsToWorld_.clear();
+    ROS_DEBUG_STREAM("JOINT TO WORLD TRANSFORMS");
+    for(int i = 0; i < jointTransformsToBase_.size(); i++){
+        Eigen::MatrixXd jointTransformToWorld = (baseTransform_ * jointTransformsToBase_.at(i));
+        
+        ROS_DEBUG_STREAM("\n" << jointTransformToWorld);
+        jointTransformsToWorld_.push_back(jointTransformToWorld);
     }
 }
 

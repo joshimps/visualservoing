@@ -21,6 +21,7 @@ class Robot{
     Eigen::MatrixXd getEndEffectorTransform();
     Eigen::MatrixXd getJointTransform(int i);
     Eigen::MatrixXd getJointTransformToBase(int i);
+    Eigen::MatrixXd getJointTransformToWorld(int i);
     Eigen::MatrixXd getBaseTransform();
     Eigen::MatrixXd getJacobian();
     Eigen::MatrixXd getTransposeJacobian();
@@ -40,6 +41,7 @@ class Robot{
     void calculateJointTransforms();
     void calculateJacobian();
     void calculateJointTransformsToBase();
+    void calculateJointTransformsToWorld();
 
     ///////////////////////////////////////////////////////////
     // Callbacks
@@ -69,6 +71,7 @@ class Robot{
     sensor_msgs::JointState jointStates_;
     std::vector<Eigen::Matrix4d> jointTransforms_;
     std::vector<Eigen::Matrix4d> jointTransformsToBase_;
+    std::vector<Eigen::Matrix4d> jointTransformsToWorld_;
     Eigen::MatrixXd jacobian_;
     int numberOfJoints_;
 
