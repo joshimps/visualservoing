@@ -23,7 +23,7 @@ RobotController::RobotController(ros::NodeHandle nh, Robot* robot, double gain, 
     clockSub_ = nh_.subscribe("/clock", 10, &RobotController::clockCallback, this);
     jointVelocityPub_ = nh_.advertise<std_msgs::Float64MultiArray>("joint_group_vel_controller/command", 10, false);
     endEffectorVelocityPub_ = nh_.advertise<std_msgs::Float64MultiArray>("visual_servoing/end_effector_velocity", 10, false);
-    fiducialNewPose_ = nh_.advertise<geometry_msgs::Pose>("visual_servoing/fiducial_pose", 10, false);
+    fiducialNewPose_ = nh_.advertise<geometry_msgs::PoseStamped>("visual_servoing/fiducial_pose", 10, false);
 
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
@@ -123,46 +123,132 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
     robot_->calculateJointTransformsToBase();
     robot_->calculateJacobian(); 
     
-    geometry_msgs::PoseStamped fiducialPoseStampedLocal_ = *msg;
+    geometry_msgs::PoseStamped fiducialPoseStampedGlobal_ = *msg;
 
     //These fiducial positions need to be updated as the camera has a different coord system to the end effector
 
-    Eigen::Quaterniond fiducialQuaternion;
-    fiducialQuaternion.w() = fiducialPoseStampedLocal_.pose.orientation.w;
-    fiducialQuaternion.x() = fiducialPoseStampedLocal_.pose.orientation.x;
-    fiducialQuaternion.y() = fiducialPoseStampedLocal_.pose.orientation.y;
-    fiducialQuaternion.z() = fiducialPoseStampedLocal_.pose.orientation.z;
+    Eigen::Matrix4d fiducialTransformGlobal;
+    Eigen::Quaterniond fiducialQuaternionGlobal;
+    Eigen::Matrix3d fiducialRotationMatrixGlobal;
+    Eigen::Matrix4d fiducialTransformGlobalAdjusted;
+    Eigen::Matrix4d fiducialTransformEndEffector;
+    Eigen::Matrix3d fiducialRotationMatrixEndEffector;
+    Eigen::Vector3d fiducialTranslationEndEffector;
 
-    fiducialTranslationLocal_(0,0) = fiducialPoseStampedLocal_.pose.position.x;
-    fiducialTranslationLocal_(1,0) = fiducialPoseStampedLocal_.pose.position.y;
-    fiducialTranslationLocal_(2,0) = fiducialPoseStampedLocal_.pose.position.z;
+    fiducialQuaternionGlobal.w() = fiducialPoseStampedGlobal_.pose.orientation.w;
+    fiducialQuaternionGlobal.x() = fiducialPoseStampedGlobal_.pose.orientation.x;
+    fiducialQuaternionGlobal.y() = fiducialPoseStampedGlobal_.pose.orientation.y;
+    fiducialQuaternionGlobal.z() = fiducialPoseStampedGlobal_.pose.orientation.z;
 
-    Eigen::Matrix3d rotationMatrix = fiducialQuaternion.normalized().toRotationMatrix();
-    Eigen::Matrix3d adjustmentMatrix;
+    fiducialRotationMatrixGlobal = fiducialQuaternionGlobal.normalized().toRotationMatrix();
+
+    fiducialTransformGlobal(0,0) = fiducialRotationMatrixGlobal(0,0);
+    fiducialTransformGlobal(0,1) = fiducialRotationMatrixGlobal(0,1);
+    fiducialTransformGlobal(0,2) = fiducialRotationMatrixGlobal(0,2);
+    fiducialTransformGlobal(0,3) = fiducialPoseStampedGlobal_.pose.position.x;
+
+    fiducialTransformGlobal(1,0) = fiducialRotationMatrixGlobal(1,0);
+    fiducialTransformGlobal(1,1) = fiducialRotationMatrixGlobal(1,1);
+    fiducialTransformGlobal(1,2) = fiducialRotationMatrixGlobal(1,2);
+    fiducialTransformGlobal(1,3) = fiducialPoseStampedGlobal_.pose.position.y;
+
+    fiducialTransformGlobal(2,0) = fiducialRotationMatrixGlobal(2,0);
+    fiducialTransformGlobal(2,1) = fiducialRotationMatrixGlobal(2,1);
+    fiducialTransformGlobal(2,2) = fiducialRotationMatrixGlobal(2,2);
+    fiducialTransformGlobal(2,3) = fiducialPoseStampedGlobal_.pose.position.z;
+
+    fiducialTransformGlobal(3,0) = 0;
+    fiducialTransformGlobal(3,1) = 0;
+    fiducialTransformGlobal(3,2) = 0;
+    fiducialTransformGlobal(3,3) = 1;
+
+    Eigen::Matrix4d adjustmentMatrix;
 
     adjustmentMatrix(0,0) = 1;
     adjustmentMatrix(0,1) = 0;
     adjustmentMatrix(0,2) = 0;
+    adjustmentMatrix(0,3) = 0;
 
     adjustmentMatrix(1,0) = 0;
     adjustmentMatrix(1,1) = -1;
     adjustmentMatrix(1,2) = 0;
+    adjustmentMatrix(1,3) = 0;
 
     adjustmentMatrix(2,0) = 0;
     adjustmentMatrix(2,1) = 0;
     adjustmentMatrix(2,2) = -1;
+    adjustmentMatrix(2,3) = 0;
 
-    fiducialRotationLocal_ = (rotationMatrix*adjustmentMatrix);     
+    adjustmentMatrix(3,0) = 0;
+    adjustmentMatrix(3,1) = 0;
+    adjustmentMatrix(3,2) = 0;
+    adjustmentMatrix(3,3) = 1;
 
-    ROS_INFO_STREAM("\n" << fiducialTranslationLocal_);
-    ROS_INFO_STREAM("\n" << fiducialRotationLocal_.toRotationMatrix());
-    calculateEndEffectorVelocity();
+    fiducialTransformGlobalAdjusted = fiducialTransformGlobal * adjustmentMatrix;
+
+    fiducialTransformEndEffector = fiducialTransformGlobalAdjusted * (robot_->getEndEffectorTransform()).inverse();
+
+    fiducialRotationMatrixEndEffector(0,0) = fiducialTransformEndEffector(0,0);
+    fiducialRotationMatrixEndEffector(0,1) = fiducialTransformEndEffector(0,1);
+    fiducialRotationMatrixEndEffector(0,2) = fiducialTransformEndEffector(0,2);
+    fiducialTranslationEndEffector(0,0) = fiducialTransformEndEffector(0,3);
+
+    fiducialRotationMatrixEndEffector(1,0) = fiducialTransformEndEffector(1,0);
+    fiducialRotationMatrixEndEffector(1,1) = fiducialTransformEndEffector(1,1);
+    fiducialRotationMatrixEndEffector(1,2) = fiducialTransformEndEffector(1,2);
+    fiducialTranslationEndEffector(1,0) = fiducialTransformEndEffector(1,3);
+
+    fiducialRotationMatrixEndEffector(2,0) = fiducialTransformEndEffector(2,0);
+    fiducialRotationMatrixEndEffector(2,1) = fiducialTransformEndEffector(2,1);
+    fiducialRotationMatrixEndEffector(2,2) = fiducialTransformEndEffector(2,2);
+    fiducialTranslationEndEffector(2,0) = fiducialTransformEndEffector(2,3);
+
+    fiducialRotationLocal_ = fiducialRotationMatrixEndEffector;
+    fiducialTranslationLocal_ = fiducialTranslationEndEffector;
+
+    geometry_msgs::PoseStamped pose;
+
+    Eigen::Matrix3d endEffectorMatrixEndEffector;
+    Eigen::Vector3d endEffectorTranslation;
+    Eigen::Quaterniond endEffectorQuaternion;
+
+    endEffectorMatrixEndEffector(0,0) = robot_->getJointTransformToBase(5)(0,0);
+    endEffectorMatrixEndEffector(0,1) = robot_->getJointTransformToBase(5)(0,1);
+    endEffectorMatrixEndEffector(0,2) = robot_->getJointTransformToBase(5)(0,2);
+    endEffectorTranslation(0,0) = robot_->getEndEffectorTransform()(0,3);
+
+    endEffectorMatrixEndEffector(1,0) = robot_->getJointTransformToBase(5)(1,0);
+    endEffectorMatrixEndEffector(1,1) = robot_->getJointTransformToBase(5)(1,1);
+    endEffectorMatrixEndEffector(1,2) = robot_->getJointTransformToBase(5)(1,2);
+    endEffectorTranslation(1,0) = robot_->getEndEffectorTransform()(1,3);
+
+    endEffectorMatrixEndEffector(2,0) = robot_->getJointTransformToBase(5)(2,0);
+    endEffectorMatrixEndEffector(2,1) = robot_->getJointTransformToBase(5)(2,1);
+    endEffectorMatrixEndEffector(2,2) = robot_->getJointTransformToBase(5)(2,2);
+    endEffectorTranslation(2,0) = robot_->getJointTransformToBase(5)(2,3);
+
+    endEffectorQuaternion = endEffectorMatrixEndEffector;
+
+    pose.pose.orientation.w = endEffectorQuaternion.w();
+    pose.pose.orientation.x = endEffectorQuaternion.x();
+    pose.pose.orientation.y = endEffectorQuaternion.y();
+    pose.pose.orientation.z = endEffectorQuaternion.z();
+
+    pose.pose.position.x = endEffectorTranslation(0,0);
+    pose.pose.position.y = endEffectorTranslation(1,0);
+    pose.pose.position.z = endEffectorTranslation(2,0);
+
+    pose.header.frame_id = fiducialPoseStampedGlobal_.header.frame_id;
+
+    fiducialNewPose_.publish(pose);
     
+    calculateEndEffectorVelocity();
+
     if(euclidianNorm_ > errorThreshold_){
-        moveRobot();     
+        //moveRobot();     
     }
     else{
-        stallRobot();
+        //stallRobot();
     }
     
 }
