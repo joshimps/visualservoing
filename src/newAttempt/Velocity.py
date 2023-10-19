@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import rospy
 import tf2_ros
 from geometry_msgs.msg import PoseStamped
@@ -10,7 +10,7 @@ vel_gain = 0.1
 rot_gain = 10
 refQuat = PoseStamped()
 refQuat.pose.orientation.x = 0
-refQuat.pose.orientation.y = 1
+refQuat.pose.orientation.y = 0.5
 refQuat.pose.orientation.z = 0
 refQuat.pose.orientation.w = 0
 
@@ -34,7 +34,7 @@ def procFiducial(msg):
     velMsg = Float32MultiArray()
     velMsg.data.append(msg.pose.position.x * vel_gain)
     velMsg.data.append(msg.pose.position.y * vel_gain)
-    velMsg.data.append((msg.pose.position.z -1) * vel_gain)
+    velMsg.data.append(msg.pose.position.z * vel_gain)
     qSource = msg.pose.orientation
     qTarget = refQuat.pose.orientation
     angularVel = angularVelfromQuat(qSource, qTarget, rot_gain)
@@ -52,7 +52,7 @@ if __name__ == "__main__":
     rospy.init_node("VelocityNode")
     rospy.loginfo("Starting VelocityNode.")
     fiducial_sub = rospy.Subscriber("aruco_single/pose", PoseStamped, procFiducial, queue_size=10)
-    velocity_pub = rospy.Publisher("eeVel", Float32MultiArray,queue_size=10) 
+    velocity_pub = rospy.Publisher("eeVel", Float32MultiArray, queue_size=10) 
         
     while not rospy.is_shutdown():
         pass
