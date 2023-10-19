@@ -249,10 +249,10 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
     calculateEndEffectorVelocity();
 
     if(euclidianNorm_ > errorThreshold_){
-        moveRobot();     
+        //moveRobot();     
     }
     else{
-        stallRobot();
+        //stallRobot();
     }
     
 }
