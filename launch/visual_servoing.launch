@@ -1,8 +1,0 @@
-<launch>
-  <node
-    pkg="visual_servoing"
-    type="visual_servoing"
-    name="visual_servoin_node" 
-    output="screen"
-  />
-</launch> 
