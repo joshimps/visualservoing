@@ -6,8 +6,8 @@ from std_msgs.msg import Float32MultiArray
 import numpy as np
 
 ## CFG ##
-vel_gain = 0.1
-rot_gain = 10
+vel_gain = 0.02
+rot_gain = 30
 refQuat = PoseStamped()
 refQuat.pose.orientation.x = 0
 refQuat.pose.orientation.y = 0.5
@@ -34,7 +34,11 @@ def procFiducial(msg):
     velMsg = Float32MultiArray()
     velMsg.data.append(msg.pose.position.x * vel_gain)
     velMsg.data.append(msg.pose.position.y * vel_gain)
+<<<<<<< HEAD
     velMsg.data.append(msg.pose.position.z * vel_gain)
+=======
+    velMsg.data.append((msg.pose.position.z-0.5) * vel_gain)
+>>>>>>> f0a273cab3d6dd681d5f5137f4e4148566ae6669
     qSource = msg.pose.orientation
     qTarget = refQuat.pose.orientation
     angularVel = angularVelfromQuat(qSource, qTarget, rot_gain)

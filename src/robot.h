@@ -12,7 +12,7 @@ class Robot{
     ///////////////////////////////////////////////////////////////////////////////////////////
     // Constructors and Destructors
     /////////////////////////////////////////////////////////////////////////////////////////
-    Robot(ros::NodeHandle nh, std::vector<double> d, std::vector<double> a, std::vector<double> alpha);
+    Robot(ros::NodeHandle nh, std::vector<double> d, std::vector<double> a, std::vector<double> alpha, std::vector<std::string> jointNames);
     
     ///////////////////////////////////////////////////////////////////////////////////////////
     // Getters
@@ -21,6 +21,7 @@ class Robot{
     Eigen::MatrixXd getEndEffectorTransform();
     Eigen::MatrixXd getJointTransform(int i);
     Eigen::MatrixXd getJointTransformToBase(int i);
+    Eigen::MatrixXd getBaseTransform();
     Eigen::MatrixXd getJacobian();
     Eigen::MatrixXd getTransposeJacobian();
     Eigen::MatrixXd getPseudoInverseJacobian();
@@ -29,7 +30,7 @@ class Robot{
     ///////////////////////////////////////////////////////////////////////////////////////////
     // Setters
     /////////////////////////////////////////////////////////////////////////////////////////
-    void setTheta(std::vector<double> theta);
+    void setTheta(std::vector<double> theta,std::vector<std::string> jointNames);
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -79,4 +80,5 @@ class Robot{
     std::vector<double> d_;
     std::vector<double> a_;
     std::vector<double> alpha_;
+    std::vector<std::string> jointNames_;
 };
