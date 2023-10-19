@@ -5,13 +5,14 @@
 /////////////////////////////////////////////////////////////////////////////////////////
 
 
-Robot::Robot(ros::NodeHandle nh, std::vector<double> d, std::vector<double> a, std::vector<double> alpha){
+Robot::Robot(ros::NodeHandle nh, std::vector<double> d, std::vector<double> a, std::vector<double> alpha, std::vector<std::string> jointNames){
     nh_ = nh;
     jointStateSub_ = nh_.subscribe("/joint_states", 3, &Robot::jointStateCallBack, this);
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
     d_ = d;
     a_ = a;
     alpha_ = alpha;
+    jointNames_ = jointNames;
     jacobian_.resize(6,d.size());
     numberOfJoints_ = d_.size();
 
@@ -38,6 +39,10 @@ Robot::Robot(ros::NodeHandle nh, std::vector<double> d, std::vector<double> a, s
     baseTransform_(3,1) = 0;
     baseTransform_(3,2) = 0;
     baseTransform_(3,3) = 1;
+
+    for(int i = 0; i < jointNames_.size(); i++){
+        jointTransforms_.push_back(baseTransform_);
+    }
     
 }
 
@@ -62,7 +67,7 @@ sensor_msgs::JointState Robot::getJointState(){
 
 Eigen::MatrixXd Robot::getEndEffectorTransform(){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
-    return jointTransforms_.at(numberOfJoints_-1);
+    return jointTransformsToBase_.at(numberOfJoints_-1);
 }
 
 Eigen::MatrixXd Robot::getJointTransform(int i){
@@ -70,6 +75,11 @@ Eigen::MatrixXd Robot::getJointTransform(int i){
     
     return jointTransforms_.at(i);
 }
+
+Eigen::MatrixXd Robot::getBaseTransform(){
+    return baseTransform_;
+}
+
 
 Eigen::MatrixXd Robot::getJointTransformToBase(int i){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
@@ -81,10 +91,12 @@ Eigen::MatrixXd Robot::getJacobian(){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
     return jacobian_;
 }
+
 Eigen::MatrixXd Robot::getTransposeJacobian(){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
     return jacobian_.transpose();
 }
+
 Eigen::MatrixXd Robot::getPseudoInverseJacobian(){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
 
@@ -122,10 +134,11 @@ int Robot::getNumberOfJoints(){
 // Setters
 /////////////////////////////////////////////////////////////////////////////////////////
 
-void Robot::setTheta(std::vector<double> theta){
+void Robot::setTheta(std::vector<double> theta, std::vector<std::string> jointNames){
     theta_ = theta;
     sensor_msgs::JointState jointStates;
     jointStates_.position = theta;
+    jointStates_.name = jointNames;
 }
 
 
@@ -134,15 +147,32 @@ void Robot::setTheta(std::vector<double> theta){
 /////////////////////////////////////////////////////////////////////////////////////////
 
 void Robot::calculateJointTransforms(){
-    jointTransforms_.clear();
 
+    std::unique_lock<std::mutex> lck(jointStateMutex_);
+    
     Eigen::Matrix4d tRz;
     Eigen::Matrix4d tz;
     Eigen::Matrix4d tx;
     Eigen::Matrix4d tRx;
 
     ROS_DEBUG_STREAM("JOINT TRANSFORMS");
-    for(int i = 0; i < d_.size(); i++){
+
+    std::vector<int> jointOrder;
+
+    if(jointStates_.name.size() != jointNames_.size()){
+        ROS_ERROR_STREAM("MORE JOINTS FOUND IN MESSAGE THAN PROVIDED IN jointNames_");
+    }
+
+    for(int i = 0; i < jointNames_.size(); i++){
+        for(int j = 0; j < jointStates_.name.size(); j++){
+            if(jointNames_.at(i) == jointStates_.name.at(j)){
+                jointOrder.push_back(j);
+                ROS_INFO_STREAM(j);
+            }
+        }
+    }
+    
+    for(int i = 0; i < jointNames_.size(); i++){
         //tRz
         
         //Row 1
@@ -246,10 +276,9 @@ void Robot::calculateJointTransforms(){
         tRx(3,1) = 0;
         tRx(3,2) = 0;
         tRx(3,3) = 1;
-        
-        jointTransforms_.push_back(tRz * tz * tx * tRx);
-        
-        ROS_DEBUG_STREAM("\n" << tRz * tz * tx * tRx);
+
+        jointTransforms_.at(jointOrder.at(i)) = (tRz * tz * tx * tRx);
+        ROS_DEBUG_STREAM("JOINT " << jointOrder.at(i) << "\n" << tRz * tz * tx * tRx);
 
     }   
 }
