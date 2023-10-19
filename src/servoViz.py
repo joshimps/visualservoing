@@ -3,14 +3,15 @@ import rospy
 from visualization_msgs.msg import Marker
 from geometry_msgs.msg import Point
 from geometry_msgs.msg import PoseStamped
-from std_msgs.msg import Float64MultiArray
+from std_msgs.msg import Float32MultiArray
 import math
 import time
 from tf.transformations import quaternion_from_euler
 # from scipy.spatial.transform import Rotation as R
 import numpy as np
-from tf.transformations import quaternion_from_euler
+from tf.transformations import euler_from_quaternion
 
+counter = 0
 
 def vector_callback(data):
   marker = Marker()
@@ -24,9 +25,11 @@ def vector_callback(data):
   start_point.y = 0.0
   start_point.z = 0.0
   end_point = Point()
-  end_point.x = data.data[0]
-  end_point.y = data.data[1]
-  end_point.z = data.data[2]
+  end_point.x = data.data[0] * 5
+  end_point.y = data.data[1] * 10
+  end_point.z = data.data[2] * 10
+
+  rospy.loginfo(end_point)
   # end_point.x = data.pose.position.z
   # end_point.y = -data.pose.position.x
   # end_point.z = -data.pose.position.y
@@ -41,7 +44,6 @@ def vector_callback(data):
   marker.color.b = 0.0
 
   # Set the orientation (quaternion) - Identity quaternion
-
   
 
   marker.pose.orientation.x = 0
@@ -76,8 +78,28 @@ def vector_callback(data):
   # Set the orientation (quaternion) - Identity quaternion
   # w, x, y, z = get_quaternion_from_euler(data.data[3]*10, data.data[4]*10, data.data[5]*10)
   # w, x, y, z = get_quaternion_from_euler(d, data.pose.orientation.y, data.pose.orientation.z)
-
+  angular_velocity = [data.data[3],data.data[4], data.data[5]]
+  rospy.loginfo('Original:')
+  rospy.loginfo(angular_velocity)
   w, x, y, z = quaternion_from_euler(data.data[3],data.data[4], data.data[5])
+  roll, pitch, yaw = euler_from_quaternion([w,x,y,z])
+
+  rospy.loginfo('Quaternion:')
+  rospy.loginfo(quaternion_from_euler(data.data[3],data.data[4], data.data[5]))
+
+  # reversed_velocity = [roll,pitch,yaw]
+  # rospy.loginfo('Reversed Calculated RPY:')
+  # rospy.loginfo(euler_from_quaternion([w,x,y,z]))
+
+  global counter 
+
+  if counter == 0:
+     x = 0
+     y = 0
+     z = 0
+     w = 1
+     counter = 1
+
   plane.pose.orientation.x = x
   plane.pose.orientation.y = y
   plane.pose.orientation.z = z  
@@ -106,27 +128,27 @@ def get_quaternion_from_euler(roll, pitch, yaw):
  
   return [qx, qy, qz, qw]
 
-def euler_from_quaternion(x, y, z, w):
-        """
-        Convert a quaternion into euler angles (roll, pitch, yaw)
-        roll is rotation around x in radians (counterclockwise)
-        pitch is rotation around y in radians (counterclockwise)
-        yaw is rotation around z in radians (counterclockwise)
-        """
-        t0 = +2.0 * (w * x + y * z)
-        t1 = +1.0 - 2.0 * (x * x + y * y)
-        roll_x = math.atan2(t0, t1)
+# def euler_from_quaternion(x, y, z, w):
+#         """
+#         Convert a quaternion into euler angles (roll, pitch, yaw)
+#         roll is rotation around x in radians (counterclockwise)
+#         pitch is rotation around y in radians (counterclockwise)
+#         yaw is rotation around z in radians (counterclockwise)
+#         """
+#         t0 = +2.0 * (w * x + y * z)
+#         t1 = +1.0 - 2.0 * (x * x + y * y)
+#         roll_x = math.atan2(t0, t1)
      
-        t2 = +2.0 * (w * y - z * x)
-        t2 = +1.0 if t2 > +1.0 else t2
-        t2 = -1.0 if t2 < -1.0 else t2
-        pitch_y = math.asin(t2)
+#         t2 = +2.0 * (w * y - z * x)
+#         t2 = +1.0 if t2 > +1.0 else t2
+#         t2 = -1.0 if t2 < -1.0 else t2
+#         pitch_y = math.asin(t2)
      
-        t3 = +2.0 * (w * z + x * y)
-        t4 = +1.0 - 2.0 * (y * y + z * z)
-        yaw_z = math.atan2(t3, t4)
+#         t3 = +2.0 * (w * z + x * y)
+#         t4 = +1.0 - 2.0 * (y * y + z * z)
+#         yaw_z = math.atan2(t3, t4)
      
-        return roll_x, pitch_y, yaw_z # in radians
+#         return roll_x, pitch_y, yaw_z # in radians
 
 # def euler_to_quaternion(roll, pitch, yaw):
 #     cy = np.cos(yaw * 0.5)
@@ -146,8 +168,9 @@ def euler_from_quaternion(x, y, z, w):
 
 if __name__ == '__main__':
     
+    
     rospy.init_node('vector_visualisation_node', anonymous= True)
-    marker_pub = rospy.Publisher('visualization_marker', Marker, queue_size=1)
-    velocity_sub = rospy.Subscriber('eeVel', Float64MultiArray,  vector_callback)
+    marker_pub = rospy.Publisher('visualization_marker', Marker, queue_size=2)
+    velocity_sub = rospy.Subscriber('eeVel', Float32MultiArray,  vector_callback)
     # velocity_sub = rospy.Subscriber('/aruco_single/pose', PoseStamped, vector_callback)
     rospy.spin()
