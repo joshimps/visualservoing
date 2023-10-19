@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import rospy
 import tf2_ros
 from geometry_msgs.msg import PoseStamped
@@ -6,8 +6,8 @@ from std_msgs.msg import Float32MultiArray
 import numpy as np
 
 ## CFG ##
-vel_gain = 0.1
-rot_gain = 10
+vel_gain = 0.02
+rot_gain = 30
 refQuat = PoseStamped()
 refQuat.pose.orientation.x = 0
 refQuat.pose.orientation.y = 1
@@ -34,7 +34,7 @@ def procFiducial(msg):
     velMsg = Float32MultiArray()
     velMsg.data.append(msg.pose.position.x * vel_gain)
     velMsg.data.append(msg.pose.position.y * vel_gain)
-    velMsg.data.append((msg.pose.position.z -1) * vel_gain)
+    velMsg.data.append((msg.pose.position.z-0.5) * vel_gain)
     qSource = msg.pose.orientation
     qTarget = refQuat.pose.orientation
     angularVel = angularVelfromQuat(qSource, qTarget, rot_gain)
