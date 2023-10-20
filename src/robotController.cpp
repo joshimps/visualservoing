@@ -121,6 +121,7 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
 
     robot_->calculateJointTransforms();
     robot_->calculateJointTransformsToBase();
+    robot_->calculateJointTransformsToWorld();
     robot_->calculateJacobian(); 
     
     geometry_msgs::PoseStamped fiducialPoseStampedGlobal_ = *msg;
@@ -186,7 +187,7 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
 
     fiducialTransformGlobalAdjusted = fiducialTransformGlobal * adjustmentMatrix;
 
-    fiducialTransformEndEffector = fiducialTransformGlobalAdjusted * (robot_->getEndEffectorTransform()).inverse();
+    fiducialTransformEndEffector = fiducialTransformGlobalAdjusted * (robot_->getJointTransformToWorld(5)).inverse();
 
     fiducialRotationMatrixEndEffector(0,0) = fiducialTransformEndEffector(0,0);
     fiducialRotationMatrixEndEffector(0,1) = fiducialTransformEndEffector(0,1);
@@ -206,26 +207,27 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
     fiducialRotationLocal_ = fiducialRotationMatrixEndEffector;
     fiducialTranslationLocal_ = fiducialTranslationEndEffector;
 
+
     geometry_msgs::PoseStamped pose;
 
     Eigen::Matrix3d endEffectorMatrixEndEffector;
     Eigen::Vector3d endEffectorTranslation;
     Eigen::Quaterniond endEffectorQuaternion;
 
-    endEffectorMatrixEndEffector(0,0) = robot_->getJointTransformToBase(5)(0,0);
-    endEffectorMatrixEndEffector(0,1) = robot_->getJointTransformToBase(5)(0,1);
-    endEffectorMatrixEndEffector(0,2) = robot_->getJointTransformToBase(5)(0,2);
-    endEffectorTranslation(0,0) = robot_->getEndEffectorTransform()(0,3);
+    endEffectorMatrixEndEffector(0,0) = robot_->getJointTransformToWorld(5)(0,0);
+    endEffectorMatrixEndEffector(0,1) = robot_->getJointTransformToWorld(5)(0,1);
+    endEffectorMatrixEndEffector(0,2) = robot_->getJointTransformToWorld(5)(0,2);
+    endEffectorTranslation(0,0) =       robot_->getJointTransformToWorld(5)(0,3);
 
-    endEffectorMatrixEndEffector(1,0) = robot_->getJointTransformToBase(5)(1,0);
-    endEffectorMatrixEndEffector(1,1) = robot_->getJointTransformToBase(5)(1,1);
-    endEffectorMatrixEndEffector(1,2) = robot_->getJointTransformToBase(5)(1,2);
-    endEffectorTranslation(1,0) = robot_->getEndEffectorTransform()(1,3);
+    endEffectorMatrixEndEffector(1,0) = robot_->getJointTransformToWorld(5)(1,0);
+    endEffectorMatrixEndEffector(1,1) = robot_->getJointTransformToWorld(5)(1,1);
+    endEffectorMatrixEndEffector(1,2) = robot_->getJointTransformToWorld(5)(1,2);
+    endEffectorTranslation(1,0) =       robot_->getJointTransformToWorld(5)(1,3);
 
-    endEffectorMatrixEndEffector(2,0) = robot_->getJointTransformToBase(5)(2,0);
-    endEffectorMatrixEndEffector(2,1) = robot_->getJointTransformToBase(5)(2,1);
-    endEffectorMatrixEndEffector(2,2) = robot_->getJointTransformToBase(5)(2,2);
-    endEffectorTranslation(2,0) = robot_->getJointTransformToBase(5)(2,3);
+    endEffectorMatrixEndEffector(2,0) = robot_->getJointTransformToWorld(5)(2,0);
+    endEffectorMatrixEndEffector(2,1) = robot_->getJointTransformToWorld(5)(2,1);
+    endEffectorMatrixEndEffector(2,2) = robot_->getJointTransformToWorld(5)(2,2);
+    endEffectorTranslation(2,0) =       robot_->getJointTransformToWorld(5)(2,3);
 
     endEffectorQuaternion = endEffectorMatrixEndEffector;
 
@@ -241,14 +243,16 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
     pose.header.frame_id = fiducialPoseStampedGlobal_.header.frame_id;
 
     fiducialNewPose_.publish(pose);
+
+    ROS_INFO_STREAM(fiducialTransformEndEffector);
     
     calculateEndEffectorVelocity();
 
     if(euclidianNorm_ > errorThreshold_){
-        //moveRobot();     
+        moveRobot();     
     }
     else{
-        //stallRobot();
+        stallRobot();
     }
     
 }
