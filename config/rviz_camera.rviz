@@ -82,18 +82,12 @@ Visualization Manager:
       Unreliable: false
       Value: true
     - Class: rviz/TF
-      Enabled: true
+      Enabled: false
       Filter (blacklist): ""
       Filter (whitelist): ""
       Frame Timeout: 15
       Frames:
         All Enabled: true
-        camera1:
-          Value: true
-        map:
-          Value: true
-        quad:
-          Value: true
       Marker Alpha: 1
       Marker Scale: 1
       Name: TF
@@ -101,15 +95,12 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        map:
-          camera1:
-            quad:
-              {}
+        {}
       Update Interval: 0
-      Value: true
+      Value: false
     - Class: rviz_textured_quads/MeshDisplayCustom
       Enabled: true
-      Image Topic: /camera/color/image_raw
+      Image Topic: /aruco_single/result
       Meters per pixel: 0.0020000000949949026
       Name: MeshDisplayCustom
       Quad Frame: quad
@@ -119,6 +110,7 @@ Visualization Manager:
       Marker Topic: visualization_marker
       Name: Marker
       Namespaces:
+        airplane: true
         vector_arrow: true
       Queue Size: 100
       Value: true
@@ -188,5 +180,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1481
-  X: 56
-  Y: 0
+  X: 72
+  Y: 27
