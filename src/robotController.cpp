@@ -57,7 +57,7 @@ void RobotController::moveRobot(){
 
     //Calculate the jacobian of the current pose 
     //The joint velocity is the jacobian multiplied by the error 
-   
+    ROS_INFO_STREAM("STALLING ROBOT \n");
     jointVelocities =  robot_->getPseudoInverseJacobian() * endEffectorVelocity_;
     //Publish the joint velocities to the robot here
     for(int i = 0; i < (robot_->getNumberOfJoints()); i++){
@@ -244,15 +244,16 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
 
     fiducialNewPose_.publish(pose);
 
-    ROS_INFO_STREAM(fiducialTransformEndEffector);
+    ROS_DEBUG_STREAM("FIDUCIAL TRANSFORM END EFFECTOR");
+    ROS_DEBUG_STREAM("\n" << fiducialTransformEndEffector);
     
     calculateEndEffectorVelocity();
 
     if(euclidianNorm_ > errorThreshold_){
-        //moveRobot();     
+        moveRobot();     
     }
     else{
-        //stallRobot();
+        stallRobot();
     }
     
 }

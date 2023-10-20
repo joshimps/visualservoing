@@ -338,9 +338,9 @@ void Robot::calculateJacobian(){
     unitVector(2,0) = 1;  
 
     //The translationMatrixNto0 will be the translation part of the transformation matrix N to 0
-    translationMatrixNtoB(0,0) = jointTransformsToBase_.at(jointTransformsToBase_.size()-1)(0,3);
-    translationMatrixNtoB(1,0) = jointTransformsToBase_.at(jointTransformsToBase_.size()-1)(1,3);
-    translationMatrixNtoB(2,0) = jointTransformsToBase_.at(jointTransformsToBase_.size()-1)(2,3);
+    translationMatrixNtoB(0,0) = jointTransformsToWorld_.at(jointTransformsToWorld_.size()-1)(0,3);
+    translationMatrixNtoB(1,0) = jointTransformsToWorld_.at(jointTransformsToWorld_.size()-1)(1,3);
+    translationMatrixNtoB(2,0) = jointTransformsToWorld_.at(jointTransformsToWorld_.size()-1)(2,3);
     
     for(int i = 0; i < jointTransforms_.size(); i++){
         //Get the rotation matrix from i to 0 and the translation matrix from i to 0
@@ -368,23 +368,23 @@ void Robot::calculateJacobian(){
         }
         else{
             //Build the matrices rotationMatrixIto0 and translationMatrixIto0
-            translationMatrixItoB(0,0) = jointTransformsToBase_.at(i-1)(0,3);
-            translationMatrixItoB(1,0) = jointTransformsToBase_.at(i-1)(1,3);
-            translationMatrixItoB(2,0) = jointTransformsToBase_.at(i-1)(2,3);
+            translationMatrixItoB(0,0) = jointTransformsToWorld_.at(i-1)(0,3);
+            translationMatrixItoB(1,0) = jointTransformsToWorld_.at(i-1)(1,3);
+            translationMatrixItoB(2,0) = jointTransformsToWorld_.at(i-1)(2,3);
             
             //Row 1
-            rotationMatrixItoB(0,0) = jointTransformsToBase_.at(i-1)(0,0);
-            rotationMatrixItoB(0,1) = jointTransformsToBase_.at(i-1)(0,1);
-            rotationMatrixItoB(0,2) = jointTransformsToBase_.at(i-1)(0,2);
+            rotationMatrixItoB(0,0) = jointTransformsToWorld_.at(i-1)(0,0);
+            rotationMatrixItoB(0,1) = jointTransformsToWorld_.at(i-1)(0,1);
+            rotationMatrixItoB(0,2) = jointTransformsToWorld_.at(i-1)(0,2);
             
             //Row 2
-            rotationMatrixItoB(1,0) = jointTransformsToBase_.at(i-1)(1,0);
-            rotationMatrixItoB(1,1) = jointTransformsToBase_.at(i-1)(1,1);
-            rotationMatrixItoB(1,2) = jointTransformsToBase_.at(i-1)(1,2);
+            rotationMatrixItoB(1,0) = jointTransformsToWorld_.at(i-1)(1,0);
+            rotationMatrixItoB(1,1) = jointTransformsToWorld_.at(i-1)(1,1);
+            rotationMatrixItoB(1,2) = jointTransformsToWorld_.at(i-1)(1,2);
             //Row 3
-            rotationMatrixItoB(2,0) = jointTransformsToBase_.at(i-1)(2,0);
-            rotationMatrixItoB(2,1) = jointTransformsToBase_.at(i-1)(2,1);
-            rotationMatrixItoB(2,2) = jointTransformsToBase_.at(i-1)(2,2);
+            rotationMatrixItoB(2,0) = jointTransformsToWorld_.at(i-1)(2,0);
+            rotationMatrixItoB(2,1) = jointTransformsToWorld_.at(i-1)(2,1);
+            rotationMatrixItoB(2,2) = jointTransformsToWorld_.at(i-1)(2,2);
         }
         
         //Create the coiumn in the jacobian matrix
