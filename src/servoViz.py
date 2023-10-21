@@ -9,6 +9,7 @@ from std_msgs.msg import Float32MultiArray
 counter = 0
 
 def vector_callback(data):
+
   marker = Marker()
   marker.header.frame_id = "map"
   marker.header.stamp = rospy.Time.now()
@@ -71,11 +72,21 @@ def vector_callback(data):
 
   marker_pub.publish(plane)
 
-if __name__ == '__main__':
-    
+if __name__ == '__main__': 
     
     rospy.init_node('vector_visualisation_node', anonymous= True)
+
+    mode = rospy.get_param("~rgbd_mode", default=False)
+
+    if mode:
+        rospy.loginfo("RGBD Mode: %s", mode)
+        rgbd_sub = rospy.Subscriber('/aruco_single/pose_rgbd', PoseStamped, vector_callback)
+    else:
+        rospy.loginfo("RGBD Mode: %s", mode)
+        velocity_sub = rospy.Subscriber('/aruco_single/pose', PoseStamped, vector_callback)
+
     marker_pub = rospy.Publisher('visualization_marker', Marker, queue_size=2)
     # velocity_sub = rospy.Subscriber('eeVel', Float32MultiArray,  vector_callback)
-    velocity_sub = rospy.Subscriber('/aruco_single/pose', PoseStamped, vector_callback)
-    rospy.spin()
+    
+    while not rospy.is_shutdown():
+        pass

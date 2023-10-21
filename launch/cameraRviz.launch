@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <launch>
 
+    <arg name="rgbd" default="false" />
     <arg name="use_static_tf" default="true" />
+    
 
     <node pkg="rviz" type="rviz" name="rviz_textured_quads"
         args="-d $(find visual_servoing)/config/rviz_camera.rviz"
@@ -30,7 +32,8 @@
     </group>
 
     <!-- Start the visualization node -->
-    <node name="vector_visualisation_node" pkg="visual_servoing" type="servoViz.py"  output="screen" />
- 
+    <node name="vector_visualisation_node" pkg="visual_servoing" type="servoViz.py"  output="screen">
+        <param name="rgbd_mode" type="bool" value="$(arg rgbd)" />
+    </node>
 
 </launch>
