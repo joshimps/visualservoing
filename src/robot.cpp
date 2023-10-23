@@ -14,6 +14,8 @@ Robot::Robot(ros::NodeHandle nh, std::vector<double> d, std::vector<double> a, s
     alpha_ = alpha;
     jointNames_ = jointNames;
     jacobianInWorldFrame_.resize(6,d.size());
+    jacobianInEndEffectorFrame_.resize(6,d.size());
+
     numberOfJoints_ = d_.size();
 
     //Row 1
@@ -350,7 +352,6 @@ void Robot::calculateJointTransformsToWorld(){
 
 void Robot::calculateJacobianInWorldFrame(){
     
-    std::unique_lock<std::mutex> lck(jointStateMutex_);
     Eigen::Vector3d unitVector;
     Eigen::Matrix3d rotationMatrixItoB;
     Eigen::Vector3d translationMatrixItoB;
@@ -444,157 +445,54 @@ void Robot::calculateJacobianInWorldFrame(){
 
 void Robot::calculateJacobianInEndEffectorFrame(){
     
-    std::unique_lock<std::mutex> lck(jointStateMutex_);
-    Eigen::Vector3d unitVector;
-    Eigen::Matrix3d rotationMatrixItoB;
-    Eigen::Vector3d translationMatrixItoB;
-    Eigen::Vector3d translationMatrixNtoB;
-    Eigen::Vector3d jacobianLinearVelocityComponent;
-    Eigen::Vector3d jacobianRotationalVelocityComponent;
-    Eigen::MatrixXd alterationMatrix;
+    Eigen::MatrixXd alterationMatrix(6,6);
+    Eigen::MatrixXd inverseEndEffectorTransformation = getJointTransformToWorld(5).inverse();
 
-
-    //Lets fill in each column of the jacobian
-    //Each column can be represented by the formula
-    //For a robot with N DOF where I is the jacobian column index and B is the base transform
-    //If I was 0 then the transform would be from BtoB or 0to0
-    //rotationMatrixIToB x unitVector x (translationMatrixNtoB - translationMatrix(ItoB) }->First three rows
-    //unitVector }->Last three rows
+    //Row 1
+    alterationMatrix(0,0) = inverseEndEffectorTransformation(0,0);
+    alterationMatrix(0,1) = inverseEndEffectorTransformation(0,1);
+    alterationMatrix(0,2) = inverseEndEffectorTransformation(0,2);
+    alterationMatrix(0,3) = 0;
+    alterationMatrix(0,4) = 0;
+    alterationMatrix(0,5) = 0;
+    //Row 2
+    alterationMatrix(1,0) = inverseEndEffectorTransformation(1,0);
+    alterationMatrix(1,1) = inverseEndEffectorTransformation(1,1);
+    alterationMatrix(1,2) = inverseEndEffectorTransformation(1,2);
+    alterationMatrix(1,3) = 0;
+    alterationMatrix(1,4) = 0;
+    alterationMatrix(1,5) = 0;
+    //Row 3
+    alterationMatrix(2,0) = inverseEndEffectorTransformation(2,0);
+    alterationMatrix(2,1) = inverseEndEffectorTransformation(2,1);
+    alterationMatrix(2,2) = inverseEndEffectorTransformation(2,2);
+    alterationMatrix(2,3) = 0;
+    alterationMatrix(2,4) = 0;
+    alterationMatrix(2,5) = 0;
+    //Row 4
+    alterationMatrix(3,0) = 0;
+    alterationMatrix(3,1) = 0;
+    alterationMatrix(3,2) = 0;
+    alterationMatrix(3,3) = inverseEndEffectorTransformation(3,0);
+    alterationMatrix(3,4) = inverseEndEffectorTransformation(3,1);
+    alterationMatrix(3,5) = inverseEndEffectorTransformation(3,2);
+    //Row 5
+    alterationMatrix(4,0) = 0;
+    alterationMatrix(4,1) = 0;
+    alterationMatrix(4,2) = 0;
+    alterationMatrix(4,3) = inverseEndEffectorTransformation(4,0);
+    alterationMatrix(4,4) = inverseEndEffectorTransformation(4,1);
+    alterationMatrix(4,5) = inverseEndEffectorTransformation(4,2);
+    //Row 6
+    alterationMatrix(5,0) = 0;
+    alterationMatrix(5,1) = 0;
+    alterationMatrix(5,2) = 0;
+    alterationMatrix(5,3) = inverseEndEffectorTransformation(5,0);
+    alterationMatrix(5,4) = inverseEndEffectorTransformation(5,1);
+    alterationMatrix(5,5) = inverseEndEffectorTransformation(5,2);
     
-    //The unit vector is 0;0;1 as with DH params we always rotate about z axis
-    unitVector(0,0) = 0; 
-    unitVector(1,0) = 0;
-    unitVector(2,0) = 1;  
+    jacobianInEndEffectorFrame_ = alterationMatrix * jacobianInWorldFrame_;
 
-    //The translationMatrixNto0 will be the translation part of the transformation matrix N to 0
-    translationMatrixNtoB(0,0) = jointTransformsToWorld_.at(jointTransformsToWorld_.size()-1)(0,3);
-    translationMatrixNtoB(1,0) = jointTransformsToWorld_.at(jointTransformsToWorld_.size()-1)(1,3);
-    translationMatrixNtoB(2,0) = jointTransformsToWorld_.at(jointTransformsToWorld_.size()-1)(2,3);
-    
-    for(int i = 0; i < jointTransforms_.size(); i++){
-        //Get the rotation matrix from i to 0 and the translation matrix from i to 0
-        
-        if(i == 0){
-            //Build the matrices rotationMatrixIto0 and translationMatrixIto0
-            translationMatrixItoB(0,0) = baseTransform_(0,3);
-            translationMatrixItoB(1,0) = baseTransform_(1,3);
-            translationMatrixItoB(2,0) = baseTransform_(2,3);
-
-            //Row 1
-            rotationMatrixItoB(0,0) = baseTransform_(0,0);
-            rotationMatrixItoB(0,1) = baseTransform_(0,1);
-            rotationMatrixItoB(0,2) = baseTransform_(0,2);
-
-            //Row 2
-            rotationMatrixItoB(1,0) = baseTransform_(1,0);
-            rotationMatrixItoB(1,1) = baseTransform_(1,1);
-            rotationMatrixItoB(1,2) = baseTransform_(1,2);
-
-            //Row 3
-            rotationMatrixItoB(2,0) = baseTransform_(2,0);
-            rotationMatrixItoB(2,1) = baseTransform_(2,1);
-            rotationMatrixItoB(2,2) = baseTransform_(2,2);
-        }
-        else{
-            //Build the matrices rotationMatrixIto0 and translationMatrixIto0
-            translationMatrixItoB(0,0) = jointTransformsToWorld_.at(i-1)(0,3);
-            translationMatrixItoB(1,0) = jointTransformsToWorld_.at(i-1)(1,3);
-            translationMatrixItoB(2,0) = jointTransformsToWorld_.at(i-1)(2,3);
-            
-            //Row 1
-            rotationMatrixItoB(0,0) = jointTransformsToWorld_.at(i-1)(0,0);
-            rotationMatrixItoB(0,1) = jointTransformsToWorld_.at(i-1)(0,1);
-            rotationMatrixItoB(0,2) = jointTransformsToWorld_.at(i-1)(0,2);
-            
-            //Row 2
-            rotationMatrixItoB(1,0) = jointTransformsToWorld_.at(i-1)(1,0);
-            rotationMatrixItoB(1,1) = jointTransformsToWorld_.at(i-1)(1,1);
-            rotationMatrixItoB(1,2) = jointTransformsToWorld_.at(i-1)(1,2);
-            //Row 3
-            rotationMatrixItoB(2,0) = jointTransformsToWorld_.at(i-1)(2,0);
-            rotationMatrixItoB(2,1) = jointTransformsToWorld_.at(i-1)(2,1);
-            rotationMatrixItoB(2,2) = jointTransformsToWorld_.at(i-1)(2,2);
-        }
-        
-        //Create the coiumn in the jacobian matrix
-        jacobianLinearVelocityComponent = (rotationMatrixItoB * unitVector).cross((translationMatrixNtoB - translationMatrixItoB));
-        jacobianRotationalVelocityComponent = rotationMatrixItoB * unitVector;
-
-
-        //Row 1
-        jacobianInEndEffectorFrame_(0,i) = jacobianLinearVelocityComponent(0,0);
-        //Row 2
-        jacobianInEndEffectorFrame_(1,i) = jacobianLinearVelocityComponent(1,0);
-        //Row 3
-        jacobianInEndEffectorFrame_(2,i) = jacobianLinearVelocityComponent(2,0);
-        //Row 4
-        jacobianInEndEffectorFrame_(3,i) = jacobianRotationalVelocityComponent(0,0);
-        //Row 5
-        jacobianInEndEffectorFrame_(4,i) = jacobianRotationalVelocityComponent(1,0);
-        //Row 6
-        jacobianInEndEffectorFrame_(5,i) = jacobianRotationalVelocityComponent(2,0);
-
-        alterationMatrix.resize(6,6);
-
-        Eigen::Matrix4d inverseEndEffectorTransformation = getJointTransformToWorld(5).inverse();
-
-
-        //Row 1
-        alterationMatrix(0,0) = inverseEndEffectorTransformation(0,0);
-        alterationMatrix(0,1) = inverseEndEffectorTransformation(0,1);
-        alterationMatrix(0,2) = inverseEndEffectorTransformation(0,2);
-        alterationMatrix(0,3) = 0;
-        alterationMatrix(0,4) = 0;
-        alterationMatrix(0,5) = 0;
-
-        //Row 2
-
-        alterationMatrix(1,0) = inverseEndEffectorTransformation(1,0);
-        alterationMatrix(1,1) = inverseEndEffectorTransformation(1,1);
-        alterationMatrix(1,2) = inverseEndEffectorTransformation(1,2);
-        alterationMatrix(1,3) = 0;
-        alterationMatrix(1,4) = 0;
-        alterationMatrix(1,5) = 0;
-
-        //Row 3
-
-        alterationMatrix(2,0) = inverseEndEffectorTransformation(2,0);
-        alterationMatrix(2,1) = inverseEndEffectorTransformation(2,1);
-        alterationMatrix(2,2) = inverseEndEffectorTransformation(2,2);
-        alterationMatrix(2,3) = 0;
-        alterationMatrix(2,4) = 0;
-        alterationMatrix(2,5) = 0;
-
-        //Row 4
-
-        alterationMatrix(3,0) = 0;
-        alterationMatrix(3,1) = 0;
-        alterationMatrix(3,2) = 0;
-        alterationMatrix(3,3) = inverseEndEffectorTransformation(3,0);
-        alterationMatrix(3,4) = inverseEndEffectorTransformation(3,1);
-        alterationMatrix(3,5) = inverseEndEffectorTransformation(3,2);
-
-        //Row 5
-
-        alterationMatrix(4,0) = 0;
-        alterationMatrix(4,1) = 0;
-        alterationMatrix(4,2) = 0;
-        alterationMatrix(4,3) = inverseEndEffectorTransformation(4,0);
-        alterationMatrix(4,4) = inverseEndEffectorTransformation(4,1);
-        alterationMatrix(4,5) = inverseEndEffectorTransformation(4,2);
-
-        //Row 6
-
-        alterationMatrix(5,0) = 0;
-        alterationMatrix(5,1) = 0;
-        alterationMatrix(5,2) = 0;
-        alterationMatrix(5,3) = inverseEndEffectorTransformation(5,0);
-        alterationMatrix(5,4) = inverseEndEffectorTransformation(5,1);
-        alterationMatrix(5,5) = inverseEndEffectorTransformation(5,2);
-
-        jacobianInEndEffectorFrame_ = alterationMatrix * jacobianInEndEffectorFrame_;
-
-    }
     ROS_DEBUG_STREAM("JACOBIAN IN END EFFECTOR FRAME");
     ROS_DEBUG_STREAM("\n" << jacobianInEndEffectorFrame_);
 }
