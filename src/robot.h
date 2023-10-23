@@ -23,9 +23,17 @@ class Robot{
     Eigen::MatrixXd getJointTransformToBase(int i);
     Eigen::MatrixXd getJointTransformToWorld(int i);
     Eigen::MatrixXd getBaseTransform();
-    Eigen::MatrixXd getJacobian();
-    Eigen::MatrixXd getTransposeJacobian();
-    Eigen::MatrixXd getPseudoInverseJacobian();
+
+    Eigen::MatrixXd getJacobianInWorldFrame();
+    Eigen::MatrixXd getTransposeJacobianInWorldFrame();
+    Eigen::MatrixXd getPseudoInverseJacobianInWorldFrame();
+
+    Eigen::MatrixXd getJacobianInEndEffectorFrame();
+    Eigen::MatrixXd getTransposeJacobianInEndEffectorFrame();
+    Eigen::MatrixXd getPseudoInverseJacobianInEndEffectorFrame();
+
+
+
     int getNumberOfJoints();
 
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -39,7 +47,8 @@ class Robot{
     /////////////////////////////////////////////////////////////////////////////////////////
 
     void calculateJointTransforms();
-    void calculateJacobian();
+    void calculateJacobianInWorldFrame();
+    void calculateJacobianInEndEffectorFrame();
     void calculateJointTransformsToBase();
     void calculateJointTransformsToWorld();
 
@@ -72,7 +81,8 @@ class Robot{
     std::vector<Eigen::Matrix4d> jointTransforms_;
     std::vector<Eigen::Matrix4d> jointTransformsToBase_;
     std::vector<Eigen::Matrix4d> jointTransformsToWorld_;
-    Eigen::MatrixXd jacobian_;
+    Eigen::MatrixXd jacobianInWorldFrame_;
+    Eigen::MatrixXd jacobianInEndEffectorFrame_;
     int numberOfJoints_;
 
     ///////////////////////////////////////////////////////////////////////

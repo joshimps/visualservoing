@@ -8,7 +8,7 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "visual_servoing");
   ros::NodeHandle nh;
 
-  if(ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Debug) ) {
+  if(ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info) ) {
   ros::console::notifyLoggerLevelsChanged();
   }
   
@@ -18,7 +18,7 @@ int main(int argc, char **argv)
   std::vector<std::string> jointNames = {"shoulder_pan_joint","shoulder_lift_joint","elbow_joint","wrist_1_joint","wrist_2_joint","wrist_3_joint"};
   
   double gain = 0.1;
-  double errorThreshold = 0.0001;
+  double errorThreshold = 0.2;
 
   ros::AsyncSpinner spinner(0);
   spinner.start();
