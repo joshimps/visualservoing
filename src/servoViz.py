@@ -85,7 +85,7 @@ if __name__ == '__main__':
         rospy.loginfo("RGBD Mode: %s", mode)
         velocity_sub = rospy.Subscriber('/aruco_single/pose', PoseStamped, vector_callback)
 
-    marker_pub = rospy.Publisher('visualization_marker', Marker, queue_size=2)
+    marker_pub = rospy.Publisher('visualization_marker', Marker, queue_size=3)
     # velocity_sub = rospy.Subscriber('eeVel', Float32MultiArray,  vector_callback)
     
     while not rospy.is_shutdown():

@@ -4,6 +4,7 @@ import message_filters
 from sensor_msgs.msg import Image
 from geometry_msgs.msg import PointStamped, PoseStamped
 from math import sin, cos
+from cv_bridge import CvBridge
 
 HEIGHT = 480
 WIDTH = 640
@@ -14,26 +15,22 @@ MIN_ANGLE_H = (HFOV/2)
 ANGLE_INC_V = VFOV/HEIGHT  
 MIN_ANGLE_V = -(VFOV/2)
 
+bridge = CvBridge()
+
 def process_depth(depth, pixel, pose):
-    print('foo')
-    u = pixel.point.x
+    u = int(round(pixel.point.x))
+    v = int(round(pixel.point.y))
     theta = MIN_ANGLE_H - ANGLE_INC_H * u
-    v = pixel.point.y
     gamma = MIN_ANGLE_V + ANGLE_INC_V * v
-    index = u * depth.step + v
-    marker_depth = depth.data[index]
-    x = marker_depth * sin(theta)
-    y = marker_depth * sin(gamma)
-    z = marker_depth * cos(gamma)
+    depthCV = bridge.imgmsg_to_cv2(depth, desired_encoding="passthrough")
+    marker_depth = depthCV[v,u]/1000
     
     msg = PoseStamped()
     msg.header = pose.header
     msg.pose.orientation = pose.pose.orientation
-    msg.pose.position.x = x
-    msg.pose.position.y = y
-    msg.pose.position.z = z
+    msg.pose.position = pose.pose.position
+    msg.pose.position.x = marker_depth
     rgbd_pub.publish(msg)
-
 
 
 if __name__ == "__main__":
@@ -45,7 +42,7 @@ if __name__ == "__main__":
 
     rgbd_pub = rospy.Publisher("/aruco_single/pose_rgbd", PoseStamped, queue_size=5)
     
-    sync_sub = message_filters.TimeSynchronizer([depth_sub,pixel_sub, pose_sub], 100)
+    sync_sub = message_filters.ApproximateTimeSynchronizer([depth_sub,pixel_sub, pose_sub], 3, 0.1)
     sync_sub.registerCallback(process_depth)    
     while not rospy.is_shutdown():
         pass
