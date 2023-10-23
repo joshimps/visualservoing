@@ -100,6 +100,11 @@ Eigen::MatrixXd Robot::getJacobianInWorldFrame(){
     return jacobianInWorldFrame_;
 }
 
+Eigen::MatrixXd Robot::getJacobianInEndEffectorFrame(){
+    std::unique_lock<std::mutex> lck(jointStateMutex_);
+    return jacobianInEndEffectorFrame_;
+}
+
 Eigen::MatrixXd Robot::getTransposeJacobianInWorldFrame(){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
     return jacobianInWorldFrame_.transpose();
@@ -425,7 +430,6 @@ void Robot::calculateJacobianInWorldFrame(){
         jacobianLinearVelocityComponent = (rotationMatrixItoB * unitVector).cross((translationMatrixNtoB - translationMatrixItoB));
         jacobianRotationalVelocityComponent = rotationMatrixItoB * unitVector;
 
-
         //Row 1
         jacobianInWorldFrame_(0,i) = jacobianLinearVelocityComponent(0,0);
         //Row 2
@@ -473,23 +477,23 @@ void Robot::calculateJacobianInEndEffectorFrame(){
     alterationMatrix(3,0) = 0;
     alterationMatrix(3,1) = 0;
     alterationMatrix(3,2) = 0;
-    alterationMatrix(3,3) = inverseEndEffectorTransformation(3,0);
-    alterationMatrix(3,4) = inverseEndEffectorTransformation(3,1);
-    alterationMatrix(3,5) = inverseEndEffectorTransformation(3,2);
+    alterationMatrix(3,3) = inverseEndEffectorTransformation(0,0);
+    alterationMatrix(3,4) = inverseEndEffectorTransformation(0,1);
+    alterationMatrix(3,5) = inverseEndEffectorTransformation(0,2);
     //Row 5
     alterationMatrix(4,0) = 0;
     alterationMatrix(4,1) = 0;
     alterationMatrix(4,2) = 0;
-    alterationMatrix(4,3) = inverseEndEffectorTransformation(4,0);
-    alterationMatrix(4,4) = inverseEndEffectorTransformation(4,1);
-    alterationMatrix(4,5) = inverseEndEffectorTransformation(4,2);
+    alterationMatrix(4,3) = inverseEndEffectorTransformation(1,0);
+    alterationMatrix(4,4) = inverseEndEffectorTransformation(1,1);
+    alterationMatrix(4,5) = inverseEndEffectorTransformation(1,2);
     //Row 6
     alterationMatrix(5,0) = 0;
     alterationMatrix(5,1) = 0;
     alterationMatrix(5,2) = 0;
-    alterationMatrix(5,3) = inverseEndEffectorTransformation(5,0);
-    alterationMatrix(5,4) = inverseEndEffectorTransformation(5,1);
-    alterationMatrix(5,5) = inverseEndEffectorTransformation(5,2);
+    alterationMatrix(5,3) = inverseEndEffectorTransformation(2,0);
+    alterationMatrix(5,4) = inverseEndEffectorTransformation(2,1);
+    alterationMatrix(5,5) = inverseEndEffectorTransformation(2,2);
     
     jacobianInEndEffectorFrame_ = alterationMatrix * jacobianInWorldFrame_;
 

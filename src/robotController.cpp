@@ -189,11 +189,8 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
 
     fiducialTransformGlobalAdjusted = fiducialTransformGlobal * adjustmentMatrix;
 
-    fiducialTransformEndEffector = (robot_->getJointTransformToWorld(5)).inverse() * fiducialTransformGlobal;
-    fiducialTransformEndEffector(2,3) = fiducialTransformEndEffector(2,3) - 0.5;
-    fiducialTransformGlobalAdjusted = (robot_->getJointTransformToWorld(5)) * fiducialTransformEndEffector;
-
     fiducialError = (robot_->getJointTransformToWorld(5)).inverse() * fiducialTransformGlobalAdjusted;
+    fiducialError(2,3) = fiducialError(2,3) - 0.5;
 
     fiducialRotationMatrixEndEffector(0,0) = fiducialError(0,0);
     fiducialRotationMatrixEndEffector(0,1) = fiducialError(0,1);
@@ -213,7 +210,6 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
     fiducialRotationLocal_ = fiducialRotationMatrixEndEffector;
     fiducialTranslationLocal_ = fiducialTranslationEndEffector;
 
-    
     calculateEndEffectorVelocity();
 
     if(euclidianNorm_ > errorThreshold_){
@@ -229,7 +225,7 @@ void RobotController::clockCallback(const rosgraph_msgs::ClockConstPtr &msg){
     const rosgraph_msgs::Clock clock = *msg;
     std_msgs::Float64MultiArray jointMsg;
     //If gretaer than 1 second since fiducial publish
-    if(clock.clock.sec - timeAtFiducialPublish_.sec > 5 && recievedFiducial_){
+    if(clock.clock.sec - timeAtFiducialPublish_.sec > 1 && recievedFiducial_){
         ROS_ERROR_STREAM("LOST SIGHT OF FIDUCIAL");
         ros::shutdown();
     }

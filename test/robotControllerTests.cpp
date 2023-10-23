@@ -1,47 +1,6 @@
 #include <gtest/gtest.h>
 #include "../src/robotController.h"
 
-TEST(RobotController,testCompile){
-    ros::NodeHandle nh;
-    
-    std::vector<double> d{0.1519,0,0,0.11235,0.08535,0.0819};
-    std::vector<double> a{0,-0.24365,-0.21325,0,0,0};
-    std::vector<double> alpha{M_PI/2,0,0,M_PI/2,-M_PI/2,0};
-    std::vector<std::string> jointNames = {"shoulder_pan_joint","shoulder_lift_joint","elbow_joint","wrist_1_joint","wrist_2_joint","wrist_3_joint"};
-    Robot robot(nh,d,a,alpha,jointNames);
-    
-    //Lets set the joint angles and compare with values obtained from Matlab
-    std::vector<double> theta{0,0,0,0,0,0};
-    robot.setTheta(theta,jointNames); 
-
-
-    double gain = 0.1;
-    double errorThreshold = 1;
-
-    RobotController robotController(nh,&robot,gain,errorThreshold);
-
-    Eigen::Vector3d fiducialTranslationLocal;
-
-    //X
-    fiducialTranslationLocal(0,0) = 0.5;
-
-    //Y
-    fiducialTranslationLocal(1,0) = 0.5;
-
-    //Z
-    fiducialTranslationLocal(2,0) = 0.5;
-
-
-    float roll = M_PI/2, pitch = 0, yaw = M_PI/4;    
-    Eigen::Quaterniond fiducialRotationLocal;
-    fiducialRotationLocal = Eigen::AngleAxisd(roll, Eigen::Vector3d::UnitX())
-    * Eigen::AngleAxisd(pitch, Eigen::Vector3d::UnitY())
-    * Eigen::AngleAxisd(yaw, Eigen::Vector3d::UnitZ());
-    
-   robotController.setFiducialPostition(fiducialTranslationLocal,fiducialRotationLocal);
-   
-}
-
 
 TEST(RobotController,tesEndEffectorVelocity){
     ros::NodeHandle nh;
@@ -58,7 +17,8 @@ TEST(RobotController,tesEndEffectorVelocity){
 
     robot.calculateJointTransforms();
     robot.calculateJointTransformsToBase();
-    robot.calculateJacobian(); 
+    robot.calculateJointTransformsToWorld();
+    robot.calculateJacobianInWorldFrame(); 
 
     double gain = 0.1;
     double errorThreshold = 1;
@@ -120,7 +80,8 @@ TEST(RobotController,testJointVelocity){
 
     robot.calculateJointTransforms();
     robot.calculateJointTransformsToBase();
-    robot.calculateJacobian(); 
+    robot.calculateJointTransformsToWorld();
+    robot.calculateJacobianInWorldFrame(); 
 
     double gain = 0.1;
     double errorThreshold = 0.001;
@@ -152,7 +113,7 @@ TEST(RobotController,testJointVelocity){
 
     Eigen::VectorXd jointVelocities(robot.getNumberOfJoints());
    
-    jointVelocities =  robot.getPseudoInverseJacobian() * robotController.getEndEffectorVelocity();
+    jointVelocities =  robot.getPseudoInverseJacobianInWorldFrame() * robotController.getEndEffectorVelocity();
 
     ASSERT_NEAR(jointVelocities(0,0),-0.1465,0.001);
     ASSERT_NEAR(jointVelocities(1,0),0.0584,0.001);
