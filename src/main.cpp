@@ -17,7 +17,7 @@ int main(int argc, char **argv)
   std::vector<double> alpha{M_PI/2,0,0,M_PI/2,-M_PI/2,0};
   std::vector<std::string> jointNames = {"shoulder_pan_joint","shoulder_lift_joint","elbow_joint","wrist_1_joint","wrist_2_joint","wrist_3_joint"};
   
-  double gain = 0.01;
+  double gain = 0.2;
   double errorThreshold = 0.001;
 
   ros::AsyncSpinner spinner(0);

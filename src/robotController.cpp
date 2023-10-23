@@ -158,7 +158,7 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
     fiducialTransformGlobal(2,0) = fiducialRotationMatrixGlobal(2,0);
     fiducialTransformGlobal(2,1) = fiducialRotationMatrixGlobal(2,1);
     fiducialTransformGlobal(2,2) = fiducialRotationMatrixGlobal(2,2);
-    fiducialTransformGlobal(2,3) = fiducialPoseStampedGlobal_.pose.position.z;
+    fiducialTransformGlobal(2,3) = fiducialPoseStampedGlobal_.pose.position.z + 0.69;
 
     fiducialTransformGlobal(3,0) = 0;
     fiducialTransformGlobal(3,1) = 0;
@@ -189,6 +189,10 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
 
     fiducialTransformGlobalAdjusted = fiducialTransformGlobal * adjustmentMatrix;
 
+    ROS_INFO_STREAM("FIDUCIAL GLOBAL");
+    ROS_INFO_STREAM(fiducialTransformGlobalAdjusted);
+
+
     fiducialError = (robot_->getJointTransformToWorld(5)).inverse() * fiducialTransformGlobalAdjusted;
     fiducialError(2,3) = fiducialError(2,3) - 0.5;
 
@@ -206,6 +210,9 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
     fiducialRotationMatrixEndEffector(2,1) = fiducialError(2,1);
     fiducialRotationMatrixEndEffector(2,2) = fiducialError(2,2);
     fiducialTranslationEndEffector(2,0) = fiducialError(2,3);
+
+    ROS_INFO_STREAM("FIDUCIAL ERROR");
+    ROS_INFO_STREAM(fiducialError);
 
     fiducialRotationLocal_ = fiducialRotationMatrixEndEffector;
     fiducialTranslationLocal_ = fiducialTranslationEndEffector;
