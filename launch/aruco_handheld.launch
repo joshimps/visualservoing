@@ -24,5 +24,8 @@
 
 </node>
 
+<node name="aruco_rgbd" pkg="visual_servoing" type="aruco_rgbd.py" output="screen"/>
+
+
 </launch>
 
