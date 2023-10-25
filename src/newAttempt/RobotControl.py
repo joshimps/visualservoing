@@ -32,13 +32,12 @@ class ROSNode:
         thresh = 0.001
         # self.joint_states = rospy.wait_for_message('/joint_states', JointState)
         eevel = np.array(msg.data)
-        eevelTrans = eevel[0:3]
         ctrl_msg = Float64MultiArray()
         if np.linalg.norm(eevel) < 0.001:
             for i in range(6):
                 ctrl_msg.data.append(0)
         else:
-            jacobian = self.robot.jacobe(self.joint_states)
+            jacobian = self.robot.jacob0(self.joint_states)
             mu = self.robot.manipulability(self.joint_states, jacobian, method='yoshikawa', axes='all')
             # print(self.joint_states)
             # print(mu)

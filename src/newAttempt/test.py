@@ -9,7 +9,7 @@ def get_transform_wrist():
     tf_buffer = tf2_ros.Buffer(rospy.Duration(2.0))
     tf2_ros.TransformListener(tf_buffer)
     try:
-        transformation = tf_buffer.lookup_transform('base_link', 'wrist_3_link', rospy.Time(0), rospy.Duration(0.1))
+        transformation = tf_buffer.lookup_transform('world', 'wrist_3_link', rospy.Time(0), rospy.Duration(0.1))
         return transformation
     except (tf2_ros.LookupException, tf2_ros.ConnectivityException,
             tf2_ros.ExtrapolationException):

@@ -3,11 +3,12 @@ import rospy
 import tf2_ros
 from geometry_msgs.msg import PoseStamped
 from std_msgs.msg import Float32MultiArray
+from tf.transformations import quaternion_multiply
 import numpy as np
+from math import pi
 
 ## CFG ##
-vel_gain = 0.2
-rot_gain = 0.5
+gain = 0.05
 refQuat = PoseStamped()
 refQuat.pose.orientation.x = 0
 refQuat.pose.orientation.y = 1
@@ -15,36 +16,50 @@ refQuat.pose.orientation.z = 0
 refQuat.pose.orientation.w = 0
 
 def get_transform_wrist():
-    tf_buffer = tf2_ros.Buffer(rospy.Duration(1.0))
+    tf_buffer = tf2_ros.Buffer(rospy.Duration(5.0))
     tf2_ros.TransformListener(tf_buffer)
     try:
-        transformation = tf_buffer.lookup_transform('base_link', 'wrist_3_link', rospy.Time(0), rospy.Duration(0.1))
+        transformation = tf_buffer.lookup_transform('base_link', 'wrist_3_link', rospy.Time(0), rospy.Duration(0.2))
         return transformation
     except (tf2_ros.LookupException, tf2_ros.ConnectivityException,
             tf2_ros.ExtrapolationException):
         rospy.logerr('Unable to find the transformation from %s to %s' % 'base', 'wrist')
 
-def angularVelfromQuat(qsource, qtarget, timestep):
-    return (2 / timestep) * np.array([
-        qsource.w*qtarget.x - qsource.x*qtarget.w - qsource.y*qtarget.z + qsource.z*qtarget.y,
-        qsource.w*qtarget.y + qsource.x*qtarget.z - qsource.y*qtarget.w - qsource.z*qtarget.x,
-        qsource.w*qtarget.z - qsource.x*qtarget.y + qsource.y*qtarget.x - qsource.z*qtarget.w])
+
 
 def procFiducial(msg):
-    velMsg = Float32MultiArray()
-    velMsg.data.append(msg.pose.position.x * vel_gain)
-    velMsg.data.append(msg.pose.position.y * vel_gain)
-    velMsg.data.append(msg.pose.position.z * vel_gain)
-    # velMsg.data.append((msg.pose.position.z-0.5) * vel_gain)
+    try:
+        wrist_tf = get_transform_wrist()
+    except Exception as e:
+        raise(e)
+        return 0
 
-    qSource = msg.pose.orientation
-    qTarget = refQuat.pose.orientation
-    angularVel = angularVelfromQuat(qSource, qTarget, rot_gain)
-    velMsg.data.append(angularVel[0])
-    velMsg.data.append(angularVel[1])
-    velMsg.data.append(angularVel[2])
+    velMsg = Float32MultiArray()
+    xVel = msg.pose.position.x - wrist_tf.transform.translation.x 
+    yVel = (msg.pose.position.y - wrist_tf.transform.translation.y)
+    zVel = msg.pose.position.z - wrist_tf.transform.translation.z
+    
+    velMsg.data.append(xVel*gain)
+    velMsg.data.append(yVel*gain)
+    velMsg.data.append(zVel*gain)
+
+    quatWrist = [msg.pose.orientation.x, msg.pose.orientation.y, msg.pose.orientation.z, msg.pose.orientation.w]
+    quatRotate = [1,0,0,pi]
+    quatFid = [wrist_tf.transform.rotation.x, wrist_tf.transform.rotation.y, wrist_tf.transform.rotation.z, wrist_tf.transform.rotation.w]
+    quatFid = quaternion_multiply(quatRotate, quatFid)
+    quatError = quaternion_multiply(quatWrist, quatFid)
+
+    if quatError[3] <= pi:
+        rot_gain = gain
+    else: 
+        rot_gain = -gain
+
+    
+    velMsg.data.append(quatError[1] * rot_gain)
+    velMsg.data.append(quatError[2] * rot_gain)
+    velMsg.data.append(quatError[3] * rot_gain)
     velocity_pub.publish(velMsg)
-    print(velMsg.data)
+
 
 
 if __name__ == "__main__":
