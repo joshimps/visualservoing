@@ -53,6 +53,8 @@ class Robot{
     void calculateJointTransformsToBase();
     void calculateJointTransformsToWorld();
     void calculateMeasureOfManipulabilityInEndEffector();
+    void calculatePseudoInverseJacobianInWorldFrame();
+    void calculatePseudoInverseJacobianInEndEffectorFrame();
 
     ///////////////////////////////////////////////////////////
     // Callbacks
@@ -85,8 +87,12 @@ class Robot{
     std::vector<Eigen::Matrix4d> jointTransformsToWorld_;
     Eigen::MatrixXd jacobianInWorldFrame_;
     Eigen::MatrixXd jacobianInEndEffectorFrame_;
-    double measureOfManipubilityInEndEffector_;
+    Eigen::MatrixXd pseudoInverseJacobianInWorldFrame_;
+    Eigen::MatrixXd pseudoInverseJacobianInEndEffectorFrame_;
+    double measureOfManipubilityInWorldFrame_;
+    double measureOfManipubilityInEndEffectorFrame_;
     double dampingThreshold_;
+    double dampingMax_;
     int numberOfJoints_;
 
     ///////////////////////////////////////////////////////////////////////

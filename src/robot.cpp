@@ -74,24 +74,22 @@ Eigen::MatrixXd Robot::getEndEffectorTransform(){
 
 Eigen::MatrixXd Robot::getJointTransform(int i){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
-    
     return jointTransforms_.at(i);
 }
 
 Eigen::MatrixXd Robot::getBaseTransform(){
+    std::unique_lock<std::mutex> lck(jointStateMutex_);
     return baseTransform_;
 }
 
 
 Eigen::MatrixXd Robot::getJointTransformToBase(int i){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
-    
     return jointTransformsToBase_.at(i);
 }
 
 Eigen::MatrixXd Robot::getJointTransformToWorld(int i){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
-    
     return jointTransformsToWorld_.at(i);
 }
 
@@ -117,70 +115,16 @@ Eigen::MatrixXd Robot::getTransposeJacobianInEndEffectorFrame(){
 
 Eigen::MatrixXd Robot::getPseudoInverseJacobianInWorldFrame(){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
-
-    Eigen::MatrixXd transposeJacobian;
-    Eigen::MatrixXd psuedoInverseJacobian;
-    double jacobianDeterminant = jacobianInWorldFrame_.determinant();
-    double damping = 0.1;
-    Eigen::MatrixXd identityMatrix = Eigen::MatrixXd::Identity(jacobianInWorldFrame_.rows(), jacobianInWorldFrame_.cols()) ;
-
-    if(jacobianDeterminant == 0 || jacobianDeterminant == -0){
-        ROS_INFO_STREAM("USING DLS");
-        transposeJacobian = jacobianInWorldFrame_.transpose();
-        ROS_DEBUG_STREAM("TRANSPOSE JACOBIAN \n" << transposeJacobian);
-        psuedoInverseJacobian = transposeJacobian * (jacobianInWorldFrame_*transposeJacobian + damping * identityMatrix).inverse();
-        ROS_DEBUG_STREAM("PSUEDO INVERSE JACOBIAN \n" << psuedoInverseJacobian);
-    }
-    else{
-        ROS_INFO_STREAM("NOT USING DLS");
-        transposeJacobian = jacobianInWorldFrame_.transpose();
-        ROS_DEBUG_STREAM("TRANSPOSE JACOBIAN \n" << transposeJacobian);
-        psuedoInverseJacobian = transposeJacobian * (jacobianInWorldFrame_*transposeJacobian).inverse();
-        ROS_DEBUG_STREAM("PSUEDO INVERSE JACOBIAN \n" << psuedoInverseJacobian);
-    }
-
-
-    return psuedoInverseJacobian;
+    return pseudoInverseJacobianInWorldFrame_;
 }
 
 Eigen::MatrixXd Robot::getPseudoInverseJacobianInEndEffectorFrame(){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
-
-    Eigen::MatrixXd transposeJacobian;
-    Eigen::MatrixXd psuedoInverseJacobian;
-    double jacobianDeterminant = jacobianInEndEffectorFrame_.determinant();
-    double damping;
-    
-    if(measureOfManipubilityInEndEffector_ > dampingThreshold_){
-        damping = 0
-    }
-    else{
-        damping = (1 - pow((measureOfManipubilityInEndEffector_/dampingThreshold_),2))*dampMax
-    }
-        
-    Eigen::MatrixXd identityMatrix = Eigen::MatrixXd::Identity(jacobianInEndEffectorFrame_.rows(), jacobianInEndEffectorFrame_.cols()) ;
-
-    if(jacobianDeterminant == 0 || jacobianDeterminant == -0){
-        ROS_INFO_STREAM("USING DLS");
-        transposeJacobian = jacobianInEndEffectorFrame_.transpose();
-        ROS_DEBUG_STREAM("TRANSPOSE JACOBIAN \n" << transposeJacobian);
-        psuedoInverseJacobian = transposeJacobian * (jacobianInEndEffectorFrame_*transposeJacobian + damping * identityMatrix).inverse();
-        ROS_DEBUG_STREAM("PSUEDO INVERSE JACOBIAN \n" << psuedoInverseJacobian);
-    }
-    else{
-        ROS_INFO_STREAM("NOT USING DLS");
-        transposeJacobian = jacobianInEndEffectorFrame_.transpose();
-        ROS_DEBUG_STREAM("TRANSPOSE JACOBIAN \n" << transposeJacobian);
-        psuedoInverseJacobian = transposeJacobian * (jacobianInEndEffectorFrame_*transposeJacobian).inverse();
-        ROS_DEBUG_STREAM("PSUEDO INVERSE JACOBIAN \n" << psuedoInverseJacobian);
-    }
-
-
-    return psuedoInverseJacobian;
+    return pseudoInverseJacobianInEndEffectorFrame_;
 }
 
-
 int Robot::getNumberOfJoints(){
+    std::unique_lock<std::mutex> lck(jointStateMutex_);
     return numberOfJoints_;
 }
 
@@ -509,8 +453,49 @@ void Robot::calculateJacobianInEndEffectorFrame(){
     ROS_DEBUG_STREAM("\n" << jacobianInEndEffectorFrame_);
 }
 
-void Robot::calculateMeasureOfManipulabilityInEndEffector(){
-    measureOfManipubilityInEndEffector_ = sqrt(((jacobianInEndEffectorFrame_ * jacobianInEndEffectorFrame_.transpose()).determinant())(1,1));
+void Robot::calculatePseudoInverseJacobianInEndEffectorFrame(){
+    std::unique_lock<std::mutex> lck(jointStateMutex_);
 
+    Eigen::MatrixXd transposeJacobian;
+    double damping;
+    
+    if(measureOfManipubilityInEndEffectorFrame_ > dampingThreshold_){
+        damping = 0;
+    }
+    else{
+        damping = (1 - pow((measureOfManipubilityInEndEffectorFrame_/dampingThreshold_),2))* dampingMax_;
+    }
+        
+    Eigen::MatrixXd identityMatrix = Eigen::MatrixXd::Identity(jacobianInEndEffectorFrame_.rows(), jacobianInEndEffectorFrame_.cols()) ;
+
+    transposeJacobian = jacobianInEndEffectorFrame_.transpose();
+    pseudoInverseJacobianInEndEffectorFrame_ = transposeJacobian * (jacobianInEndEffectorFrame_*transposeJacobian + damping * identityMatrix).inverse();
+    ROS_DEBUG_STREAM("PSUEDO INVERSE JACOBIAN IN END EFFECTOR FRAME \n" << pseudoInverseJacobianInEndEffectorFrame_);
+}
+
+void Robot::calculatePseudoInverseJacobianInWorldFrame(){
+    std::unique_lock<std::mutex> lck(jointStateMutex_);
+
+    Eigen::MatrixXd transposeJacobian;
+    double damping;
+    
+    if(measureOfManipubilityInWorldFrame_ > dampingThreshold_){
+        damping = 0;
+    }
+    else{
+        damping = (1 - pow((measureOfManipubilityInWorldFrame_/dampingThreshold_),2))* dampingMax_;
+    }
+        
+    Eigen::MatrixXd identityMatrix = Eigen::MatrixXd::Identity(jacobianInWorldFrame_.rows(), jacobianInWorldFrame_.cols()) ;
+
+    transposeJacobian = jacobianInEndEffectorFrame_.transpose();
+    pseudoInverseJacobianInWorldFrame_ = transposeJacobian * (jacobianInWorldFrame_*transposeJacobian + damping * identityMatrix).inverse();
+    ROS_DEBUG_STREAM("PSUEDO INVERSE JACOBIAN IN END EFFECTOR FRAME \n" << pseudoInverseJacobianInWorldFrame_);
+}
+
+
+void Robot::calculateMeasureOfManipulabilityInEndEffector(){
+    measureOfManipubilityInEndEffectorFrame_ = sqrt(((jacobianInEndEffectorFrame_ * jacobianInEndEffectorFrame_.transpose()).determinant()));
+    ROS_DEBUG_STREAM("MEASURE OF MANIPULABILITY IN END EFFECTOR FRAME \n" << measureOfManipubilityInEndEffectorFrame_);
 }
 

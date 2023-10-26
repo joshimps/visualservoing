@@ -123,6 +123,8 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
     robot_->calculateJointTransformsToWorld();
     robot_->calculateJacobianInWorldFrame(); 
     robot_->calculateJacobianInEndEffectorFrame(); 
+    robot_->calculateMeasureOfManipulabilityInEndEffector();
+    robot_->calculatePseudoInverseJacobianInEndEffectorFrame();
     
     geometry_msgs::PoseStamped fiducialPoseStampedGlobal_ = *msg;
 
@@ -148,17 +150,17 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
     fiducialTransformGlobal(0,0) = fiducialRotationMatrixGlobal(0,0);
     fiducialTransformGlobal(0,1) = fiducialRotationMatrixGlobal(0,1);
     fiducialTransformGlobal(0,2) = fiducialRotationMatrixGlobal(0,2);
-    fiducialTransformGlobal(0,3) = fiducialPoseStampedGlobal_.pose.position.x;
+    fiducialTransformGlobal(0,3) = fiducialPoseStampedGlobal_.pose.position.x + robot_->getBaseTransform()(0,3);
 
     fiducialTransformGlobal(1,0) = fiducialRotationMatrixGlobal(1,0);
     fiducialTransformGlobal(1,1) = fiducialRotationMatrixGlobal(1,1);
     fiducialTransformGlobal(1,2) = fiducialRotationMatrixGlobal(1,2);
-    fiducialTransformGlobal(1,3) = fiducialPoseStampedGlobal_.pose.position.y;
+    fiducialTransformGlobal(1,3) = fiducialPoseStampedGlobal_.pose.position.y + robot_->getBaseTransform()(1,3);
 
     fiducialTransformGlobal(2,0) = fiducialRotationMatrixGlobal(2,0);
     fiducialTransformGlobal(2,1) = fiducialRotationMatrixGlobal(2,1);
     fiducialTransformGlobal(2,2) = fiducialRotationMatrixGlobal(2,2);
-    fiducialTransformGlobal(2,3) = fiducialPoseStampedGlobal_.pose.position.z;
+    fiducialTransformGlobal(2,3) = fiducialPoseStampedGlobal_.pose.position.z + robot_->getBaseTransform()(2,3);
 
     fiducialTransformGlobal(3,0) = 0;
     fiducialTransformGlobal(3,1) = 0;
@@ -170,17 +172,17 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
     adjustmentMatrix(0,0) = 1;
     adjustmentMatrix(0,1) = 0;
     adjustmentMatrix(0,2) = 0;
-    adjustmentMatrix(0,3) = robot_->getBaseTransform()(0,3);
+    adjustmentMatrix(0,3) = 0;
 
     adjustmentMatrix(1,0) = 0;
     adjustmentMatrix(1,1) = -1;
     adjustmentMatrix(1,2) = 0;
-    adjustmentMatrix(1,3) = robot_->getBaseTransform()(1,3);
+    adjustmentMatrix(1,3) = 0;
 
     adjustmentMatrix(2,0) = 0;
     adjustmentMatrix(2,1) = 0;
     adjustmentMatrix(2,2) = -1;
-    adjustmentMatrix(2,3) = robot_->getBaseTransform()(2,3);
+    adjustmentMatrix(2,3) = 0;
 
     adjustmentMatrix(3,0) = 0;
     adjustmentMatrix(3,1) = 0;
@@ -194,6 +196,7 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
 
     fiducialError = (robot_->getJointTransformToWorld(5)).inverse() * fiducialTransformGlobalAdjusted;
     fiducialError(2,3) = fiducialError(2,3) - 0.3;
+    
     //TEST
     fiducialRotationMatrixEndEffector(0,0) = fiducialError(0,0);
     fiducialRotationMatrixEndEffector(0,1) = fiducialError(0,1);
