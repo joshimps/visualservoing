@@ -41,8 +41,6 @@ class RobotController{
 
     void setFiducialPostition(Eigen::MatrixXd fiducialTranslationLocal , Eigen::Quaterniond fiducialRotationLocal);
 
-    protected:
-
     private:
    
     ///////////////////////////////////////////////////////////
