@@ -18,14 +18,36 @@ class RobotController{
     // Constructors and Destructors
     /////////////////////////////////////////////////////////////////////////////////////////
 
+    /*! @brief Constructor of the RobotController class
+     *
+     *   @param nh ros node handle
+     *   @param robot robot to control
+     *   @param gain gain of the p controller
+     *   @param errorThreshold threshold which when under the controller should consider itself done
+     *   @return void
+     */
     RobotController(ros::NodeHandle nh, Robot* robot, double gain, double errorThreshold);
 
     ///////////////////////////////////////////////////////////
     // Action
     //////////////////////////////////////////////////////////
 
+    /*! @brief Calculates the joint velocities required to move to the fiducials location and publishs them to the robot controller
+     *
+     *   @return void
+     */
     void moveRobot();
+
+     /*! @brief Stalls the robot, writing 0 as the joint velocity and publishes them to the robot controller
+     *
+     *   @return void
+     */
     void stallRobot();
+
+    /*! @brief Calculates the end effector velocity required to reach the fiducials location
+     *
+     *   @return void
+     */
     void calculateEndEffectorVelocity();
 
 
@@ -33,12 +55,23 @@ class RobotController{
     // Getters
     /////////////////////////////////////////////////////////////////////////////////////////
 
+     /*! @brief Gets the end effector velocity
+     *
+     *   @return Eigen::VectorXd end effector velocity in translational xyz and rotational quat xyz components
+     */
     Eigen::VectorXd getEndEffectorVelocity();
     
     ///////////////////////////////////////////////////////////////////////////////////////////
     // Setters
     /////////////////////////////////////////////////////////////////////////////////////////
 
+    /*! @brief Sets a position for the fiducial to be, useful for testing, do not use otherwise
+     *
+     *   @param fiducialTranslationLocal matrix containing the xyz translational component of where the fiducial should be
+     *   @param fiducialRotationLocal matrix containing the quat xyz rotational component of where the fiducial should be
+     * 
+     *   @return void
+     */ 
     void setFiducialPostition(Eigen::MatrixXd fiducialTranslationLocal , Eigen::Quaterniond fiducialRotationLocal);
 
     private:
