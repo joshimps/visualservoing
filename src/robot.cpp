@@ -15,7 +15,7 @@ Robot::Robot(ros::NodeHandle nh, std::vector<double> d, std::vector<double> a, s
     jointNames_ = jointNames;
     jacobianInWorldFrame_.resize(6,d.size());
     jacobianInEndEffectorFrame_.resize(6,d.size());
-
+    dampingThreshold_ = 0.001;
     numberOfJoints_ = d_.size();
 
     //Row 1
@@ -149,7 +149,15 @@ Eigen::MatrixXd Robot::getPseudoInverseJacobianInEndEffectorFrame(){
     Eigen::MatrixXd transposeJacobian;
     Eigen::MatrixXd psuedoInverseJacobian;
     double jacobianDeterminant = jacobianInEndEffectorFrame_.determinant();
-    double damping = 0.1;
+    double damping;
+    
+    if(measureOfManipubilityInEndEffector_ > dampingThreshold_){
+        damping = 0
+    }
+    else{
+        damping = (1 - pow((measureOfManipubilityInEndEffector_/dampingThreshold_),2))*dampMax
+    }
+        
     Eigen::MatrixXd identityMatrix = Eigen::MatrixXd::Identity(jacobianInEndEffectorFrame_.rows(), jacobianInEndEffectorFrame_.cols()) ;
 
     if(jacobianDeterminant == 0 || jacobianDeterminant == -0){
@@ -500,3 +508,9 @@ void Robot::calculateJacobianInEndEffectorFrame(){
     ROS_DEBUG_STREAM("JACOBIAN IN END EFFECTOR FRAME");
     ROS_DEBUG_STREAM("\n" << jacobianInEndEffectorFrame_);
 }
+
+void Robot::calculateMeasureOfManipulabilityInEndEffector(){
+    measureOfManipubilityInEndEffector_ = sqrt(((jacobianInEndEffectorFrame_ * jacobianInEndEffectorFrame_.transpose()).determinant())(1,1));
+
+}
+
