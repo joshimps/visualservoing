@@ -12,6 +12,7 @@ int main(int argc, char **argv)
   ros::console::notifyLoggerLevelsChanged();
   }
   
+  //DH Parameters of a UR3 robot are provided
   std::vector<double> d{0.1519,0,0,0.11235,0.08535,0.0819};
   std::vector<double> a{0,-0.24365,-0.21325,0,0,0};
   std::vector<double> alpha{M_PI/2,0,0,M_PI/2,-M_PI/2,0};
@@ -23,11 +24,9 @@ int main(int argc, char **argv)
   ros::AsyncSpinner spinner(0);
   spinner.start();
 
-
   Robot robot(nh,d,a,alpha,jointNames);
   RobotController robotController(nh,&robot,gain,errorThreshold);
 
-  
   ros::waitForShutdown();
 
   return 0;

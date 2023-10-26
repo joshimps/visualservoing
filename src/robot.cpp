@@ -53,7 +53,6 @@ Robot::Robot(ros::NodeHandle nh, std::vector<double> d, std::vector<double> a, s
 //////////////////////////////////////////////////////////
 
 void Robot::jointStateCallBack(const sensor_msgs::JointStateConstPtr &msg){
-    ROS_DEBUG_STREAM("RECIEVED JOINT TRANSFORM");
     std::unique_lock<std::mutex> lck(jointStateMutex_);
     jointStates_ = *msg;
 }
@@ -81,7 +80,6 @@ Eigen::MatrixXd Robot::getBaseTransform(){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
     return baseTransform_;
 }
-
 
 Eigen::MatrixXd Robot::getJointTransformToBase(int i){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
@@ -155,6 +153,9 @@ void Robot::calculateJointTransforms(){
 
     ROS_DEBUG_STREAM("JOINT TRANSFORMS");
 
+
+    //We have to rearrange the order of the joint states recieved from the /joint_states topic to match the order provided by the user
+    //This is because the /joint_states topic does not always report the joints in order
     std::vector<int> jointOrder;
 
     if(jointStates_.name.size() != jointNames_.size()){
@@ -169,6 +170,7 @@ void Robot::calculateJointTransforms(){
         }
     }
     
+    //We then create transforms for each of the joints to represent our robot
     for(int i = 0; i < jointNames_.size(); i++){
         //tRz
         
@@ -289,7 +291,6 @@ void Robot::calculateJointTransformsToBase(){
     ROS_DEBUG_STREAM("JOINT TO BASE TRANSFORMS");
     ROS_DEBUG_STREAM("\n" << jointTransformToBase);
     for(int i = 1; i < jointTransforms_.size(); i++){
-        
         jointTransformToBase = jointTransformToBase * jointTransforms_.at(i); 
         ROS_DEBUG_STREAM("\n" << jointTransformToBase);
         jointTransformsToBase_.push_back(jointTransformToBase);
@@ -492,7 +493,6 @@ void Robot::calculatePseudoInverseJacobianInWorldFrame(){
     pseudoInverseJacobianInWorldFrame_ = transposeJacobian * (jacobianInWorldFrame_*transposeJacobian + damping * identityMatrix).inverse();
     ROS_DEBUG_STREAM("PSUEDO INVERSE JACOBIAN IN END EFFECTOR FRAME \n" << pseudoInverseJacobianInWorldFrame_);
 }
-
 
 void Robot::calculateMeasureOfManipulabilityInEndEffector(){
     measureOfManipubilityInEndEffectorFrame_ = sqrt(((jacobianInEndEffectorFrame_ * jacobianInEndEffectorFrame_.transpose()).determinant()));
