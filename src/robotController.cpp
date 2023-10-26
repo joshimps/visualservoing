@@ -194,7 +194,7 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
 
     fiducialError = (robot_->getJointTransformToWorld(5)).inverse() * fiducialTransformGlobalAdjusted;
     fiducialError(2,3) = fiducialError(2,3) - 0.3;
-
+    //TEST
     fiducialRotationMatrixEndEffector(0,0) = fiducialError(0,0);
     fiducialRotationMatrixEndEffector(0,1) = fiducialError(0,1);
     fiducialRotationMatrixEndEffector(0,2) = fiducialError(0,2);
