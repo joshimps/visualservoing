@@ -57,15 +57,14 @@ void RobotController::moveRobot(){
 
     //Calculate the jacobian of the current pose 
     //The joint velocity is the jacobian multiplied by the error 
-   
-    jointVelocities =  robot_->getPseudoInverseJacobian() * endEffectorVelocity_;
+    jointVelocities =  robot_->getPseudoInverseJacobianInEndEffectorFrame() * endEffectorVelocity_;
     //Publish the joint velocities to the robot here
     for(int i = 0; i < (robot_->getNumberOfJoints()); i++){
         msg.data.push_back(jointVelocities(i,0));
     }
 
     euclidianNorm_ = endEffectorVelocity_.norm();
-    ROS_INFO_STREAM("ERROR \n" << euclidianNorm_);
+    ROS_INFO_STREAM("EUCLIDIAN ERROR \n" << euclidianNorm_);
     jointVelocityPub_.publish(msg);
     ROS_DEBUG_STREAM("PUBLISHED JOINT VELOCITY \n" << jointVelocities);
 }
@@ -75,13 +74,13 @@ void RobotController::stallRobot(){
     std_msgs::Float64MultiArray msg;
     Eigen::VectorXd jointVelocities(robot_->getNumberOfJoints());
    
-    jointVelocities =  robot_->getPseudoInverseJacobian() * endEffectorVelocity_;
+    jointVelocities =  robot_->getPseudoInverseJacobianInEndEffectorFrame() * endEffectorVelocity_;
     //Publish the joint velocities to the robot here
     for(int i = 0; i < (robot_->getNumberOfJoints()); i++){
         msg.data.push_back(0);
     }
     euclidianNorm_ = endEffectorVelocity_.norm();
-    ROS_INFO_STREAM("ERROR \n" << euclidianNorm_);
+    ROS_INFO_STREAM("EUCLIDIAN ERROR \n" << euclidianNorm_);
     jointVelocityPub_.publish(msg);
     ROS_DEBUG_STREAM("PUBLISHED JOINT VELOCITY \n" << jointVelocities);
 }
@@ -122,7 +121,8 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
     robot_->calculateJointTransforms();
     robot_->calculateJointTransformsToBase();
     robot_->calculateJointTransformsToWorld();
-    robot_->calculateJacobian(); 
+    robot_->calculateJacobianInWorldFrame(); 
+    robot_->calculateJacobianInEndEffectorFrame(); 
     
     geometry_msgs::PoseStamped fiducialPoseStampedGlobal_ = *msg;
 
@@ -133,6 +133,8 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
     Eigen::Matrix3d fiducialRotationMatrixGlobal;
     Eigen::Matrix4d fiducialTransformGlobalAdjusted;
     Eigen::Matrix4d fiducialTransformEndEffector;
+    Eigen::Matrix4d fiducialTransformEndEffectorAdjusted;
+    Eigen::Matrix4d fiducialError;
     Eigen::Matrix3d fiducialRotationMatrixEndEffector;
     Eigen::Vector3d fiducialTranslationEndEffector;
 
@@ -168,17 +170,17 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
     adjustmentMatrix(0,0) = 1;
     adjustmentMatrix(0,1) = 0;
     adjustmentMatrix(0,2) = 0;
-    adjustmentMatrix(0,3) = 0;
+    adjustmentMatrix(0,3) = robot_->getBaseTransform()(0,3);
 
     adjustmentMatrix(1,0) = 0;
     adjustmentMatrix(1,1) = -1;
     adjustmentMatrix(1,2) = 0;
-    adjustmentMatrix(1,3) = 0;
+    adjustmentMatrix(1,3) = robot_->getBaseTransform()(1,3);
 
     adjustmentMatrix(2,0) = 0;
     adjustmentMatrix(2,1) = 0;
     adjustmentMatrix(2,2) = -1;
-    adjustmentMatrix(2,3) = 0;
+    adjustmentMatrix(2,3) = robot_->getBaseTransform()(2,3);
 
     adjustmentMatrix(3,0) = 0;
     adjustmentMatrix(3,1) = 0;
@@ -187,65 +189,33 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
 
     fiducialTransformGlobalAdjusted = fiducialTransformGlobal * adjustmentMatrix;
 
-    fiducialTransformEndEffector = fiducialTransformGlobalAdjusted * (robot_->getJointTransformToWorld(5)).inverse();
+    ROS_INFO_STREAM("FIDUCIAL GLOBAL");
+    ROS_INFO_STREAM(fiducialTransformGlobalAdjusted);
 
-    fiducialRotationMatrixEndEffector(0,0) = fiducialTransformEndEffector(0,0);
-    fiducialRotationMatrixEndEffector(0,1) = fiducialTransformEndEffector(0,1);
-    fiducialRotationMatrixEndEffector(0,2) = fiducialTransformEndEffector(0,2);
-    fiducialTranslationEndEffector(0,0) = fiducialTransformEndEffector(0,3);
+    fiducialError = (robot_->getJointTransformToWorld(5)).inverse() * fiducialTransformGlobalAdjusted;
+    fiducialError(2,3) = fiducialError(2,3) - 0.3;
+    //TEST
+    fiducialRotationMatrixEndEffector(0,0) = fiducialError(0,0);
+    fiducialRotationMatrixEndEffector(0,1) = fiducialError(0,1);
+    fiducialRotationMatrixEndEffector(0,2) = fiducialError(0,2);
+    fiducialTranslationEndEffector(0,0) = fiducialError(0,3);
 
-    fiducialRotationMatrixEndEffector(1,0) = fiducialTransformEndEffector(1,0);
-    fiducialRotationMatrixEndEffector(1,1) = fiducialTransformEndEffector(1,1);
-    fiducialRotationMatrixEndEffector(1,2) = fiducialTransformEndEffector(1,2);
-    fiducialTranslationEndEffector(1,0) = fiducialTransformEndEffector(1,3);
+    fiducialRotationMatrixEndEffector(1,0) = fiducialError(1,0);
+    fiducialRotationMatrixEndEffector(1,1) = fiducialError(1,1);
+    fiducialRotationMatrixEndEffector(1,2) = fiducialError(1,2);
+    fiducialTranslationEndEffector(1,0) = fiducialError(1,3);
 
-    fiducialRotationMatrixEndEffector(2,0) = fiducialTransformEndEffector(2,0);
-    fiducialRotationMatrixEndEffector(2,1) = fiducialTransformEndEffector(2,1);
-    fiducialRotationMatrixEndEffector(2,2) = fiducialTransformEndEffector(2,2);
-    fiducialTranslationEndEffector(2,0) = fiducialTransformEndEffector(2,3);
+    fiducialRotationMatrixEndEffector(2,0) = fiducialError(2,0);
+    fiducialRotationMatrixEndEffector(2,1) = fiducialError(2,1);
+    fiducialRotationMatrixEndEffector(2,2) = fiducialError(2,2);
+    fiducialTranslationEndEffector(2,0) = fiducialError(2,3);
+
+    ROS_INFO_STREAM("FIDUCIAL ERROR");
+    ROS_INFO_STREAM(fiducialError);
 
     fiducialRotationLocal_ = fiducialRotationMatrixEndEffector;
     fiducialTranslationLocal_ = fiducialTranslationEndEffector;
 
-
-    geometry_msgs::PoseStamped pose;
-
-    Eigen::Matrix3d endEffectorMatrixEndEffector;
-    Eigen::Vector3d endEffectorTranslation;
-    Eigen::Quaterniond endEffectorQuaternion;
-
-    endEffectorMatrixEndEffector(0,0) = robot_->getJointTransformToWorld(5)(0,0);
-    endEffectorMatrixEndEffector(0,1) = robot_->getJointTransformToWorld(5)(0,1);
-    endEffectorMatrixEndEffector(0,2) = robot_->getJointTransformToWorld(5)(0,2);
-    endEffectorTranslation(0,0) =       robot_->getJointTransformToWorld(5)(0,3);
-
-    endEffectorMatrixEndEffector(1,0) = robot_->getJointTransformToWorld(5)(1,0);
-    endEffectorMatrixEndEffector(1,1) = robot_->getJointTransformToWorld(5)(1,1);
-    endEffectorMatrixEndEffector(1,2) = robot_->getJointTransformToWorld(5)(1,2);
-    endEffectorTranslation(1,0) =       robot_->getJointTransformToWorld(5)(1,3);
-
-    endEffectorMatrixEndEffector(2,0) = robot_->getJointTransformToWorld(5)(2,0);
-    endEffectorMatrixEndEffector(2,1) = robot_->getJointTransformToWorld(5)(2,1);
-    endEffectorMatrixEndEffector(2,2) = robot_->getJointTransformToWorld(5)(2,2);
-    endEffectorTranslation(2,0) =       robot_->getJointTransformToWorld(5)(2,3);
-
-    endEffectorQuaternion = endEffectorMatrixEndEffector;
-
-    pose.pose.orientation.w = endEffectorQuaternion.w();
-    pose.pose.orientation.x = endEffectorQuaternion.x();
-    pose.pose.orientation.y = endEffectorQuaternion.y();
-    pose.pose.orientation.z = endEffectorQuaternion.z();
-
-    pose.pose.position.x = endEffectorTranslation(0,0);
-    pose.pose.position.y = endEffectorTranslation(1,0);
-    pose.pose.position.z = endEffectorTranslation(2,0);
-
-    pose.header.frame_id = fiducialPoseStampedGlobal_.header.frame_id;
-
-    fiducialNewPose_.publish(pose);
-
-    ROS_INFO_STREAM(fiducialTransformEndEffector);
-    
     calculateEndEffectorVelocity();
 
     if(euclidianNorm_ > errorThreshold_){
@@ -263,5 +233,6 @@ void RobotController::clockCallback(const rosgraph_msgs::ClockConstPtr &msg){
     //If gretaer than 1 second since fiducial publish
     if(clock.clock.sec - timeAtFiducialPublish_.sec > 1 && recievedFiducial_){
         ROS_ERROR_STREAM("LOST SIGHT OF FIDUCIAL");
+        ros::shutdown();
     }
 }

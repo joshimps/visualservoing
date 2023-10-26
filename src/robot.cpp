@@ -13,7 +13,9 @@ Robot::Robot(ros::NodeHandle nh, std::vector<double> d, std::vector<double> a, s
     a_ = a;
     alpha_ = alpha;
     jointNames_ = jointNames;
-    jacobian_.resize(6,d.size());
+    jacobianInWorldFrame_.resize(6,d.size());
+    jacobianInEndEffectorFrame_.resize(6,d.size());
+    dampingThreshold_ = 0.001;
     numberOfJoints_ = d_.size();
 
     //Row 1
@@ -93,37 +95,83 @@ Eigen::MatrixXd Robot::getJointTransformToWorld(int i){
     return jointTransformsToWorld_.at(i);
 }
 
-Eigen::MatrixXd Robot::getJacobian(){
+Eigen::MatrixXd Robot::getJacobianInWorldFrame(){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
-    return jacobian_;
+    return jacobianInWorldFrame_;
 }
 
-Eigen::MatrixXd Robot::getTransposeJacobian(){
+Eigen::MatrixXd Robot::getJacobianInEndEffectorFrame(){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
-    return jacobian_.transpose();
+    return jacobianInEndEffectorFrame_;
 }
 
-Eigen::MatrixXd Robot::getPseudoInverseJacobian(){
+Eigen::MatrixXd Robot::getTransposeJacobianInWorldFrame(){
+    std::unique_lock<std::mutex> lck(jointStateMutex_);
+    return jacobianInWorldFrame_.transpose();
+}
+
+Eigen::MatrixXd Robot::getTransposeJacobianInEndEffectorFrame(){
+    std::unique_lock<std::mutex> lck(jointStateMutex_);
+    return jacobianInEndEffectorFrame_.transpose();
+}
+
+Eigen::MatrixXd Robot::getPseudoInverseJacobianInWorldFrame(){
     std::unique_lock<std::mutex> lck(jointStateMutex_);
 
     Eigen::MatrixXd transposeJacobian;
     Eigen::MatrixXd psuedoInverseJacobian;
-    double jacobianDeterminant = jacobian_.determinant();
+    double jacobianDeterminant = jacobianInWorldFrame_.determinant();
     double damping = 0.1;
-    Eigen::MatrixXd identityMatrix = Eigen::MatrixXd::Identity(jacobian_.rows(), jacobian_.cols()) ;
+    Eigen::MatrixXd identityMatrix = Eigen::MatrixXd::Identity(jacobianInWorldFrame_.rows(), jacobianInWorldFrame_.cols()) ;
 
     if(jacobianDeterminant == 0 || jacobianDeterminant == -0){
         ROS_INFO_STREAM("USING DLS");
-        transposeJacobian = jacobian_.transpose();
+        transposeJacobian = jacobianInWorldFrame_.transpose();
         ROS_DEBUG_STREAM("TRANSPOSE JACOBIAN \n" << transposeJacobian);
-        psuedoInverseJacobian = transposeJacobian * (jacobian_*transposeJacobian + damping * identityMatrix).inverse();
+        psuedoInverseJacobian = transposeJacobian * (jacobianInWorldFrame_*transposeJacobian + damping * identityMatrix).inverse();
         ROS_DEBUG_STREAM("PSUEDO INVERSE JACOBIAN \n" << psuedoInverseJacobian);
     }
     else{
         ROS_INFO_STREAM("NOT USING DLS");
-        transposeJacobian = jacobian_.transpose();
+        transposeJacobian = jacobianInWorldFrame_.transpose();
         ROS_DEBUG_STREAM("TRANSPOSE JACOBIAN \n" << transposeJacobian);
-        psuedoInverseJacobian = transposeJacobian * (jacobian_*transposeJacobian).inverse();
+        psuedoInverseJacobian = transposeJacobian * (jacobianInWorldFrame_*transposeJacobian).inverse();
+        ROS_DEBUG_STREAM("PSUEDO INVERSE JACOBIAN \n" << psuedoInverseJacobian);
+    }
+
+
+    return psuedoInverseJacobian;
+}
+
+Eigen::MatrixXd Robot::getPseudoInverseJacobianInEndEffectorFrame(){
+    std::unique_lock<std::mutex> lck(jointStateMutex_);
+
+    Eigen::MatrixXd transposeJacobian;
+    Eigen::MatrixXd psuedoInverseJacobian;
+    double jacobianDeterminant = jacobianInEndEffectorFrame_.determinant();
+    double damping;
+    
+    if(measureOfManipubilityInEndEffector_ > dampingThreshold_){
+        damping = 0
+    }
+    else{
+        damping = (1 - pow((measureOfManipubilityInEndEffector_/dampingThreshold_),2))*dampMax
+    }
+        
+    Eigen::MatrixXd identityMatrix = Eigen::MatrixXd::Identity(jacobianInEndEffectorFrame_.rows(), jacobianInEndEffectorFrame_.cols()) ;
+
+    if(jacobianDeterminant == 0 || jacobianDeterminant == -0){
+        ROS_INFO_STREAM("USING DLS");
+        transposeJacobian = jacobianInEndEffectorFrame_.transpose();
+        ROS_DEBUG_STREAM("TRANSPOSE JACOBIAN \n" << transposeJacobian);
+        psuedoInverseJacobian = transposeJacobian * (jacobianInEndEffectorFrame_*transposeJacobian + damping * identityMatrix).inverse();
+        ROS_DEBUG_STREAM("PSUEDO INVERSE JACOBIAN \n" << psuedoInverseJacobian);
+    }
+    else{
+        ROS_INFO_STREAM("NOT USING DLS");
+        transposeJacobian = jacobianInEndEffectorFrame_.transpose();
+        ROS_DEBUG_STREAM("TRANSPOSE JACOBIAN \n" << transposeJacobian);
+        psuedoInverseJacobian = transposeJacobian * (jacobianInEndEffectorFrame_*transposeJacobian).inverse();
         ROS_DEBUG_STREAM("PSUEDO INVERSE JACOBIAN \n" << psuedoInverseJacobian);
     }
 
@@ -173,7 +221,6 @@ void Robot::calculateJointTransforms(){
         for(int j = 0; j < jointStates_.name.size(); j++){
             if(jointNames_.at(i) == jointStates_.name.at(j)){
                 jointOrder.push_back(j);
-                ROS_INFO_STREAM(j);
             }
         }
     }
@@ -316,7 +363,7 @@ void Robot::calculateJointTransformsToWorld(){
     }
 }
 
-void Robot::calculateJacobian(){
+void Robot::calculateJacobianInWorldFrame(){
     
     Eigen::Vector3d unitVector;
     Eigen::Matrix3d rotationMatrixItoB;
@@ -338,9 +385,9 @@ void Robot::calculateJacobian(){
     unitVector(2,0) = 1;  
 
     //The translationMatrixNto0 will be the translation part of the transformation matrix N to 0
-    translationMatrixNtoB(0,0) = jointTransformsToBase_.at(jointTransformsToBase_.size()-1)(0,3);
-    translationMatrixNtoB(1,0) = jointTransformsToBase_.at(jointTransformsToBase_.size()-1)(1,3);
-    translationMatrixNtoB(2,0) = jointTransformsToBase_.at(jointTransformsToBase_.size()-1)(2,3);
+    translationMatrixNtoB(0,0) = jointTransformsToWorld_.at(jointTransformsToWorld_.size()-1)(0,3);
+    translationMatrixNtoB(1,0) = jointTransformsToWorld_.at(jointTransformsToWorld_.size()-1)(1,3);
+    translationMatrixNtoB(2,0) = jointTransformsToWorld_.at(jointTransformsToWorld_.size()-1)(2,3);
     
     for(int i = 0; i < jointTransforms_.size(); i++){
         //Get the rotation matrix from i to 0 and the translation matrix from i to 0
@@ -368,43 +415,102 @@ void Robot::calculateJacobian(){
         }
         else{
             //Build the matrices rotationMatrixIto0 and translationMatrixIto0
-            translationMatrixItoB(0,0) = jointTransformsToBase_.at(i-1)(0,3);
-            translationMatrixItoB(1,0) = jointTransformsToBase_.at(i-1)(1,3);
-            translationMatrixItoB(2,0) = jointTransformsToBase_.at(i-1)(2,3);
+            translationMatrixItoB(0,0) = jointTransformsToWorld_.at(i-1)(0,3);
+            translationMatrixItoB(1,0) = jointTransformsToWorld_.at(i-1)(1,3);
+            translationMatrixItoB(2,0) = jointTransformsToWorld_.at(i-1)(2,3);
             
             //Row 1
-            rotationMatrixItoB(0,0) = jointTransformsToBase_.at(i-1)(0,0);
-            rotationMatrixItoB(0,1) = jointTransformsToBase_.at(i-1)(0,1);
-            rotationMatrixItoB(0,2) = jointTransformsToBase_.at(i-1)(0,2);
+            rotationMatrixItoB(0,0) = jointTransformsToWorld_.at(i-1)(0,0);
+            rotationMatrixItoB(0,1) = jointTransformsToWorld_.at(i-1)(0,1);
+            rotationMatrixItoB(0,2) = jointTransformsToWorld_.at(i-1)(0,2);
             
             //Row 2
-            rotationMatrixItoB(1,0) = jointTransformsToBase_.at(i-1)(1,0);
-            rotationMatrixItoB(1,1) = jointTransformsToBase_.at(i-1)(1,1);
-            rotationMatrixItoB(1,2) = jointTransformsToBase_.at(i-1)(1,2);
+            rotationMatrixItoB(1,0) = jointTransformsToWorld_.at(i-1)(1,0);
+            rotationMatrixItoB(1,1) = jointTransformsToWorld_.at(i-1)(1,1);
+            rotationMatrixItoB(1,2) = jointTransformsToWorld_.at(i-1)(1,2);
             //Row 3
-            rotationMatrixItoB(2,0) = jointTransformsToBase_.at(i-1)(2,0);
-            rotationMatrixItoB(2,1) = jointTransformsToBase_.at(i-1)(2,1);
-            rotationMatrixItoB(2,2) = jointTransformsToBase_.at(i-1)(2,2);
+            rotationMatrixItoB(2,0) = jointTransformsToWorld_.at(i-1)(2,0);
+            rotationMatrixItoB(2,1) = jointTransformsToWorld_.at(i-1)(2,1);
+            rotationMatrixItoB(2,2) = jointTransformsToWorld_.at(i-1)(2,2);
         }
         
         //Create the coiumn in the jacobian matrix
         jacobianLinearVelocityComponent = (rotationMatrixItoB * unitVector).cross((translationMatrixNtoB - translationMatrixItoB));
         jacobianRotationalVelocityComponent = rotationMatrixItoB * unitVector;
 
-
         //Row 1
-        jacobian_(0,i) = jacobianLinearVelocityComponent(0,0);
+        jacobianInWorldFrame_(0,i) = jacobianLinearVelocityComponent(0,0);
         //Row 2
-        jacobian_(1,i) = jacobianLinearVelocityComponent(1,0);
+        jacobianInWorldFrame_(1,i) = jacobianLinearVelocityComponent(1,0);
         //Row 3
-        jacobian_(2,i) = jacobianLinearVelocityComponent(2,0);
+        jacobianInWorldFrame_(2,i) = jacobianLinearVelocityComponent(2,0);
         //Row 4
-        jacobian_(3,i) = jacobianRotationalVelocityComponent(0,0);
+        jacobianInWorldFrame_(3,i) = jacobianRotationalVelocityComponent(0,0);
         //Row 5
-        jacobian_(4,i) = jacobianRotationalVelocityComponent(1,0);
+        jacobianInWorldFrame_(4,i) = jacobianRotationalVelocityComponent(1,0);
         //Row 6
-        jacobian_(5,i) = jacobianRotationalVelocityComponent(2,0);
+        jacobianInWorldFrame_(5,i) = jacobianRotationalVelocityComponent(2,0);
     }
-    ROS_DEBUG_STREAM("JACOBIAN");
-    ROS_DEBUG_STREAM("\n" << jacobian_);
+    ROS_DEBUG_STREAM("JACOBIAN IN WORLD FRAME");
+    ROS_DEBUG_STREAM("\n" << jacobianInWorldFrame_);
 }
+
+void Robot::calculateJacobianInEndEffectorFrame(){
+    
+    Eigen::MatrixXd alterationMatrix(6,6);
+    Eigen::MatrixXd inverseEndEffectorTransformation = getJointTransformToWorld(5).inverse();
+
+    //Row 1
+    alterationMatrix(0,0) = inverseEndEffectorTransformation(0,0);
+    alterationMatrix(0,1) = inverseEndEffectorTransformation(0,1);
+    alterationMatrix(0,2) = inverseEndEffectorTransformation(0,2);
+    alterationMatrix(0,3) = 0;
+    alterationMatrix(0,4) = 0;
+    alterationMatrix(0,5) = 0;
+    //Row 2
+    alterationMatrix(1,0) = inverseEndEffectorTransformation(1,0);
+    alterationMatrix(1,1) = inverseEndEffectorTransformation(1,1);
+    alterationMatrix(1,2) = inverseEndEffectorTransformation(1,2);
+    alterationMatrix(1,3) = 0;
+    alterationMatrix(1,4) = 0;
+    alterationMatrix(1,5) = 0;
+    //Row 3
+    alterationMatrix(2,0) = inverseEndEffectorTransformation(2,0);
+    alterationMatrix(2,1) = inverseEndEffectorTransformation(2,1);
+    alterationMatrix(2,2) = inverseEndEffectorTransformation(2,2);
+    alterationMatrix(2,3) = 0;
+    alterationMatrix(2,4) = 0;
+    alterationMatrix(2,5) = 0;
+    //Row 4
+    alterationMatrix(3,0) = 0;
+    alterationMatrix(3,1) = 0;
+    alterationMatrix(3,2) = 0;
+    alterationMatrix(3,3) = inverseEndEffectorTransformation(0,0);
+    alterationMatrix(3,4) = inverseEndEffectorTransformation(0,1);
+    alterationMatrix(3,5) = inverseEndEffectorTransformation(0,2);
+    //Row 5
+    alterationMatrix(4,0) = 0;
+    alterationMatrix(4,1) = 0;
+    alterationMatrix(4,2) = 0;
+    alterationMatrix(4,3) = inverseEndEffectorTransformation(1,0);
+    alterationMatrix(4,4) = inverseEndEffectorTransformation(1,1);
+    alterationMatrix(4,5) = inverseEndEffectorTransformation(1,2);
+    //Row 6
+    alterationMatrix(5,0) = 0;
+    alterationMatrix(5,1) = 0;
+    alterationMatrix(5,2) = 0;
+    alterationMatrix(5,3) = inverseEndEffectorTransformation(2,0);
+    alterationMatrix(5,4) = inverseEndEffectorTransformation(2,1);
+    alterationMatrix(5,5) = inverseEndEffectorTransformation(2,2);
+    
+    jacobianInEndEffectorFrame_ = alterationMatrix * jacobianInWorldFrame_;
+
+    ROS_DEBUG_STREAM("JACOBIAN IN END EFFECTOR FRAME");
+    ROS_DEBUG_STREAM("\n" << jacobianInEndEffectorFrame_);
+}
+
+void Robot::calculateMeasureOfManipulabilityInEndEffector(){
+    measureOfManipubilityInEndEffector_ = sqrt(((jacobianInEndEffectorFrame_ * jacobianInEndEffectorFrame_.transpose()).determinant())(1,1));
+
+}
+
