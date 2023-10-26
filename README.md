@@ -33,7 +33,7 @@ roslaunch visual_servoing ur3.launch
 Update markerId and markerSize (in metres) on command line if required
 
 ```
-roslaunch visual_servoing aruco_Robot.launch
+roslaunch visual_servoing aruco_robot.launch
 ```
 
 ### Launch Visual Servoing Node
