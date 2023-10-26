@@ -23,7 +23,7 @@ RobotController::RobotController(ros::NodeHandle nh, Robot *robot, double gain, 
     clockSub_ = nh_.subscribe("/clock", 10, &RobotController::clockCallback, this);
     jointVelocityPub_ = nh_.advertise<std_msgs::Float64MultiArray>("joint_group_vel_controller/command", 10, false);
     endEffectorVelocityPub_ = nh_.advertise<std_msgs::Float64MultiArray>("visual_servoing/end_effector_velocity", 10, false);
-    fiducialNewPose_ = nh_.advertise<geometry_msgs::PoseStamped>("visual_servoing/fiducial_pose", 10, false);
+    euclidianNormPub_ = nh_.advertise<std_msgs::Float64>("visual_servoing/euclidian_norm", 10, false);
 
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
 }
@@ -67,6 +67,9 @@ void RobotController::moveRobot()
     }
 
     euclidianNorm_ = endEffectorVelocity_.norm();
+    std_msgs::Float64 euclidianNormMsg;
+    euclidianNormMsg.data = euclidianNorm_;
+    euclidianNormPub_.publish(euclidianNormMsg);
     ROS_INFO_STREAM("EUCLIDIAN ERROR \n"
                     << euclidianNorm_);
     jointVelocityPub_.publish(msg);
@@ -87,6 +90,9 @@ void RobotController::stallRobot()
         msg.data.push_back(0);
     }
     euclidianNorm_ = endEffectorVelocity_.norm();
+    std_msgs::Float64 euclidianNormMsg;
+    euclidianNormMsg.data = euclidianNorm_;
+    euclidianNormPub_.publish(euclidianNormMsg);
     ROS_INFO_STREAM("EUCLIDIAN ERROR \n"
                     << euclidianNorm_);
     jointVelocityPub_.publish(msg);
@@ -201,7 +207,7 @@ void RobotController::fiducialPositionCallBack(const geometry_msgs::PoseStampedP
     fiducialTransformGlobalAdjusted = fiducialTransformGlobal * adjustmentMatrix;
 
     fiducialError = (robot_->getJointTransformToWorld(5)).inverse() * fiducialTransformGlobalAdjusted;
-    fiducialError(2, 3) = fiducialError(2, 3) - 0.3;
+    fiducialError(2, 3) = fiducialError(2, 3) - 0.6;
 
     // TEST
     fiducialRotationMatrixEndEffector(0, 0) = fiducialError(0, 0);

@@ -4,6 +4,7 @@
 #include "geometry_msgs/PoseStamped.h"
 #include "eigen3/Eigen/Dense"
 #include "std_msgs/Float64MultiArray.h"
+#include "std_msgs/Float64.h"
 #include "geometry_msgs/PoseStamped.h"
 #include "rosgraph_msgs/Clock.h"
 #include <atomic>
@@ -92,7 +93,7 @@ class RobotController{
     ros::Subscriber clockSub_;
     ros::Publisher jointVelocityPub_;
     ros::Publisher endEffectorVelocityPub_;
-    ros::Publisher fiducialNewPose_;
+    ros::Publisher euclidianNormPub_;
 
     ///////////////////////////////////////////////////////////////////////
     // Data Security and Pointers
