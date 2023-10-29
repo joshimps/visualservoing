@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     rgbd_pub = rospy.Publisher("/aruco_single/pose_rgbd", PoseStamped, queue_size=5)
     # Subscribe to depth image, pixel centre and pose of detected marker
-    sync_sub = message_filters.ApproximateTimeSynchronizer([depth_sub,pixel_sub, pose_sub], 3, 0.1)
+    sync_sub = message_filters.ApproximateTimeSynchronizer([depth_sub,pixel_sub, pose_sub], 10, 0.5)
     sync_sub.registerCallback(process_depth)    
     while not rospy.is_shutdown():
         pass
