@@ -4,6 +4,7 @@
 #include "geometry_msgs/PoseStamped.h"
 #include "eigen3/Eigen/Dense"
 #include "std_msgs/Float64MultiArray.h"
+#include "std_msgs/Float64.h"
 #include "geometry_msgs/PoseStamped.h"
 #include "rosgraph_msgs/Clock.h"
 #include <atomic>
@@ -18,14 +19,36 @@ class RobotController{
     // Constructors and Destructors
     /////////////////////////////////////////////////////////////////////////////////////////
 
+    /*! @brief Constructor of the RobotController class
+     *
+     *   @param nh ros node handle
+     *   @param robot robot to control
+     *   @param gain gain of the p controller
+     *   @param errorThreshold threshold which when under the controller should consider itself done
+     *   @return void
+     */
     RobotController(ros::NodeHandle nh, Robot* robot, double gain, double errorThreshold);
 
     ///////////////////////////////////////////////////////////
     // Action
     //////////////////////////////////////////////////////////
 
+    /*! @brief Calculates the joint velocities required to move to the fiducials location and publishs them to the robot controller
+     *
+     *   @return void
+     */
     void moveRobot();
+
+     /*! @brief Stalls the robot, writing 0 as the joint velocity and publishes them to the robot controller
+     *
+     *   @return void
+     */
     void stallRobot();
+
+    /*! @brief Calculates the end effector velocity required to reach the fiducials location
+     *
+     *   @return void
+     */
     void calculateEndEffectorVelocity();
 
 
@@ -33,15 +56,24 @@ class RobotController{
     // Getters
     /////////////////////////////////////////////////////////////////////////////////////////
 
+     /*! @brief Gets the end effector velocity
+     *
+     *   @return Eigen::VectorXd end effector velocity in translational xyz and rotational quat xyz components
+     */
     Eigen::VectorXd getEndEffectorVelocity();
     
     ///////////////////////////////////////////////////////////////////////////////////////////
     // Setters
     /////////////////////////////////////////////////////////////////////////////////////////
 
+    /*! @brief Sets a position for the fiducial to be, useful for testing, do not use otherwise
+     *
+     *   @param fiducialTranslationLocal matrix containing the xyz translational component of where the fiducial should be
+     *   @param fiducialRotationLocal matrix containing the quat xyz rotational component of where the fiducial should be
+     * 
+     *   @return void
+     */ 
     void setFiducialPostition(Eigen::MatrixXd fiducialTranslationLocal , Eigen::Quaterniond fiducialRotationLocal);
-
-    protected:
 
     private:
    
@@ -61,7 +93,7 @@ class RobotController{
     ros::Subscriber clockSub_;
     ros::Publisher jointVelocityPub_;
     ros::Publisher endEffectorVelocityPub_;
-    ros::Publisher fiducialNewPose_;
+    ros::Publisher euclidianNormPub_;
 
     ///////////////////////////////////////////////////////////////////////
     // Data Security and Pointers

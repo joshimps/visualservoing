@@ -74,19 +74,19 @@ def vector_callback(data):
 
 if __name__ == '__main__': 
     
-    rospy.init_node('vector_visualisation_node', anonymous= True)
+    rospy.init_node('vector_visualisation_node')
 
     mode = rospy.get_param("~rgbd_mode", default=False)
 
     if mode:
         rospy.loginfo("RGBD Mode: %s", mode)
-        rgbd_sub = rospy.Subscriber('/aruco_single/pose_rgbd', PoseStamped, vector_callback)
+        rgbd_sub = rospy.Subscriber('/aruco_single/pose_rgbd', PoseStamped, vector_callback, queue_size=3)
     else:
         rospy.loginfo("RGBD Mode: %s", mode)
-        velocity_sub = rospy.Subscriber('/aruco_single/pose', PoseStamped, vector_callback)
+        velocity_sub = rospy.Subscriber('/aruco_single/pose', PoseStamped, vector_callback, queue_size=3)
 
     marker_pub = rospy.Publisher('visualization_marker', Marker, queue_size=3)
-    # velocity_sub = rospy.Subscriber('eeVel', Float32MultiArray,  vector_callback)
+
     
     while not rospy.is_shutdown():
         pass

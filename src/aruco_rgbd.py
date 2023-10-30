@@ -6,25 +6,23 @@ from geometry_msgs.msg import PointStamped, PoseStamped
 from math import sin, cos
 from cv_bridge import CvBridge
 
-HEIGHT = 480
-WIDTH = 640
-VFOV = 42
-HFOV = 69
-ANGLE_INC_H = HFOV/WIDTH  
-MIN_ANGLE_H = (HFOV/2)
-ANGLE_INC_V = VFOV/HEIGHT  
-MIN_ANGLE_V = -(VFOV/2)
+bridge = CvBridge()
 
 bridge = CvBridge()
 
 def process_depth(depth, pixel, pose):
+
+    # Extract Pixels
     u = int(round(pixel.point.x))
     v = int(round(pixel.point.y))
-    theta = MIN_ANGLE_H - ANGLE_INC_H * u
-    gamma = MIN_ANGLE_V + ANGLE_INC_V * v
+    # Convert depth image to mm
     depthCV = bridge.imgmsg_to_cv2(depth, desired_encoding="passthrough")
+    # Extract depth value from depth image in metres
+
     marker_depth = depthCV[v,u]/1000
     
+    # Use P3P algorithm from aruco ros node to determine orientation, x and y values
+    # replace z value with depth from depth image
     msg = PoseStamped()
     msg.header = pose.header
     msg.pose.orientation = pose.pose.orientation
@@ -41,8 +39,10 @@ if __name__ == "__main__":
     pose_sub = message_filters.Subscriber("/aruco_single/pose", PoseStamped)
 
     rgbd_pub = rospy.Publisher("/aruco_single/pose_rgbd", PoseStamped, queue_size=5)
-    
-    sync_sub = message_filters.ApproximateTimeSynchronizer([depth_sub,pixel_sub, pose_sub], 3, 0.1)
+
+    # Subscribe to depth image, pixel centre and pose of detected marker
+    sync_sub = message_filters.ApproximateTimeSynchronizer([depth_sub,pixel_sub, pose_sub], 10, 0.5)
+
     sync_sub.registerCallback(process_depth)    
     while not rospy.is_shutdown():
         pass
