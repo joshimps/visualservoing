@@ -86,6 +86,7 @@ if __name__ == '__main__':
         velocity_sub = rospy.Subscriber('/aruco_single/pose', PoseStamped, vector_callback, queue_size=3)
 
     marker_pub = rospy.Publisher('visualization_marker', Marker, queue_size=3)
+
     
     while not rospy.is_shutdown():
         pass

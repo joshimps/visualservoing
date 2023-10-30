@@ -8,13 +8,17 @@ from cv_bridge import CvBridge
 
 bridge = CvBridge()
 
+bridge = CvBridge()
+
 def process_depth(depth, pixel, pose):
+
     # Extract Pixels
     u = int(round(pixel.point.x))
     v = int(round(pixel.point.y))
     # Convert depth image to mm
     depthCV = bridge.imgmsg_to_cv2(depth, desired_encoding="passthrough")
     # Extract depth value from depth image in metres
+
     marker_depth = depthCV[v,u]/1000
     
     # Use P3P algorithm from aruco ros node to determine orientation, x and y values
@@ -35,8 +39,10 @@ if __name__ == "__main__":
     pose_sub = message_filters.Subscriber("/aruco_single/pose", PoseStamped)
 
     rgbd_pub = rospy.Publisher("/aruco_single/pose_rgbd", PoseStamped, queue_size=5)
+
     # Subscribe to depth image, pixel centre and pose of detected marker
     sync_sub = message_filters.ApproximateTimeSynchronizer([depth_sub,pixel_sub, pose_sub], 10, 0.5)
+
     sync_sub.registerCallback(process_depth)    
     while not rospy.is_shutdown():
         pass
